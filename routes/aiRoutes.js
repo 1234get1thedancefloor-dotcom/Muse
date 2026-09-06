@@ -27,7 +27,7 @@ const fetch = (...args) =>
 function generateStylistConsultation(question, hasQ) {
     const vibes = [
         {
-            archetype: "Soft Coquette & Modern Romantic 💕",
+            archetype: "Soft Coquette & Modern Romantic",
             palette: "Powder pink, cream ivory, and rose gold",
             mood: "Whimsical, feminine, and effortlessly elevated",
             shoes: "Kitten heels, dainty ballet flats, or Mary Janes",
@@ -35,7 +35,7 @@ function generateStylistConsultation(question, hasQ) {
             beauty: "Dewy cushion blush, glazed lip oil, and soft winged lashes"
         },
         {
-            archetype: "90s Minimalist & Clean Chic ✨",
+            archetype: "90s Minimalist & Clean Chic",
             palette: "Oatmeal beige, slate gray, and espresso black",
             mood: "Understated, structured, and confident",
             shoes: "Sleek pointed slingbacks or lug-sole loafers",
@@ -43,7 +43,7 @@ function generateStylistConsultation(question, hasQ) {
             beauty: "Satin nude lip, clean-girl brushed brows, and minimal mascara"
         },
         {
-            archetype: "Y2K Indie Pop & Playful Retro 🌈",
+            archetype: "Y2K Indie Pop & Playful Retro",
             palette: "Baby blue, metallic chrome, and cherry red",
             mood: "Vibrant, nostalgic, and trendsetter energy",
             shoes: "Platform sneakers or retro square-toe ankle boots",
@@ -51,7 +51,7 @@ function generateStylistConsultation(question, hasQ) {
             beauty: "Glossy berry tint and frosted champagne highlighter"
         },
         {
-            archetype: "Chic Parisian & Warm Luxury ☕",
+            archetype: "Chic Parisian & Warm Luxury",
             palette: "Camel tan, warm ivory, and espresso leather",
             mood: "Tailored, sophisticated, and effortless",
             shoes: "Pointed slingbacks, leather ankle boots, or minimalist loafers",
@@ -67,27 +67,27 @@ function generateStylistConsultation(question, hasQ) {
         const q = question.toLowerCase();
         if (q.includes("gold") || q.includes("silver")) {
             const metal = (pick.palette.includes("gold") || pick.palette.includes("pink") || pick.palette.includes("warm") || pick.palette.includes("cream")) ? "Gold" : "Silver";
-            qAnswer = `✨ Jewelry Verdict on "${question}":\n` +
+            qAnswer = `Jewelry Verdict on "${question}":\n` +
                       `• Winning Choice: **${metal}**!\n` +
                       `• Why: It harmonizes naturally with the tones of ${pick.palette}, creating a radiant and seamless glow.\n` +
                       `• Top Pieces: ${pick.jewelry}.\n\n`;
         } else if (q.includes("shoe") || q.includes("heel") || q.includes("sneaker") || q.includes("boot") || q.includes("flat") || q.includes("sandals")) {
-            qAnswer = `👠 Footwear Advice on "${question}":\n` +
+            qAnswer = `Footwear Advice on "${question}":\n` +
                       `• Recommended Pair: ${pick.shoes}.\n` +
                       `• Pro Tip: Ensure the shoe silhouette anchors the outfit proportion cleanly.\n\n`;
         } else if (q.includes("new year") || q.includes("party") || q.includes("celebrat") || q.includes("anniversary") || q.includes("diwali") || q.includes("wedding") || q.includes("event")) {
-            qAnswer = `🎉 Occasion Styling on "${question}":\n` +
+            qAnswer = `Occasion Styling on "${question}":\n` +
                       `• Verdict: This outfit is a great foundation for the event!\n` +
                       `• Styling Tip: Elevate it with reflective accessories (${pick.jewelry}) and pair with ${pick.shoes.toLowerCase()} to keep the energy chic and poised.\n\n`;
         } else {
-            qAnswer = `💡 Stylist Consultation on "${question}":\n` +
+            qAnswer = `Stylist Consultation on "${question}":\n` +
                       `• Verdict: The fit looks balanced and intentional! It leans into ${pick.archetype}.\n` +
                       `• Key Advice: Balance the look with ${pick.jewelry.toLowerCase()} and ${pick.shoes.toLowerCase()}.\n\n`;
         }
     }
 
     return `${qAnswer}━━━━━━━━━━━━━━━━━━━━━\n` +
-           `👗 Style & Aesthetic Breakdown:\n` +
+           `Style & Aesthetic Breakdown:\n` +
            `• Aesthetic Archetype: ${pick.archetype}\n` +
            `• Color Palette: ${pick.palette}\n` +
            `• Overall Mood: ${pick.mood}\n` +
@@ -292,7 +292,7 @@ router.post('/generate-outfit', async (req, res) => {
         res.json({
             success: true,
             outfit: {
-                title: `${vibe} × ${occasion} Edit ✨`,
+                title: `${vibe} × ${occasion} Edit`,
                 occasion: occasion,
                 vibe: vibe,
                 pieces: {
@@ -319,7 +319,7 @@ router.post('/generate-outfit', async (req, res) => {
 router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, res) => {
     let tempFilePath = null;
     try {
-        const { vibe = "Soft Coquette & Modern Romantic 💕", undertone = "Warm Golden / Olive", userQuestion } = req.body;
+        const { vibe = "Soft Coquette & Modern Romantic", undertone = "Warm Golden / Olive", userQuestion } = req.body;
 
         if (req.file) {
             tempFilePath = req.file.path;
@@ -328,7 +328,7 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
         // Tailored makeup palettes by vibe & undertone
         const makeupGuides = {
             coquette: {
-                title: "Soft Coquette & Modern Romantic Glow 💕",
+                title: "Soft Coquette & Modern Romantic Glow",
                 skinBase: "Glass-skin hydrating cushion foundation with radiant rose-water mist. Soft diffuse berry-pink liquid blush tapped high on the cheekbones and bridge of the nose.",
                 eyes: "Champagne shimmer across the eyelid, ultra-fine brown liquid flick, and fluttery flared outer-corner lashes.",
                 lips: "Peachy-pink lip liner with a plumping glazed berry lip oil or gloss.",
@@ -336,7 +336,7 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
                 proTip: "Keep the base ultra-dewy so the soft pink blush radiates naturally under ambient light."
             },
             minimalist: {
-                title: "90s Minimalist & Clean-Girl Chic ✨",
+                title: "90s Minimalist & Clean-Girl Chic",
                 skinBase: "Skin tint or spot-concealer base with a velvety satin finish. Warm taupe-bronzer sculpting the cheekbones and jawline.",
                 eyes: "Brushed-up soap brows, a wash of warm beige shadow in the crease, and brown mascara.",
                 lips: "Warm cocoa or 90s satin nude lipstick with defined neutral lip liner.",
@@ -344,7 +344,7 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
                 proTip: "Focus on clean skin and defined eyebrows—keep eye color minimal to let your outfit silhouette lead."
             },
             goth: {
-                title: "Goth Siren & Smoky Grunge 🖤",
+                title: "Goth Siren & Smoky Grunge",
                 skinBase: "Velvet cloud matte complexion with subtle alabaster or cool-neutral undertone setting powder. Muted berry-plum contour.",
                 eyes: "Smudged diffused kohl eyeliner along top and bottom waterlines, deep espresso/slate shadow, and dramatic volumized mascara.",
                 lips: "Deep black cherry, espresso wine, or vampy burgundy velvet matte lip.",
@@ -352,7 +352,7 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
                 proTip: "Use a smudge brush to soften the kohl liner edges for that effortless editorial grunge allure."
             },
             indie: {
-                title: "Y2K Indie Pop & Retro Playful Glam 🌈",
+                title: "Y2K Indie Pop & Retro Playful Glam",
                 skinBase: "Luminous dewy base with frosted champagne highlighter on the cheekbone peaks, brow bones, and cupid's bow.",
                 eyes: "Graphic baby blue or metallic silver eyeliner accent, inner corner glitter sparkle, and lifted doll lashes.",
                 lips: "Holographic high-shine gloss over a juicy pink or strawberry tint.",
@@ -360,7 +360,7 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
                 proTip: "Add a touch of icy chrome highlighter on your inner eye corners to instantly pop against vibrant clothes."
             },
             parisian: {
-                title: "Chic Parisian & Warm Luxury ☕",
+                title: "Chic Parisian & Warm Luxury",
                 skinBase: "Breathable radiant base with sun-kissed terracotta cream blush melted seamlessly into the temples.",
                 eyes: "Soft espresso winged shadow buffed outward and curled natural lashes.",
                 lips: "Iconic blotted Parisian red or warm brick-rose satin lipstick applied with finger taps for a blurred French edge.",
@@ -368,7 +368,7 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
                 proTip: "Blot your lip color with a tissue and tap edges with a ring finger for that authentic lived-in French chic look."
             },
             festive: {
-                title: "Festive Royal & Luminous Glam 🥻",
+                title: "Festive Royal & Luminous Glam",
                 skinBase: "Long-wear luminous foundation, warm golden liquid illuminator on the cheekbones, and rich warm peach blush.",
                 eyes: "Gilded antique gold pigment on lids, winged jet-black gel liner, and dense kohl on the lower rim.",
                 lips: "Rich terracotta or deep ruby velvet lip with golden gloss center accent.",
@@ -398,13 +398,13 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
         if (userQuestion && userQuestion.trim() !== "") {
             const q = userQuestion.toLowerCase();
             if (q.includes("lip") || q.includes("lipstick") || q.includes("shade")) {
-                customAdvice = `💋 Custom Lip Verdict for "${userQuestion}": Harmonize with your ${undertone.split('/')[0].trim()} undertone by pairing ${selectedGuide.lips.toLowerCase()}`;
+                customAdvice = `Custom Lip Verdict for "${userQuestion}": Harmonize with your ${undertone.split('/')[0].trim()} undertone by pairing ${selectedGuide.lips.toLowerCase()}`;
             } else if (q.includes("eye") || q.includes("eyeliner") || q.includes("shadow")) {
-                customAdvice = `👁️ Custom Eye Direction for "${userQuestion}": Focus on ${selectedGuide.eyes.toLowerCase()}`;
+                customAdvice = `Custom Eye Direction for "${userQuestion}": Focus on ${selectedGuide.eyes.toLowerCase()}`;
             } else if (q.includes("hair") || q.includes("hairstyle")) {
-                customAdvice = `💇‍♀️ Custom Hair Advice for "${userQuestion}": ${selectedGuide.hair}`;
+                customAdvice = `Custom Hair Advice for "${userQuestion}": ${selectedGuide.hair}`;
             } else {
-                customAdvice = `✨ Beauty Consultant Verdict for "${userQuestion}": This combination balances with your outfit silhouette! Follow the ${selectedGuide.title} palette to tie everything together.`;
+                customAdvice = `Beauty Consultant Verdict for "${userQuestion}": This combination balances with your outfit silhouette! Follow the ${selectedGuide.title} palette to tie everything together.`;
             }
         }
 

@@ -6,16 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muse - AI Personal Stylist & Wardrobe Assistant</title>
 
+    <!-- Google Fonts: Inter / Pin Sans Fallback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        /* Base Styling & Theme Variables */
+        /* ==========================================================================
+           PINTEREST DESIGN SYSTEM GROUNDING (DESIGN.md)
+           - Primary Color: #e60023 (Pinterest Red)
+           - Typography: Pin Sans / Inter, sans-serif
+           - Theme: Clean Modern Light Theme
+           - Button Style: Fully-rounded pill shapes (border-radius: 9999px)
+           - Spacing: 4px increments
+           ========================================================================== */
+
+        :root {
+            --primary-red: #e60023;
+            --primary-red-hover: #ad081b;
+            --primary-red-light: #ffebee;
+            --bg-canvas: #ffffff;
+            --surface-card: #ffffff;
+            --surface-muted: #f0f0f0;
+            --surface-hover: #e2e2e2;
+            --border-light: #e9e9e9;
+            --border-subtle: #cdcdcd;
+            --text-primary: #111111;
+            --text-secondary: #5f5f5f;
+            --text-muted: #767676;
+            --radius-pill: 9999px;
+            --radius-card: 16px;
+            --radius-input: 16px;
+            --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Pin Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #FFE5EC;
-            color: #4A1525;
-            max-width: 680px;
-            margin: 20px auto 50px;
-            padding: 15px;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            max-width: 720px;
+            margin: 16px auto 48px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         /* Top Navigation Header */
@@ -23,107 +63,125 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1.5px solid #FFC2D1;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
             padding: 10px 16px;
-            border-radius: 20px;
+            border-radius: var(--radius-pill);
             margin-bottom: 20px;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
-            box-shadow: 0 4px 15px rgba(74, 21, 37, 0.05);
-            transition: border-color 0.5s ease, background-color 0.5s ease;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .nav-brand-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-logo-badge {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-red);
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            user-select: none;
         }
 
         .nav-links-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
             flex-wrap: wrap;
         }
 
         .nav-link-btn {
             background: transparent;
-            border: 1.5px solid transparent;
-            padding: 6px 12px;
-            border-radius: 16px;
-            color: inherit;
+            border: none;
+            padding: 8px 14px;
+            border-radius: var(--radius-pill);
+            color: var(--text-primary);
             cursor: pointer;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
         }
 
         .nav-link-btn:hover {
-            background: rgba(255, 255, 255, 0.85);
-            border-color: #FFC2D1;
+            background: var(--surface-muted);
         }
 
         .nav-link-btn.active {
-            background: #BDE0FE;
-            border-color: #A2D2FF;
-            color: #4A1525;
+            background: var(--text-primary);
+            color: #ffffff;
         }
 
         .nav-auth-right {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 12px;
-            font-weight: bold;
         }
 
         .user-status-pill {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px 12px;
-            border-radius: 14px;
-            border: 1px solid #FFC2D1;
+            background: var(--surface-muted);
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 12.5px;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            color: var(--text-primary);
         }
 
-        /* Main App Card */
+        /* Main Card Container */
         .card {
-            background: #FFF0F5;
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(74, 21, 37, 0.08);
-            border: 2px solid #FFC2D1;
+            background: var(--surface-card);
+            padding: 32px;
+            border-radius: var(--radius-card);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-card);
             display: flex;
             flex-direction: column;
             min-height: 480px;
             position: relative;
-            box-sizing: border-box;
-            transition: border-color 0.5s ease, background-color 0.5s ease;
         }
 
         h2 {
-            color: inherit;
+            color: var(--text-primary);
             margin-top: 0;
+            margin-bottom: 6px;
             text-align: center;
             font-size: 26px;
-            letter-spacing: 0.5px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
         }
 
         .subtitle {
             text-align: center;
-            opacity: 0.85;
-            margin-top: -10px;
-            margin-bottom: 22px;
+            color: var(--text-secondary);
+            margin-top: 0;
+            margin-bottom: 24px;
             font-size: 14px;
+            font-weight: 500;
         }
 
         /* Form Inputs */
         label {
             display: block;
-            margin: 14px 0 6px;
-            font-weight: bold;
+            margin: 16px 0 6px;
+            font-weight: 700;
             font-size: 13.5px;
+            color: var(--text-primary);
         }
 
         input[type="text"],
@@ -134,42 +192,49 @@
         textarea,
         select {
             width: 100%;
-            padding: 12px;
-            background: #FFFFFF;
-            border: 2px solid #FFC2D1;
-            border-radius: 12px;
-            color: #4A1525;
+            padding: 12px 16px;
+            background: var(--surface-muted);
+            border: 2px solid transparent;
+            border-radius: var(--radius-input);
+            color: var(--text-primary);
             box-sizing: border-box;
             font-size: 14px;
-            transition: border-color 0.3s ease;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus,
+        input[type="file"]:focus,
         textarea:focus,
-        input:focus,
         select:focus {
             outline: none;
-            border-color: #A2D2FF;
+            background: #ffffff;
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
         }
 
         .row {
             display: flex;
             align-items: center;
-            margin: 18px 0;
+            margin: 16px 0;
             gap: 10px;
         }
 
         input[type="checkbox"] {
             width: 18px;
             height: 18px;
-            accent-color: #4A1525;
+            accent-color: var(--primary-red);
+            cursor: pointer;
         }
 
         /* Auth Toggle Pill Switcher */
         .auth-toggle-pill {
             display: flex;
-            background: rgba(255, 255, 255, 0.7);
-            border: 1.5px solid #FFC2D1;
-            border-radius: 14px;
+            background: var(--surface-muted);
+            border-radius: var(--radius-pill);
             padding: 4px;
             margin-bottom: 20px;
             gap: 4px;
@@ -177,123 +242,105 @@
 
         .auth-tab-btn {
             flex: 1;
-            padding: 9px 12px;
+            padding: 9px 14px;
             border: none;
             background: transparent;
-            color: inherit;
-            font-size: 14px;
+            color: var(--text-secondary);
+            font-size: 13.5px;
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: var(--radius-pill);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .auth-tab-btn.active {
-            background: #BDE0FE;
-            color: #4A1525;
-            box-shadow: 0 2px 8px rgba(189, 224, 254, 0.5);
+            background: #ffffff;
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        /* Nav Header Button */
+        /* Navigation Back Button */
         .nav-btn {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid #FFC2D1;
-            padding: 8px 14px;
-            border-radius: 20px;
-            color: inherit;
+            background: var(--surface-muted);
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            color: var(--text-primary);
             cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
-            margin-bottom: 15px;
+            gap: 6px;
+            margin-bottom: 16px;
             width: fit-content;
             transition: all 0.2s ease;
         }
 
         .nav-btn:hover {
-            background: #FFFFFF;
+            background: var(--surface-hover);
         }
 
-        /* Primary Action Button */
+        /* Pinterest Button Styles */
         .action-button {
-            background: #BDE0FE;
-            color: #4A1525;
+            background: var(--primary-red);
+            color: #ffffff;
             border: none;
-            padding: 14px 20px;
-            font-size: 15px;
-            font-weight: bold;
-            border-radius: 12px;
+            padding: 13px 22px;
+            font-size: 14.5px;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
             cursor: pointer;
             width: 100%;
-            box-shadow: 0 4px 10px rgba(189, 224, 254, 0.4);
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            user-select: none;
         }
 
         .action-button:hover {
-            background: #A2D2FF;
+            background: var(--primary-red-hover);
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(230, 0, 35, 0.25);
         }
 
-        /* Secondary Action Button */
         .secondary-btn {
-            background: #FFC2D1;
-            box-shadow: 0 4px 10px rgba(255, 194, 209, 0.4);
+            background: var(--surface-muted);
+            color: var(--text-primary);
         }
 
         .secondary-btn:hover {
-            background: #FFAFCC;
-            transform: translateY(-1px);
+            background: var(--surface-hover);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
-        /* Makeup Action Button */
-        .makeup-btn {
-            background: #E8DFF5;
-            color: #4A1525;
-            box-shadow: 0 4px 10px rgba(232, 223, 245, 0.45);
+        .dark-btn {
+            background: var(--text-primary);
+            color: #ffffff;
         }
 
-        .makeup-btn:hover {
-            background: #D8B4F8;
-            transform: translateY(-1px);
+        .dark-btn:hover {
+            background: #2b2b2b;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
+        /* Output Boxes */
+        #outputBox,
+        #wardrobeOutputBox,
         #makeupOutputBox {
             margin-top: 20px;
-            background: #FFFFFF;
-            padding: 18px;
-            border-left: 5px solid #D8B4F8;
-            border-radius: 14px;
+            background: #ffffff;
+            padding: 20px;
+            border: 1px solid var(--border-light);
+            border-left: 5px solid var(--primary-red);
+            border-radius: var(--radius-card);
             display: none;
             font-size: 14px;
-            color: #4A1525;
-            box-shadow: 0 4px 15px rgba(74, 21, 37, 0.05);
-        }
-
-        #outputBox {
-            margin-top: 20px;
-            background: #FFFFFF;
-            padding: 15px;
-            border-left: 5px solid #BDE0FE;
-            border-radius: 10px;
-            display: none;
-            white-space: pre-wrap;
-            line-height: 1.5;
-            font-size: 14px;
-            color: #4A1525;
-        }
-
-        #wardrobeOutputBox {
-            margin-top: 20px;
-            background: #FFFFFF;
-            padding: 18px;
-            border-left: 5px solid #FFC2D1;
-            border-radius: 14px;
-            display: none;
-            font-size: 14px;
-            color: #4A1525;
-            box-shadow: 0 4px 15px rgba(74, 21, 37, 0.05);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-subtle);
         }
 
         /* Wardrobe Tabs & Filter Chips */
@@ -301,127 +348,137 @@
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             margin-bottom: 12px;
             scrollbar-width: thin;
         }
 
         .tab-chip {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1.5px solid #FFC2D1;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            background: var(--surface-muted);
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
-            color: inherit;
+            color: var(--text-primary);
             transition: all 0.2s ease;
         }
 
-        .tab-chip:hover,
-        .tab-chip.active {
-            background: #BDE0FE;
-            border-color: #A2D2FF;
+        .tab-chip:hover {
+            background: var(--surface-hover);
         }
 
-        /* Wardrobe Grid */
+        .tab-chip.active {
+            background: var(--text-primary);
+            color: #ffffff;
+        }
+
+        /* Wardrobe Masonry/Grid */
         .wardrobe-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 12px;
-            margin-top: 10px;
-            max-height: 380px;
+            margin-top: 12px;
+            max-height: 420px;
             overflow-y: auto;
             padding-right: 4px;
         }
 
         .wardrobe-card {
-            background: #FFFFFF;
-            border: 1.5px solid #FFC2D1;
-            border-radius: 14px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
             padding: 8px;
             position: relative;
             display: flex;
             flex-direction: column;
             gap: 6px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-subtle);
         }
 
         .wardrobe-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-subtle);
         }
 
         .wardrobe-card img {
             width: 100%;
-            height: 110px;
+            height: 120px;
             object-fit: cover;
-            border-radius: 8px;
-            background: #f8f8f8;
+            border-radius: 12px;
+            background: var(--surface-muted);
         }
 
         .wardrobe-badge {
-            font-size: 10px;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 6px;
-            background: #FFE5EC;
-            color: #4A1525;
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-pill);
+            background: var(--surface-muted);
+            color: var(--text-primary);
             width: fit-content;
         }
 
         .wardrobe-card-title {
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 12.5px;
+            font-weight: 700;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            color: var(--text-primary);
         }
 
         .delete-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(74, 21, 37, 0.7);
-            color: #FFF;
+            top: 6px;
+            right: 6px;
+            background: rgba(17, 17, 17, 0.75);
+            color: #ffffff;
             border: none;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 11px;
-            line-height: 20px;
+            width: 24px;
+            height: 24px;
+            font-size: 13px;
+            line-height: 24px;
             text-align: center;
             cursor: pointer;
             padding: 0;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
         }
 
         .delete-btn:hover {
-            background: rgba(255, 0, 0, 0.85);
+            background: var(--primary-red);
+            transform: scale(1.1);
         }
 
-        /* Info Section Cards (About, Features, FAQ) */
+        /* Info Section Cards */
         .info-card {
-            background: rgba(255, 255, 255, 0.75);
-            border: 1.5px solid #FFC2D1;
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 14px;
-            line-height: 1.5;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-subtle);
         }
 
         .info-card h3 {
             margin: 0 0 6px 0;
             font-size: 16px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--text-primary);
         }
 
         .faq-item {
-            border-bottom: 1px solid #FFC2D1;
-            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+            padding: 14px 0;
         }
 
         .faq-item:last-child {
@@ -429,18 +486,19 @@
         }
 
         .faq-q {
-            font-weight: bold;
+            font-weight: 700;
             font-size: 14.5px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: var(--text-primary);
         }
 
         .faq-a {
             margin-top: 6px;
             font-size: 13.5px;
-            opacity: 0.9;
+            color: var(--text-secondary);
             line-height: 1.5;
         }
 
@@ -453,34 +511,37 @@
 
 <body>
 
-    <!-- TOP NAVIGATION BAR (Home, About, Key Features, FAQ, Login Status) -->
+    <!-- TOP NAVIGATION BAR (Home, About, Key Features, FAQ, User Session) -->
     <header class="top-navbar" id="topNav">
-        <div class="nav-links-left">
-            <button class="nav-link-btn active" id="navHomeBtn" onclick="showInfoSection('home')">
-                🏠 Home
-            </button>
-            <button class="nav-link-btn" id="navAboutBtn" onclick="showInfoSection('about')">
-                ℹ️ About
-            </button>
-            <button class="nav-link-btn" id="navFeaturesBtn" onclick="showInfoSection('features')">
-                ⭐ Key Features
-            </button>
-            <button class="nav-link-btn" id="navFaqBtn" onclick="showInfoSection('faq')">
-                ❓ FAQ
-            </button>
+        <div class="nav-brand-group">
+            <div class="nav-logo-badge">M</div>
+            <div class="nav-links-left">
+                <button class="nav-link-btn active" id="navHomeBtn" onclick="showInfoSection('home')">
+                    Home
+                </button>
+                <button class="nav-link-btn" id="navAboutBtn" onclick="showInfoSection('about')">
+                    About
+                </button>
+                <button class="nav-link-btn" id="navFeaturesBtn" onclick="showInfoSection('features')">
+                    Key Features
+                </button>
+                <button class="nav-link-btn" id="navFaqBtn" onclick="showInfoSection('faq')">
+                    FAQ
+                </button>
+            </div>
         </div>
 
         <div class="nav-auth-right">
             <div id="navAuthBadge" class="user-status-pill">
-                <span>👤 Guest Stylist</span>
+                <span>Guest Stylist</span>
             </div>
         </div>
     </header>
 
-    <!-- Global Back Arrow (Shown on internal screens) -->
+    <!-- Navigation Back Button (Shown on internal screens) -->
     <div id="navHeader" class="hidden">
         <button class="nav-btn" onclick="showInfoSection('home')">
-            ← Back to Onboarding / Home
+            ← Back to Home
         </button>
     </div>
 
@@ -489,19 +550,19 @@
         <!-- SCREEN 1: ONBOARDING / SIGN UP & LOGIN SCREEN -->
         <div id="onboardingScreen" style="display: flex; flex-direction: column; flex-grow: 1;">
 
-            <h2>✨ Welcome to Muse</h2>
+            <h2>Welcome to Muse</h2>
 
             <div class="subtitle">
-                Your AI-Powered Gamified Personal Stylist & Wardrobe Assistant
+                Your AI-Powered Gamified Personal Stylist & Beauty Assistant
             </div>
 
             <!-- Login / Sign Up Tab Switcher -->
             <div class="auth-toggle-pill">
                 <button id="tabSignUp" class="auth-tab-btn active" onclick="switchAuthTab('signup')">
-                    ✨ Create Account / Sign Up
+                    Sign Up
                 </button>
                 <button id="tabLogIn" class="auth-tab-btn" onclick="switchAuthTab('login')">
-                    🔑 Log In
+                    Log In
                 </button>
             </div>
 
@@ -520,8 +581,8 @@
                 <input type="date" id="userBirthday">
 
                 <label for="userAesthetic">Select Daily Aesthetic / Theme:</label>
-                <select id="userAesthetic" onchange="applyAestheticTheme()">
-                    <option value="pink">Cutesy / Soft Pink (Default)</option>
+                <select id="userAesthetic">
+                    <option value="pink">Cutesy / Soft Pink</option>
                     <option value="goth">Goth / Grunge Dark</option>
                     <option value="chic">Chic / Luxury Warm</option>
                     <option value="indie">Indie / Eclectic Teal</option>
@@ -537,23 +598,23 @@
                 <label for="loginPassword">Password:</label>
                 <input type="password" id="loginPassword" placeholder="••••••••">
 
-                <div style="margin-top: 15px; margin-bottom: 5px;">
-                    <button class="action-button secondary-btn" style="padding: 10px;" onclick="handleLoginSubmit()">
-                        🔐 Sign In to Muse Account
+                <div style="margin-top: 16px; margin-bottom: 4px;">
+                    <button class="action-button secondary-btn" onclick="handleLoginSubmit()">
+                        Sign In to Muse Account
                     </button>
                 </div>
             </div>
 
-            <!-- ONBOARDING ACTION BUTTONS -->
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 25px;">
+            <!-- ONBOARDING ACTION BUTTONS (Pill Styled) -->
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 28px;">
                 <button class="action-button" onclick="goToUploadScreen()">
-                    📸 Upload Outfit & Analyze Vibe 🚀
+                    Upload Outfit & Analyze Vibe
                 </button>
                 <button class="action-button secondary-btn" onclick="goToWardrobeScreen()">
-                    👗 Upload Your Wardrobe into Closet 🗄️
+                    Upload Your Wardrobe into Closet
                 </button>
-                <button class="action-button makeup-btn" onclick="goToMakeupScreen()">
-                    💄 Recommend Makeup & Beauty Look ✨
+                <button class="action-button dark-btn" onclick="goToMakeupScreen()">
+                    Recommend Makeup & Beauty Look
                 </button>
             </div>
 
@@ -563,27 +624,27 @@
         <div id="uploadScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
 
             <h2 id="dashboardGreeting">
-                ✨ Muse AI Styling Assistant
+                Muse AI Styling Assistant
             </h2>
 
             <div class="subtitle">
-                Your style environment is personalized and ready
+                Upload a look to analyze its fashion vibe, aesthetics & accessories
             </div>
 
             <label for="outfitFile">
-                Upload Your Outfit Image:
+                Upload Outfit Image:
             </label>
             <input type="file" id="outfitFile" accept="image/*">
 
             <!-- Live Image Preview Slot -->
-            <div id="previewContainer" class="hidden" style="margin-top: 15px; text-align: center;">
+            <div id="previewContainer" class="hidden" style="margin-top: 16px; text-align: center;">
                 <img id="imagePreview" src="" alt="Outfit preview"
-                    style="max-width: 100%; max-height: 280px; border-radius: 14px; border: 2px solid #FFC2D1; object-fit: contain; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+                    style="max-width: 100%; max-height: 280px; border-radius: var(--radius-card); border: 1px solid var(--border-light); object-fit: contain; box-shadow: var(--shadow-subtle);">
             </div>
 
             <div class="row">
                 <input type="checkbox" id="hasQ" onchange="toggleQuestionBox()">
-                <label style="margin: 0; user-select: none;" for="hasQ">
+                <label style="margin: 0; user-select: none; font-weight: 600;" for="hasQ">
                     I have a specific question about the fit / style
                 </label>
             </div>
@@ -592,16 +653,16 @@
                 <label for="userQ">
                     Your Question:
                 </label>
-                <textarea id="userQ" rows="2" placeholder="Type your question here..."></textarea>
+                <textarea id="userQ" rows="2" placeholder="Type your question here (e.g. Gold or silver jewelry? What shoes to pair?)"></textarea>
             </div>
 
             <div id="outputBox">
                 Waiting for response...
             </div>
 
-            <!-- Core action button -->
-            <button class="action-button" style="margin-top: 25px;" onclick="uploadAndAnalyze()">
-                Analyze My Vibe 🚀
+            <!-- Action button -->
+            <button class="action-button" style="margin-top: 24px;" onclick="uploadAndAnalyze()">
+                Analyze My Vibe
             </button>
 
         </div>
@@ -610,7 +671,7 @@
         <div id="wardrobeScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
 
             <h2 id="wardrobeGreeting">
-                👗 My Digital Wardrobe
+                My Digital Wardrobe
             </h2>
 
             <div class="subtitle">
@@ -618,15 +679,15 @@
             </div>
 
             <!-- Add Item Box -->
-            <div style="background: rgba(255, 255, 255, 0.65); padding: 18px; border-radius: 16px; border: 1.5px dashed #FFC2D1; margin-bottom: 20px;">
+            <div style="background: var(--surface-muted); padding: 20px; border-radius: var(--radius-card); border: 1px dashed var(--border-subtle); margin-bottom: 20px;">
                 <label style="margin-top: 0;" for="wardrobeCategory">Category:</label>
                 <select id="wardrobeCategory">
-                    <option value="Top">👚 Top / Shirt / Blouse</option>
-                    <option value="Dress">👗 Dress / One-Piece</option>
-                    <option value="Bottom">👖 Bottom / Skirt / Pants</option>
-                    <option value="Shoes">👠 Shoes / Heels / Sneakers</option>
-                    <option value="Jewelry">💍 Jewelry & Accessories</option>
-                    <option value="Outerwear">🧥 Jacket & Outerwear</option>
+                    <option value="Top">Top / Shirt / Blouse</option>
+                    <option value="Dress">Dress / One-Piece</option>
+                    <option value="Bottom">Bottom / Skirt / Pants</option>
+                    <option value="Shoes">Shoes / Heels / Sneakers</option>
+                    <option value="Jewelry">Jewelry & Accessories</option>
+                    <option value="Outerwear">Jacket & Outerwear</option>
                 </select>
 
                 <label for="wardrobeItemName">Piece Name / Description:</label>
@@ -638,19 +699,19 @@
                 <label for="wardrobeItemFile">Upload Piece Photo:</label>
                 <input type="file" id="wardrobeItemFile" accept="image/*">
 
-                <div id="wardrobePreviewContainer" class="hidden" style="margin-top: 10px; text-align: center;">
-                    <img id="wardrobeItemPreview" src="" alt="Item Preview" style="max-height: 140px; border-radius: 10px; border: 1.5px solid #FFC2D1; object-fit: contain;">
+                <div id="wardrobePreviewContainer" class="hidden" style="margin-top: 12px; text-align: center;">
+                    <img id="wardrobeItemPreview" src="" alt="Item Preview" style="max-height: 140px; border-radius: 12px; border: 1px solid var(--border-light); object-fit: contain;">
                 </div>
 
-                <button class="action-button secondary-btn" style="margin-top: 15px; padding: 11px 16px; font-size: 14px;" onclick="addWardrobeItem()">
-                    ➕ Add Piece to Wardrobe
+                <button class="action-button secondary-btn" style="margin-top: 16px; padding: 11px 18px; font-size: 13.5px;" onclick="addWardrobeItem()">
+                    + Add Piece to Wardrobe
                 </button>
             </div>
 
             <!-- Wardrobe Catalog Header & Filter Tabs -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span style="font-weight: bold; font-size: 16px;">🗄️ Closet Catalog</span>
-                <span id="wardrobeCount" style="font-size: 13px; opacity: 0.85;">0 pieces</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-weight: 800; font-size: 16px; letter-spacing: -0.2px;">Closet Catalog</span>
+                <span id="wardrobeCount" style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">0 pieces</span>
             </div>
 
             <div class="wardrobe-tabs" id="wardrobeTabs">
@@ -669,18 +730,18 @@
             </div>
 
             <!-- Outfit Generator Section -->
-            <div style="margin-top: 25px; padding-top: 15px; border-top: 1.5px solid #FFC2D1;">
+            <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-light);">
                 <label for="wardrobeOccasion">Generate Look from Closet for:</label>
                 <select id="wardrobeOccasion">
-                    <option value="Party">Party / Night Out 🎉</option>
-                    <option value="Diwali">Diwali / Traditional Festive ✨</option>
-                    <option value="Date Night">Romantic Date Night 💕</option>
-                    <option value="Birthday">Birthday Celebration 🎂</option>
-                    <option value="Casual Chic">Everyday Streetwear Chic ☕</option>
+                    <option value="Party">Party / Night Out</option>
+                    <option value="Diwali">Diwali / Traditional Festive</option>
+                    <option value="Date Night">Romantic Date Night</option>
+                    <option value="Birthday">Birthday Celebration</option>
+                    <option value="Casual Chic">Everyday Streetwear Chic</option>
                 </select>
 
-                <button class="action-button" style="margin-top: 12px;" onclick="generateOutfitFromWardrobe()">
-                    ✨ Style Outfit from My Closet 🚀
+                <button class="action-button" style="margin-top: 14px;" onclick="generateOutfitFromWardrobe()">
+                    Style Outfit from My Closet
                 </button>
 
                 <div id="wardrobeOutputBox"></div>
@@ -690,95 +751,95 @@
 
         <!-- SCREEN 4: ABOUT MUSE SCREEN -->
         <div id="aboutScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
-            <h2>ℹ️ About Muse</h2>
-            <div class="subtitle">Your wardrobe becomes an interactive style adventure</div>
+            <h2>About Muse</h2>
+            <div class="subtitle">Your wardrobe becomes an interactive style discovery engine</div>
 
             <div class="info-card">
-                <h3>✨ The Concept</h3>
-                <p style="margin: 0;">An end-to-end encrypted, gamified fashion and beauty platform that transforms the everyday struggle of getting ready into a fun, personalized experience.</p>
+                <h3>The Concept</h3>
+                <p style="margin: 0; color: var(--text-secondary);">An end-to-end encrypted, gamified fashion and beauty platform that transforms the everyday struggle of getting ready into a fun, personalized experience.</p>
             </div>
 
             <div class="info-card">
-                <h3>🎯 How It Works</h3>
-                <p style="margin: 0 0 8px;">1. <strong>Pick a Vibe:</strong> Select from dynamic aesthetic themes like Cutesy, Goth, Chic, Indie, or Minimalist.</p>
-                <p style="margin: 0 0 8px;">2. <strong>Build Your Digital Wardrobe:</strong> Catalog photos of your existing tops, bottoms, shoes, and jewelry.</p>
-                <p style="margin: 0;">3. <strong>AI Styling & Beauty Assistant:</strong> Get coordinated looks tailored to your closet pieces, occasion calendars, and undertones.</p>
+                <h3>How It Works</h3>
+                <p style="margin: 0 0 8px; color: var(--text-secondary);">1. <strong>Pick a Vibe:</strong> Select from curated aesthetics like Cutesy, Goth, Chic, Indie, or Minimalist.</p>
+                <p style="margin: 0 0 8px; color: var(--text-secondary);">2. <strong>Build Your Digital Wardrobe:</strong> Catalog photos of your existing tops, bottoms, shoes, and jewelry.</p>
+                <p style="margin: 0; color: var(--text-secondary);">3. <strong>AI Styling & Beauty Assistant:</strong> Get coordinated looks tailored to your closet pieces, occasion calendars, and undertones.</p>
             </div>
 
             <div class="info-card">
-                <h3>🔒 Privacy-First Design</h3>
-                <p style="margin: 0;">Your photos, personal style preferences, and wardrobe items remain encrypted and private on your device and session.</p>
+                <h3>Privacy-First Architecture</h3>
+                <p style="margin: 0; color: var(--text-secondary);">Your photos, personal style preferences, and wardrobe items remain encrypted and private within your local session.</p>
             </div>
 
-            <button class="action-button" style="margin-top: 15px;" onclick="showInfoSection('home')">
-                ← Back to Dashboard & Styling
+            <button class="action-button secondary-btn" style="margin-top: 16px;" onclick="showInfoSection('home')">
+                ← Back to Dashboard
             </button>
         </div>
 
         <!-- SCREEN 5: KEY FEATURES SCREEN -->
         <div id="featuresScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
-            <h2>⭐ Key Features</h2>
+            <h2>Key Features</h2>
             <div class="subtitle">Explore the intelligence powering Muse</div>
 
             <div class="info-card">
-                <h3>🎮 1. Gamified Interface & Aesthetic Themes</h3>
-                <p style="margin: 0;">The entire application environment adapts visually to your daily vibe (Soft Pink, Goth Grunge, Chic Luxury, Indie Teal, Minimalist Grey).</p>
+                <h3>1. Gamified Interface & Aesthetic Themes</h3>
+                <p style="margin: 0; color: var(--text-secondary);">Adaptive visuals and styling algorithms aligned with your chosen mood and aesthetic archetype.</p>
             </div>
 
             <div class="info-card">
-                <h3>👗 2. Smart Wardrobe & Occasion Planner</h3>
-                <p style="margin: 0;">Upload photos of your clothes to create a digital closet. Muse generates complete outfits using what you already own for festivals, birthdays, and parties.</p>
+                <h3>2. Smart Wardrobe & Occasion Planner</h3>
+                <p style="margin: 0; color: var(--text-secondary);">Catalog clothes to generate complete outfits using what you already own for festivals, birthdays, and parties.</p>
             </div>
 
             <div class="info-card">
-                <h3>📌 3. Pinterest-to-Closet Styling</h3>
-                <p style="margin: 0;">Upload an inspo photo from Pinterest or Instagram and let Muse recreate the look using pieces already in your wardrobe.</p>
+                <h3>3. Pinterest-to-Closet Styling</h3>
+                <p style="margin: 0; color: var(--text-secondary);">Recreate inspiration looks found online using existing items from your personal closet.</p>
             </div>
 
             <div class="info-card">
-                <h3>💄 4. Gender-Neutral Makeup & Beauty Assistant</h3>
-                <p style="margin: 0;">Personalized makeup suggestions, hairstyle pairings, and color undertone guidance matched to your chosen aesthetic.</p>
+                <h3>4. Gender-Neutral Makeup & Beauty Assistant</h3>
+                <p style="margin: 0; color: var(--text-secondary);">Personalized beauty suggestions, hairstyle pairings, and color undertone guidance matched to your outfit.</p>
             </div>
 
             <div class="info-card">
-                <h3>👥 5. Social Styling & Group Coordination</h3>
-                <p style="margin: 0;">Coordinate complementary outfit palettes with friends for events, weddings, and celebrations.</p>
+                <h3>5. Social Styling & Group Coordination</h3>
+                <p style="margin: 0; color: var(--text-secondary);">Coordinate matching and complementary group palettes for events, weddings, and celebrations.</p>
             </div>
 
-            <button class="action-button" style="margin-top: 15px;" onclick="showInfoSection('home')">
-                ← Back to Dashboard & Styling
+            <button class="action-button secondary-btn" style="margin-top: 16px;" onclick="showInfoSection('home')">
+                ← Back to Dashboard
             </button>
         </div>
 
         <!-- SCREEN 6: FAQ SCREEN -->
         <div id="faqScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
-            <h2>❓ Frequently Asked Questions</h2>
+            <h2>Frequently Asked Questions</h2>
             <div class="subtitle">Quick answers to common questions about Muse</div>
 
             <div class="info-card">
                 <div class="faq-item">
-                    <div class="faq-q"><span>✨ How does the outfit vibe check work?</span> <span>➕</span></div>
+                    <div class="faq-q"><span>How does the outfit vibe check work?</span> <span>+</span></div>
                     <div class="faq-a">Upload a photo of your outfit and Muse's multimodal fashion engine analyzes the silhouette, color palette, shoes, and jewelry balance.</div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-q"><span>👗 How do I style looks from my own closet?</span> <span>➕</span></div>
-                    <div class="faq-a">Use the 'Upload Wardrobe' button to add your tops, bottoms, shoes, and accessories. Then pick an occasion (Party, Diwali, Date Night) and click 'Style Outfit from My Closet'.</div>
+                    <div class="faq-q"><span>How do I style looks from my own closet?</span> <span>+</span></div>
+                    <div class="faq-a">Use the 'Upload Wardrobe' button to add your pieces. Then pick an occasion (Party, Diwali, Date Night) and click 'Style Outfit from My Closet'.</div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-q"><span>🎂 When will I see celebration alerts?</span> <span>➕</span></div>
-                    <div class="faq-a">Muse remembers your birthday entered in your profile and triggers celebration greetings and occasion styling exclusively on your special day!</div>
+                    <div class="faq-q"><span>When will I see celebration alerts?</span> <span>+</span></div>
+                    <div class="faq-a">Muse checks the birthday entered in your profile and triggers celebration greetings and tailored styling exclusively on your special day.</div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-q"><span>🔒 Are my wardrobe images private?</span> <span>➕</span></div>
+                    <div class="faq-q"><span>Are my wardrobe images private?</span> <span>+</span></div>
                     <div class="faq-a">Yes. Muse operates with privacy-first standards. Your closet data and photos remain encrypted and stored locally in your session.</div>
                 </div>
             </div>
 
-            <button class="action-button" style="margin-top: 15px;" onclick="showInfoSection('home')">
-                ← Back to Dashboard & Styling
+            <button class="action-button secondary-btn" style="margin-top: 16px;" onclick="showInfoSection('home')">
+                ← Back to Dashboard
             </button>
         </div>
 
@@ -786,7 +847,7 @@
         <div id="makeupScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
 
             <h2 id="makeupGreeting">
-                💄 Muse Makeup & Beauty Stylist
+                Muse Makeup & Beauty Stylist
             </h2>
 
             <div class="subtitle">
@@ -794,15 +855,15 @@
             </div>
 
             <!-- Upload / Input Controls -->
-            <div style="background: rgba(255, 255, 255, 0.65); padding: 18px; border-radius: 16px; border: 1.5px dashed #FFC2D1; margin-bottom: 20px;">
+            <div style="background: var(--surface-muted); padding: 20px; border-radius: var(--radius-card); border: 1px dashed var(--border-subtle); margin-bottom: 20px;">
                 <label style="margin-top: 0;" for="makeupVibeSelect">Target Outfit Vibe / Aesthetic:</label>
                 <select id="makeupVibeSelect">
-                    <option value="Soft Coquette & Modern Romantic 💕">Soft Coquette & Modern Romantic Glow 💕</option>
-                    <option value="90s Minimalist & Clean-Girl Chic ✨">90s Minimalist & Clean-Girl Chic ✨</option>
-                    <option value="Goth Siren & Smoky Grunge 🖤">Goth Siren & Smoky Grunge 🖤</option>
-                    <option value="Y2K Indie Pop & Retro Playful Glam 🌈">Y2K Indie Pop & Retro Playful Glam 🌈</option>
-                    <option value="Chic Parisian & Warm Luxury ☕">Chic Parisian & Warm Luxury ☕</option>
-                    <option value="Festive Royal & Luminous Glam 🥻">Festive Royal & Luminous Glam 🥻</option>
+                    <option value="Soft Coquette & Modern Romantic">Soft Coquette & Modern Romantic Glow</option>
+                    <option value="90s Minimalist & Clean-Girl Chic">90s Minimalist & Clean-Girl Chic</option>
+                    <option value="Goth Siren & Smoky Grunge">Goth Siren & Smoky Grunge</option>
+                    <option value="Y2K Indie Pop & Retro Playful Glam">Y2K Indie Pop & Retro Playful Glam</option>
+                    <option value="Chic Parisian & Warm Luxury">Chic Parisian & Warm Luxury</option>
+                    <option value="Festive Royal & Luminous Glam">Festive Royal & Luminous Glam</option>
                 </select>
 
                 <label for="makeupUndertoneSelect">Skin Undertone / Tone:</label>
@@ -816,15 +877,15 @@
                 <label for="makeupOutfitFile">Upload Outfit Image (Optional):</label>
                 <input type="file" id="makeupOutfitFile" accept="image/*">
 
-                <div id="makeupPreviewContainer" class="hidden" style="margin-top: 10px; text-align: center;">
-                    <img id="makeupOutfitPreview" src="" alt="Outfit preview" style="max-height: 160px; border-radius: 10px; border: 1.5px solid #FFC2D1; object-fit: contain;">
+                <div id="makeupPreviewContainer" class="hidden" style="margin-top: 12px; text-align: center;">
+                    <img id="makeupOutfitPreview" src="" alt="Outfit preview" style="max-height: 160px; border-radius: 12px; border: 1px solid var(--border-light); object-fit: contain;">
                 </div>
 
                 <label for="makeupUserQ">Specific Question (Optional):</label>
                 <input type="text" id="makeupUserQ" placeholder="e.g. Best lip shade for a dark red dress? Dewy or matte finish?">
 
-                <button class="action-button makeup-btn" style="margin-top: 15px;" onclick="getMakeupRecommendation()">
-                    💄 Generate Makeup & Beauty Direction ✨
+                <button class="action-button" style="margin-top: 16px;" onclick="getMakeupRecommendation()">
+                    Generate Makeup & Beauty Direction
                 </button>
             </div>
 
@@ -836,50 +897,6 @@
     </div>
 
     <script>
-        // Dictionary mapping user aesthetics to custom theme configs
-        const themes = {
-            pink: {
-                bg: "#FFE5EC",
-                cardBg: "#FFF0F5",
-                border: "#FFC2D1",
-                accent: "#4A1525",
-                primaryBtn: "#BDE0FE",
-                secondaryBtn: "#FFC2D1"
-            },
-            goth: {
-                bg: "#1A1A1A",
-                cardBg: "#2D2D2D",
-                border: "#444444",
-                accent: "#F5F5F5",
-                primaryBtn: "#555555",
-                secondaryBtn: "#3D3D3D"
-            },
-            chic: {
-                bg: "#F4EAE1",
-                cardBg: "#FAF4EE",
-                border: "#E0D0C0",
-                accent: "#3E2723",
-                primaryBtn: "#D7CCC8",
-                secondaryBtn: "#EFEBE9"
-            },
-            indie: {
-                bg: "#E0F2F1",
-                cardBg: "#F0FDFB",
-                border: "#B2DFDB",
-                accent: "#004D40",
-                primaryBtn: "#80CBC4",
-                secondaryBtn: "#B2DFDB"
-            },
-            minimalist: {
-                bg: "#F5F5F5",
-                cardBg: "#FFFFFF",
-                border: "#E0E0E0",
-                accent: "#212121",
-                primaryBtn: "#E0E0E0",
-                secondaryBtn: "#EEEEEE"
-            }
-        };
-
         let currentFilter = 'All';
 
         // Sample starter wardrobe items
@@ -902,37 +919,6 @@
 
         function saveWardrobeItems(items) {
             localStorage.setItem('muse_wardrobe_items', JSON.stringify(items));
-        }
-
-        // Live background & layout updates as theme changes
-        function applyAestheticTheme() {
-            const selectedOption = document.getElementById('userAesthetic').value;
-            const currentTheme = themes[selectedOption] || themes.pink;
-            const cardElement = document.getElementById('mainCard');
-            const topNav = document.getElementById('topNav');
-            const allInputs = document.querySelectorAll('input, textarea, select');
-            const allNavBtns = document.querySelectorAll('.nav-btn, .user-status-pill, .info-card');
-
-            document.body.style.backgroundColor = currentTheme.bg;
-            document.body.style.color = currentTheme.accent;
-
-            cardElement.style.backgroundColor = currentTheme.cardBg;
-            cardElement.style.borderColor = currentTheme.border;
-
-            if (topNav) {
-                topNav.style.borderColor = currentTheme.border;
-            }
-
-            allNavBtns.forEach(b => {
-                b.style.borderColor = currentTheme.border;
-            });
-
-            const imgPreview = document.getElementById('imagePreview');
-            if (imgPreview) imgPreview.style.borderColor = currentTheme.border;
-
-            allInputs.forEach(input => {
-                input.style.borderColor = currentTheme.border;
-            });
         }
 
         // Switch between Sign Up & Log In tabs
@@ -965,7 +951,6 @@
                 return;
             }
 
-            // Extract display name from email/username
             const displayName = email.split('@')[0];
             const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
@@ -973,7 +958,7 @@
             localStorage.setItem('muse_userEmail', email);
 
             updateNavAuthStatus(formattedName);
-            alert(`✨ Welcome back, ${formattedName}! You are now logged in.`);
+            alert(`Welcome back, ${formattedName}! You are signed in.`);
             switchAuthTab('signup');
             document.getElementById('userName').value = formattedName;
         }
@@ -981,9 +966,9 @@
         function updateNavAuthStatus(name) {
             const badge = document.getElementById('navAuthBadge');
             if (name && name !== 'Guest') {
-                badge.innerHTML = `<span>✨ <strong>${name}</strong> <a href="#" onclick="logoutUser(event)" style="color: inherit; margin-left: 4px; text-decoration: underline; font-size: 11px;">(Sign Out)</a></span>`;
+                badge.innerHTML = `<span><strong>${name}</strong> <a href="#" onclick="logoutUser(event)" style="color: var(--primary-red); margin-left: 6px; text-decoration: none; font-size: 11.5px; font-weight: 700;">(Sign Out)</a></span>`;
             } else {
-                badge.innerHTML = `<span>👤 Guest Stylist</span>`;
+                badge.innerHTML = `<span>Guest Stylist</span>`;
             }
         }
 
@@ -1002,13 +987,7 @@
 
         // Header Navigation Controller (Home, About, Key Features, FAQ)
         function showInfoSection(section) {
-            const screens = ['onboardingScreen', 'uploadScreen', 'wardrobeScreen', 'aboutScreen', 'featuresScreen', 'faqScreen'];
-            screens.forEach(s => {
-                const el = document.getElementById(s);
-                if (el) el.classList.add('hidden');
-            });
-
-            // Update top nav button active state
+            hideAllScreens();
             document.querySelectorAll('.nav-link-btn').forEach(b => b.classList.remove('active'));
 
             const navHeader = document.getElementById('navHeader');
@@ -1049,7 +1028,7 @@
                 if (bdayMonth === currentMonth && bdayDay === currentDay) {
                     setTimeout(() => {
                         alert(
-                            `🎂🎉 HAPPY BIRTHDAY, ${userName.toUpperCase()}! 🎉🎂\n\n✨ Today is your special celebration day! Time to pick your most showstopping outfit layout from your closet.`
+                            `Happy Birthday, ${userName}!\n\nToday is your special celebration day! Time to pick your most showstopping outfit layout from your closet.`
                         );
                     }, 300);
                 }
@@ -1078,7 +1057,7 @@
         // Navigation: Go to Outfit Vibe Check
         function goToUploadScreen() {
             const profile = saveUserProfile();
-            document.getElementById('dashboardGreeting').innerText = `✨ Welcome, ${profile.name}`;
+            document.getElementById('dashboardGreeting').innerText = `Welcome, ${profile.name}`;
 
             hideAllScreens();
             document.getElementById('uploadScreen').classList.remove('hidden');
@@ -1090,7 +1069,7 @@
         // Navigation: Go to Digital Wardrobe Closet
         function goToWardrobeScreen() {
             const profile = saveUserProfile();
-            document.getElementById('wardrobeGreeting').innerText = `👗 ${profile.name}'s Digital Wardrobe`;
+            document.getElementById('wardrobeGreeting').innerText = `${profile.name}'s Digital Wardrobe`;
 
             hideAllScreens();
             document.getElementById('wardrobeScreen').classList.remove('hidden');
@@ -1103,7 +1082,7 @@
         // Navigation: Go to Makeup & Beauty Assistant
         function goToMakeupScreen() {
             const profile = saveUserProfile();
-            document.getElementById('makeupGreeting').innerText = `💄 ${profile.name}'s Makeup & Beauty Stylist`;
+            document.getElementById('makeupGreeting').innerText = `${profile.name}'s Makeup & Beauty Stylist`;
 
             hideAllScreens();
             document.getElementById('makeupScreen').classList.remove('hidden');
@@ -1166,6 +1145,28 @@
                 wardrobePreviewContainer.classList.add('hidden');
             }
         });
+
+        // Live preview of makeup outfit photo
+        const makeupFileInput = document.getElementById('makeupOutfitFile');
+        const makeupPreviewContainer = document.getElementById('makeupPreviewContainer');
+        const makeupOutfitPreview = document.getElementById('makeupOutfitPreview');
+
+        if (makeupFileInput) {
+            makeupFileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        makeupOutfitPreview.src = e.target.result;
+                        makeupPreviewContainer.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    makeupOutfitPreview.src = '';
+                    makeupPreviewContainer.classList.add('hidden');
+                }
+            });
+        }
 
         // Add Piece to Digital Wardrobe
         function addWardrobeItem() {
@@ -1230,7 +1231,7 @@
             renderWardrobe(cat);
         }
 
-        // Render Wardrobe Grid
+        // Render Wardrobe Grid (Pinterest Card Style)
         function renderWardrobe(filter = 'All') {
             const grid = document.getElementById('wardrobeGrid');
             const countEl = document.getElementById('wardrobeCount');
@@ -1243,7 +1244,7 @@
             countEl.innerText = `${items.length} ${items.length === 1 ? 'piece' : 'pieces'}`;
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 25px; opacity: 0.7; font-size: 13px;">No pieces in this category yet. Upload one above!</div>`;
+                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 28px; color: var(--text-muted); font-size: 13.5px;">No pieces in this category yet. Upload one above!</div>`;
                 return;
             }
 
@@ -1253,7 +1254,7 @@
                     <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'">
                     <span class="wardrobe-badge">${item.category}</span>
                     <span class="wardrobe-card-title" title="${item.name}">${item.name}</span>
-                    <span style="font-size: 11px; opacity: 0.75;">${item.color}</span>
+                    <span style="font-size: 11.5px; color: var(--text-secondary); font-weight: 500;">${item.color}</span>
                 </div>
             `).join('');
         }
@@ -1271,7 +1272,7 @@
             }
 
             outBox.style.display = "block";
-            outBox.innerText = "✨ Consulting Muse Stylist to build the perfect look from your closet... 💕";
+            outBox.innerText = "Consulting Muse Stylist to build the perfect look from your closet...";
 
             try {
                 const response = await fetch('http://localhost:5000/api/ai/generate-outfit', {
@@ -1293,15 +1294,15 @@
                         const fallbackImg = 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
                         const imgSrc = p.image || fallbackImg;
                         return `
-                            <div style="display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.85); padding: 10px 14px; border-radius: 12px; border: 1.5px solid #FFC2D1; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 14px; background: var(--surface-muted); padding: 12px 16px; border-radius: var(--radius-card); margin-bottom: 8px; border: 1px solid var(--border-light);">
                                 <img src="${imgSrc}" alt="${p.name}" onerror="this.src='${fallbackImg}'"
-                                    style="width: 64px; height: 64px; object-fit: cover; border-radius: 10px; border: 1.5px solid #FFC2D1; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                                    style="width: 64px; height: 64px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-light); flex-shrink: 0; box-shadow: var(--shadow-subtle);">
                                 <div style="display: flex; flex-direction: column; gap: 3px; overflow: hidden;">
                                     <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                        <span style="font-size: 10px; font-weight: bold; background: #FFE5EC; color: #4A1525; padding: 2px 7px; border-radius: 6px;">${roleLabel || p.category}</span>
-                                        <span style="font-size: 11px; opacity: 0.75;">${p.color || ''}</span>
+                                        <span style="font-size: 11px; font-weight: 700; background: var(--text-primary); color: #ffffff; padding: 2px 8px; border-radius: var(--radius-pill);">${roleLabel || p.category}</span>
+                                        <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">${p.color || ''}</span>
                                     </div>
-                                    <div style="font-weight: bold; font-size: 14px; color: inherit; line-height: 1.3;">${p.name}</div>
+                                    <div style="font-weight: 700; font-size: 14px; color: var(--text-primary); line-height: 1.3;">${p.name}</div>
                                 </div>
                             </div>
                         `;
@@ -1312,36 +1313,36 @@
                     const jewelryHtml = (o.pieces.jewelry || []).map(p => renderPieceCard(p, 'Jewelry / Accents')).join('');
                     const outerHtml = (o.pieces.outerwear || []).map(p => renderPieceCard(p, 'Outerwear')).join('');
 
-                    const allPiecesHtml = (mainHtml + shoesHtml + jewelryHtml + outerHtml) || `<div style="opacity: 0.8; font-size: 13px;">No pieces selected.</div>`;
+                    const allPiecesHtml = (mainHtml + shoesHtml + jewelryHtml + outerHtml) || `<div style="color: var(--text-secondary); font-size: 13px;">No pieces selected.</div>`;
 
                     outBox.innerHTML = `
-                        <div style="font-weight: bold; font-size: 18px; color: inherit; margin-bottom: 12px; text-align: center;">
-                            👗 ${o.title}
+                        <div style="font-weight: 800; font-size: 18px; color: var(--text-primary); margin-bottom: 14px; text-align: center; letter-spacing: -0.2px;">
+                            ${o.title}
                         </div>
 
-                        <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px;">
-                            ✨ Curated Closet Pieces:
+                        <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                            Curated Closet Pieces
                         </div>
 
                         <div style="display: flex; flex-direction: column; margin-bottom: 14px;">
                             ${allPiecesHtml}
                         </div>
 
-                        <div style="margin-top: 12px; padding: 12px 14px; background: rgba(189, 224, 254, 0.25); border-radius: 10px; border-left: 4px solid #BDE0FE;">
-                            <div style="font-weight: bold; font-size: 13px; margin-bottom: 3px;">💡 Styling Rationale:</div>
-                            <div style="font-size: 13px; line-height: 1.45; opacity: 0.95;">${o.stylingRationale}</div>
+                        <div style="margin-top: 14px; padding: 14px 16px; background: var(--surface-muted); border-radius: var(--radius-card); border-left: 4px solid var(--text-primary);">
+                            <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 4px; color: var(--text-primary);">Styling Rationale</div>
+                            <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-secondary);">${o.stylingRationale}</div>
                         </div>
 
-                        <div style="margin-top: 8px; padding: 12px 14px; background: rgba(255, 194, 209, 0.25); border-radius: 10px; border-left: 4px solid #FFC2D1;">
-                            <div style="font-weight: bold; font-size: 13px; margin-bottom: 3px;">💄 Hair & Beauty Direction:</div>
-                            <div style="font-size: 13px; line-height: 1.45; opacity: 0.95;">${o.beautyTip}</div>
+                        <div style="margin-top: 10px; padding: 14px 16px; background: var(--primary-red-light); border-radius: var(--radius-card); border-left: 4px solid var(--primary-red);">
+                            <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 4px; color: var(--primary-red);">Hair & Beauty Direction</div>
+                            <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${o.beautyTip}</div>
                         </div>
                     `;
                 } else {
-                    outBox.innerText = "⚠️ Could not generate outfit: " + (data.error || "Unknown error");
+                    outBox.innerText = "Could not generate outfit: " + (data.error || "Unknown error");
                 }
             } catch (err) {
-                outBox.innerText = "❌ Connection failed. Ensure server is running on http://localhost:5000.";
+                outBox.innerText = "Connection failed. Ensure server is running on http://localhost:5000.";
             }
         }
 
@@ -1355,7 +1356,7 @@
             }
 
             outBox.style.display = "block";
-            outBox.innerText = "Analyzing wardrobe items through Llama Vision engine... 💕";
+            outBox.innerText = "Analyzing wardrobe items through fashion vision engine...";
 
             const formData = new FormData();
             formData.append('outfitImage', fileInput.files[0]);
@@ -1382,13 +1383,91 @@
                     }
                 } else if (data.error) {
                     const errorMsg = typeof data.error === 'object' ? JSON.stringify(data.error) : data.error;
-                    outBox.innerText = "⚠️ " + errorMsg;
+                    outBox.innerText = "Notice: " + errorMsg;
                 } else {
-                    outBox.innerText = "⚠️ Failed to extract layout data safely.";
+                    outBox.innerText = "Failed to extract layout data safely.";
                 }
 
             } catch (error) {
-                outBox.innerText = "❌ Connection Error! Verify server execution status.";
+                outBox.innerText = "Connection Error! Verify server execution status.";
+            }
+        }
+
+        // Makeup & Beauty Recommendation
+        async function getMakeupRecommendation() {
+            const outBox = document.getElementById('makeupOutputBox');
+            const vibe = document.getElementById('makeupVibeSelect').value;
+            const undertone = document.getElementById('makeupUndertoneSelect').value;
+            const userQ = document.getElementById('makeupUserQ').value;
+            const fileInput = document.getElementById('makeupOutfitFile');
+
+            outBox.style.display = "block";
+            outBox.innerText = "Formulating personalized makeup & beauty direction...";
+
+            const formData = new FormData();
+            formData.append('vibe', vibe);
+            formData.append('undertone', undertone);
+            formData.append('userQuestion', userQ);
+            if (fileInput.files.length > 0) {
+                formData.append('outfitImage', fileInput.files[0]);
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/ai/makeup-recommendation', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.makeup) {
+                    const m = data.makeup;
+
+                    outBox.innerHTML = `
+                        <div style="font-weight: 800; font-size: 18px; color: var(--text-primary); margin-bottom: 6px; text-align: center; letter-spacing: -0.2px;">
+                            ${m.title}
+                        </div>
+                        <div style="text-align: center; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 16px; font-weight: 600;">
+                            Undertone Match: ${m.undertoneMatched}
+                        </div>
+
+                        ${m.customAdvice ? `
+                        <div style="margin-bottom: 12px; padding: 12px 14px; background: var(--surface-muted); border-radius: var(--radius-card); border-left: 4px solid var(--text-primary);">
+                            <div style="font-size: 13.5px; line-height: 1.45; font-weight: 600;">${m.customAdvice}</div>
+                        </div>` : ''}
+
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="background: var(--surface-muted); padding: 12px 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light);">
+                                <div style="font-weight: 700; font-size: 13px; margin-bottom: 2px; color: var(--primary-red);">Complexion & Base Prep</div>
+                                <div style="font-size: 13px; color: var(--text-primary); line-height: 1.45;">${m.skinBase}</div>
+                            </div>
+
+                            <div style="background: var(--surface-muted); padding: 12px 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light);">
+                                <div style="font-weight: 700; font-size: 13px; margin-bottom: 2px; color: var(--primary-red);">Eyes & Lashes</div>
+                                <div style="font-size: 13px; color: var(--text-primary); line-height: 1.45;">${m.eyes}</div>
+                            </div>
+
+                            <div style="background: var(--surface-muted); padding: 12px 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light);">
+                                <div style="font-weight: 700; font-size: 13px; margin-bottom: 2px; color: var(--primary-red);">Lip Combination & Finish</div>
+                                <div style="font-size: 13px; color: var(--text-primary); line-height: 1.45;">${m.lips}</div>
+                            </div>
+
+                            <div style="background: var(--surface-muted); padding: 12px 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light);">
+                                <div style="font-weight: 700; font-size: 13px; margin-bottom: 2px; color: var(--primary-red);">Hairstyle Match</div>
+                                <div style="font-size: 13px; color: var(--text-primary); line-height: 1.45;">${m.hair}</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 14px; padding: 12px 14px; background: var(--primary-red-light); border-radius: var(--radius-card); border-left: 4px solid var(--primary-red);">
+                            <div style="font-weight: 700; font-size: 13px; color: var(--primary-red); margin-bottom: 2px;">Pro Stylist Tip</div>
+                            <div style="font-size: 13px; color: var(--text-primary); line-height: 1.45;">${m.proTip}</div>
+                        </div>
+                    `;
+                } else {
+                    outBox.innerText = "Could not generate makeup direction: " + (data.error || "Unknown error");
+                }
+            } catch (err) {
+                outBox.innerText = "Connection failed. Ensure server is running on http://localhost:5000.";
             }
         }
 
@@ -1410,7 +1489,6 @@
             if (savedBday) document.getElementById('userBirthday').value = savedBday;
             if (savedAesthetic) {
                 document.getElementById('userAesthetic').value = savedAesthetic;
-                applyAestheticTheme();
             }
         });
     </script>

@@ -43,8 +43,8 @@ router.get('/check-today-celebration', async (req, res) => {
                 hasCelebration: true,
                 celebrationName: celebrationName,
                 celebrationType: celebrationType,
-                alertMessage: `✨ Happy ${celebrationName}! ✨ Today calls for a premium look. Time to pick your perfect outfit layout from your closet.`,
-                suggestedAction: `Generate ${celebrationType} Outfit 🚀`
+                alertMessage: `Happy ${celebrationName}! Today calls for a premium look. Time to pick your perfect outfit layout from your closet.`,
+                suggestedAction: `Generate ${celebrationType} Outfit`
             });
         }
 

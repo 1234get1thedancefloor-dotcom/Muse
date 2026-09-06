@@ -25,6 +25,6 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(
-        `🚀 Muse backend server running cleanly on http://localhost:${PORT}`
+        `Muse backend server running cleanly on http://localhost:${PORT}`
     );
 });
