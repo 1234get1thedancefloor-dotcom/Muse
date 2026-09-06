@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muse AI Stylist Dashboard</title>
+    <style>
+        /* Soft Coquette Color Palette Design */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #FFE5EC; /* Light Pink Background */
+            color: #4A1525; /* Deep Velvet Wine Text */
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 20px; 
+        }
+        .card { 
+            background: #FFF0F5; /* Soft Peach / Lavender Blush Container */
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 24px rgba(74, 21, 37, 0.1); 
+            border: 2px solid #FFC2D1; 
+        }
+        h2 { 
+            color: #4A1525; /* Velvet Accent Heading */
+            margin-top: 0;
+            text-align: center;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+        }
+        label { 
+            display: block; 
+            margin: 20px 0 8px; 
+            font-weight: bold; 
+            color: #4A1525; 
+        }
+        input[type="file"], textarea { 
+            width: 100%; 
+            padding: 12px; 
+            background: #FFFFFF; 
+            border: 2px solid #FFC2D1; 
+            border-radius: 10px; 
+            color: #4A1525; 
+            box-sizing: border-box; 
+            font-size: 14px;
+        }
+        textarea:focus, input[type="file"]:focus {
+            outline: none;
+            border-color: #A2D2FF; /* Soft Blue Focus Ring */
+        }
+        .row { 
+            display: flex; 
+            align-items: center; 
+            margin: 20px 0; 
+            gap: 12px; 
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4A1525;
+        }
+        button { 
+            background: #BDE0FE; /* Soft Blue Button Background */
+            color: #4A1525; /* Velvet Button Text */
+            border: none; 
+            padding: 14px 20px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 15px; 
+            box-shadow: 0 4px 10px rgba(189, 224, 254, 0.4);
+            transition: all 0.2s ease;
+        }
+        button:hover { 
+            background: #A2D2FF; /* Slightly Deeper Soft Blue on Hover */
+            transform: translateY(-1px);
+        }
+        #outputBox { 
+            margin-top: 30px; 
+            background: #FFFFFF; 
+            padding: 20px; 
+            border-left: 5px solid #BDE0FE; 
+            border-radius: 10px; 
+            display: none; 
+            white-space: pre-wrap; 
+            font-family: inherit; 
+            line-height: 1.6;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>✨ Muse AI Styling Assistant</h2>
+    
+    <!-- File Input Slot -->
+    <label for="outfitFile">Upload Your Outfit Image:</label>
+    <input type="file" id="outfitFile" accept="image/*">
+
+    <div class="row">
+        <input type="checkbox" id="hasQ" onchange="toggleQuestionBox()">
+        <label style="margin:0; user-select: none;" for="hasQ">I have a specific question about the fit / style</label>
+    </div>
+
+    <div id="questionContainer" class="hidden">
+        <label for="userQ">Your Question:</label>
+        <textarea id="userQ" rows="3" placeholder="Does this look balanced? Should I wear gold or silver accessories?"></textarea>
+    </div>
+
+    <button onclick="uploadAndAnalyze()">Analyze My Vibe 🚀</button>
+
+    <div id="outputBox">Waiting for response...</div>
+</div>
+
+<script>
+    function toggleQuestionBox() {
+        const checkbox = document.getElementById('hasQ');
+        const container = document.getElementById('questionContainer');
+        if(checkbox.checked) {
+            container.classList.remove('hidden');
+        } else {
+            container.classList.add('hidden');
+        }
+    }
+
+    async function uploadAndAnalyze() {
+        const outBox = document.getElementById('outputBox');
+        const fileInput = document.getElementById('outfitFile');
+        
+        if (fileInput.files.length === 0) {
+            alert("Please choose an image file from your computer first!");
+            return;
+        }
+
+        outBox.style.display = "block";
+        outBox.innerText = "Processing image and connecting to Muse server... 💕";
+
+        // Create multipart form payload for handling raw physical binary images
+        const formData = new FormData();
+        formData.append('outfitImage', fileInput.files[0]); // Explicitly grab the first selected file target
+        formData.append('hasQuestion', document.getElementById('hasQ').checked);
+        formData.append('userQuestion', document.getElementById('userQ').value);
+
+        try {
+            const response = await fetch('http://localhost:5000/api/ai/detect-aesthetic', {
+                method: 'POST',
+                body: formData 
+            });
+
+            const data = await response.json();
+            console.log("Raw Server Response:", data); // Accessible inside browser inspector console
+
+            if (data.success && data.results) {
+                // Safely extract the generated text from Hugging Face format variations
+                if (Array.isArray(data.results) && data.results[0] && data.results[0].generated_text) {
+                    outBox.innerText = data.results[0].generated_text;
+                } else if (data.results.generated_text) {
+                    outBox.innerText = data.results.generated_text;
+                } else if (typeof data.results === 'string') {
+                    outBox.innerText = data.results;
+                } else {
+                    outBox.innerText = JSON.stringify(data.results, null, 2);
+                }
+            } else {
+                outBox.innerText = "⚠️ Server responded, but could not parse the format structure layout safely.";
+            }
+        } catch (error) {
+            outBox.innerText = "❌ Connection Failed! Ensure your backend node server is running on http://localhost:5000.";
+        }
+    }
+</script>
+</body>
+</html>
