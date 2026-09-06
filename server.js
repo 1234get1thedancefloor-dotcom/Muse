@@ -19,9 +19,14 @@ app.use(express.static(__dirname));
 const aiRouter = require('./routes/aiRoutes');
 app.use('/api/ai', aiRouter);
 
-// Fallback base route to launch index.html
+// Main onboarding & digital wardrobe planner page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Single outfit vibe check sub-page
+app.get('/intro', (req, res) => {
+    res.sendFile(path.join(__dirname, 'intro.html'));
 });
 
 // Start listening for app requests
