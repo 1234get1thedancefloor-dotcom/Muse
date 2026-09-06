@@ -4,20 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muse AI Stylist Dashboard</title>
+    <title>Muse - AI Personal Stylist & Wardrobe Assistant</title>
 
     <style>
-        /* Base Styling Rules */
+        /* Base Styling & Theme Variables */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #FFE5EC;
             color: #4A1525;
-            max-width: 620px;
-            margin: 40px auto;
-            padding: 20px;
+            max-width: 680px;
+            margin: 20px auto 50px;
+            padding: 15px;
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
+        /* Top Navigation Header */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid #FFC2D1;
+            padding: 10px 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 15px rgba(74, 21, 37, 0.05);
+            transition: border-color 0.5s ease, background-color 0.5s ease;
+        }
+
+        .nav-links-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link-btn {
+            background: transparent;
+            border: 1.5px solid transparent;
+            padding: 6px 12px;
+            border-radius: 16px;
+            color: inherit;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .nav-link-btn:hover {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: #FFC2D1;
+        }
+
+        .nav-link-btn.active {
+            background: #BDE0FE;
+            border-color: #A2D2FF;
+            color: #4A1525;
+        }
+
+        .nav-auth-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .user-status-pill {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 12px;
+            border-radius: 14px;
+            border: 1px solid #FFC2D1;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Main App Card */
         .card {
             background: #FFF0F5;
             padding: 30px;
@@ -26,7 +96,7 @@
             border: 2px solid #FFC2D1;
             display: flex;
             flex-direction: column;
-            min-height: 450px;
+            min-height: 480px;
             position: relative;
             box-sizing: border-box;
             transition: border-color 0.5s ease, background-color 0.5s ease;
@@ -42,19 +112,23 @@
 
         .subtitle {
             text-align: center;
-            opacity: 0.8;
+            opacity: 0.85;
             margin-top: -10px;
-            margin-bottom: 25px;
+            margin-bottom: 22px;
             font-size: 14px;
         }
 
+        /* Form Inputs */
         label {
             display: block;
-            margin: 15px 0 8px;
+            margin: 14px 0 6px;
             font-weight: bold;
+            font-size: 13.5px;
         }
 
         input[type="text"],
+        input[type="email"],
+        input[type="password"],
         input[type="date"],
         input[type="file"],
         textarea,
@@ -80,8 +154,8 @@
         .row {
             display: flex;
             align-items: center;
-            margin: 20px 0;
-            gap: 12px;
+            margin: 18px 0;
+            gap: 10px;
         }
 
         input[type="checkbox"] {
@@ -90,9 +164,39 @@
             accent-color: #4A1525;
         }
 
+        /* Auth Toggle Pill Switcher */
+        .auth-toggle-pill {
+            display: flex;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1.5px solid #FFC2D1;
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 20px;
+            gap: 4px;
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 9px 12px;
+            border: none;
+            background: transparent;
+            color: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .auth-tab-btn.active {
+            background: #BDE0FE;
+            color: #4A1525;
+            box-shadow: 0 2px 8px rgba(189, 224, 254, 0.5);
+        }
+
         /* Nav Header Button */
         .nav-btn {
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.7);
             border: 1px solid #FFC2D1;
             padding: 8px 14px;
             border-radius: 20px;
@@ -141,6 +245,30 @@
         .secondary-btn:hover {
             background: #FFAFCC;
             transform: translateY(-1px);
+        }
+
+        /* Makeup Action Button */
+        .makeup-btn {
+            background: #E8DFF5;
+            color: #4A1525;
+            box-shadow: 0 4px 10px rgba(232, 223, 245, 0.45);
+        }
+
+        .makeup-btn:hover {
+            background: #D8B4F8;
+            transform: translateY(-1px);
+        }
+
+        #makeupOutputBox {
+            margin-top: 20px;
+            background: #FFFFFF;
+            padding: 18px;
+            border-left: 5px solid #D8B4F8;
+            border-radius: 14px;
+            display: none;
+            font-size: 14px;
+            color: #4A1525;
+            box-shadow: 0 4px 15px rgba(74, 21, 37, 0.05);
         }
 
         #outputBox {
@@ -273,6 +401,49 @@
             background: rgba(255, 0, 0, 0.85);
         }
 
+        /* Info Section Cards (About, Features, FAQ) */
+        .info-card {
+            background: rgba(255, 255, 255, 0.75);
+            border: 1.5px solid #FFC2D1;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .info-card h3 {
+            margin: 0 0 6px 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #FFC2D1;
+            padding: 12px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-q {
+            font-weight: bold;
+            font-size: 14.5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-a {
+            margin-top: 6px;
+            font-size: 13.5px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
         /* Screen Visibility Control */
         .hidden {
             display: none !important;
@@ -282,46 +453,98 @@
 
 <body>
 
-    <!-- Global Navigation Back Arrow -->
+    <!-- TOP NAVIGATION BAR (Home, About, Key Features, FAQ, Login Status) -->
+    <header class="top-navbar" id="topNav">
+        <div class="nav-links-left">
+            <button class="nav-link-btn active" id="navHomeBtn" onclick="showInfoSection('home')">
+                🏠 Home
+            </button>
+            <button class="nav-link-btn" id="navAboutBtn" onclick="showInfoSection('about')">
+                ℹ️ About
+            </button>
+            <button class="nav-link-btn" id="navFeaturesBtn" onclick="showInfoSection('features')">
+                ⭐ Key Features
+            </button>
+            <button class="nav-link-btn" id="navFaqBtn" onclick="showInfoSection('faq')">
+                ❓ FAQ
+            </button>
+        </div>
+
+        <div class="nav-auth-right">
+            <div id="navAuthBadge" class="user-status-pill">
+                <span>👤 Guest Stylist</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Global Back Arrow (Shown on internal screens) -->
     <div id="navHeader" class="hidden">
-        <button class="nav-btn" onclick="goToOnboarding()">
-            ← Back to Onboarding / Preferences
+        <button class="nav-btn" onclick="showInfoSection('home')">
+            ← Back to Onboarding / Home
         </button>
     </div>
 
     <div class="card" id="mainCard">
 
-        <!-- STEP 1: ONBOARDING / SIGN IN SCREEN PANEL -->
+        <!-- SCREEN 1: ONBOARDING / SIGN UP & LOGIN SCREEN -->
         <div id="onboardingScreen" style="display: flex; flex-direction: column; flex-grow: 1;">
 
             <h2>✨ Welcome to Muse</h2>
 
             <div class="subtitle">
-                Set your style profile parameters to initialize
+                Your AI-Powered Gamified Personal Stylist & Wardrobe Assistant
             </div>
 
-            <label for="userName">
-                Enter Your Name:
-            </label>
-            <input type="text" id="userName" placeholder="e.g. Mahat">
+            <!-- Login / Sign Up Tab Switcher -->
+            <div class="auth-toggle-pill">
+                <button id="tabSignUp" class="auth-tab-btn active" onclick="switchAuthTab('signup')">
+                    ✨ Create Account / Sign Up
+                </button>
+                <button id="tabLogIn" class="auth-tab-btn" onclick="switchAuthTab('login')">
+                    🔑 Log In
+                </button>
+            </div>
 
-            <label for="userBirthday">
-                Enter Your Birthday:
-            </label>
-            <input type="date" id="userBirthday">
+            <!-- SIGN UP FORM PANEL -->
+            <div id="signUpPanel">
+                <label for="userName">Full Name / Nickname:</label>
+                <input type="text" id="userName" placeholder="e.g. Mahat">
 
-            <label for="userAesthetic">
-                Select Daily Vibe / Aesthetic:
-            </label>
-            <select id="userAesthetic" onchange="applyAestheticTheme()">
-                <option value="pink">Cutesy / Soft Pink (Default)</option>
-                <option value="goth">Goth / Grunge Dark</option>
-                <option value="chic">Chic / Luxury Warm</option>
-                <option value="indie">Indie / Eclectic Teal</option>
-                <option value="minimalist">Minimalist / Clean Grey</option>
-            </select>
+                <label for="userEmail">Email / Username:</label>
+                <input type="email" id="userEmail" placeholder="e.g. mahat@muse.style">
 
-            <!-- Onboarding Actions (Two Bottom Buttons) -->
+                <label for="userPassword">Create Password:</label>
+                <input type="password" id="userPassword" placeholder="••••••••">
+
+                <label for="userBirthday">Enter Your Birthday:</label>
+                <input type="date" id="userBirthday">
+
+                <label for="userAesthetic">Select Daily Aesthetic / Theme:</label>
+                <select id="userAesthetic" onchange="applyAestheticTheme()">
+                    <option value="pink">Cutesy / Soft Pink (Default)</option>
+                    <option value="goth">Goth / Grunge Dark</option>
+                    <option value="chic">Chic / Luxury Warm</option>
+                    <option value="indie">Indie / Eclectic Teal</option>
+                    <option value="minimalist">Minimalist / Clean Grey</option>
+                </select>
+            </div>
+
+            <!-- LOGIN FORM PANEL (Hidden by default) -->
+            <div id="loginPanel" class="hidden">
+                <label for="loginEmail">Email / Username:</label>
+                <input type="text" id="loginEmail" placeholder="Enter your email or username">
+
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" placeholder="••••••••">
+
+                <div style="margin-top: 15px; margin-bottom: 5px;">
+                    <button class="action-button secondary-btn" style="padding: 10px;" onclick="handleLoginSubmit()">
+                        🔐 Sign In to Muse Account
+                    </button>
+                </div>
+            </div>
+
+            <!-- ONBOARDING ACTION BUTTONS -->
             <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 25px;">
                 <button class="action-button" onclick="goToUploadScreen()">
                     📸 Upload Outfit & Analyze Vibe 🚀
@@ -329,11 +552,14 @@
                 <button class="action-button secondary-btn" onclick="goToWardrobeScreen()">
                     👗 Upload Your Wardrobe into Closet 🗄️
                 </button>
+                <button class="action-button makeup-btn" onclick="goToMakeupScreen()">
+                    💄 Recommend Makeup & Beauty Look ✨
+                </button>
             </div>
 
         </div>
 
-        <!-- STEP 2: UPLOAD & VIBE CHECK SCREEN PANEL -->
+        <!-- SCREEN 2: UPLOAD & VIBE CHECK SCREEN -->
         <div id="uploadScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
 
             <h2 id="dashboardGreeting">
@@ -380,7 +606,7 @@
 
         </div>
 
-        <!-- STEP 3: DIGITAL WARDROBE & CLOSET SCREEN PANEL -->
+        <!-- SCREEN 3: DIGITAL WARDROBE & CLOSET SCREEN -->
         <div id="wardrobeScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
 
             <h2 id="wardrobeGreeting">
@@ -462,6 +688,151 @@
 
         </div>
 
+        <!-- SCREEN 4: ABOUT MUSE SCREEN -->
+        <div id="aboutScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
+            <h2>ℹ️ About Muse</h2>
+            <div class="subtitle">Your wardrobe becomes an interactive style adventure</div>
+
+            <div class="info-card">
+                <h3>✨ The Concept</h3>
+                <p style="margin: 0;">An end-to-end encrypted, gamified fashion and beauty platform that transforms the everyday struggle of getting ready into a fun, personalized experience.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>🎯 How It Works</h3>
+                <p style="margin: 0 0 8px;">1. <strong>Pick a Vibe:</strong> Select from dynamic aesthetic themes like Cutesy, Goth, Chic, Indie, or Minimalist.</p>
+                <p style="margin: 0 0 8px;">2. <strong>Build Your Digital Wardrobe:</strong> Catalog photos of your existing tops, bottoms, shoes, and jewelry.</p>
+                <p style="margin: 0;">3. <strong>AI Styling & Beauty Assistant:</strong> Get coordinated looks tailored to your closet pieces, occasion calendars, and undertones.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>🔒 Privacy-First Design</h3>
+                <p style="margin: 0;">Your photos, personal style preferences, and wardrobe items remain encrypted and private on your device and session.</p>
+            </div>
+
+            <button class="action-button" style="margin-top: 15px;" onclick="showInfoSection('home')">
+                ← Back to Dashboard & Styling
+            </button>
+        </div>
+
+        <!-- SCREEN 5: KEY FEATURES SCREEN -->
+        <div id="featuresScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
+            <h2>⭐ Key Features</h2>
+            <div class="subtitle">Explore the intelligence powering Muse</div>
+
+            <div class="info-card">
+                <h3>🎮 1. Gamified Interface & Aesthetic Themes</h3>
+                <p style="margin: 0;">The entire application environment adapts visually to your daily vibe (Soft Pink, Goth Grunge, Chic Luxury, Indie Teal, Minimalist Grey).</p>
+            </div>
+
+            <div class="info-card">
+                <h3>👗 2. Smart Wardrobe & Occasion Planner</h3>
+                <p style="margin: 0;">Upload photos of your clothes to create a digital closet. Muse generates complete outfits using what you already own for festivals, birthdays, and parties.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>📌 3. Pinterest-to-Closet Styling</h3>
+                <p style="margin: 0;">Upload an inspo photo from Pinterest or Instagram and let Muse recreate the look using pieces already in your wardrobe.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>💄 4. Gender-Neutral Makeup & Beauty Assistant</h3>
+                <p style="margin: 0;">Personalized makeup suggestions, hairstyle pairings, and color undertone guidance matched to your chosen aesthetic.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>👥 5. Social Styling & Group Coordination</h3>
+                <p style="margin: 0;">Coordinate complementary outfit palettes with friends for events, weddings, and celebrations.</p>
+            </div>
+
+            <button class="action-button" style="margin-top: 15px;" onclick="showInfoSection('home')">
+                ← Back to Dashboard & Styling
+            </button>
+        </div>
+
+        <!-- SCREEN 6: FAQ SCREEN -->
+        <div id="faqScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
+            <h2>❓ Frequently Asked Questions</h2>
+            <div class="subtitle">Quick answers to common questions about Muse</div>
+
+            <div class="info-card">
+                <div class="faq-item">
+                    <div class="faq-q"><span>✨ How does the outfit vibe check work?</span> <span>➕</span></div>
+                    <div class="faq-a">Upload a photo of your outfit and Muse's multimodal fashion engine analyzes the silhouette, color palette, shoes, and jewelry balance.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-q"><span>👗 How do I style looks from my own closet?</span> <span>➕</span></div>
+                    <div class="faq-a">Use the 'Upload Wardrobe' button to add your tops, bottoms, shoes, and accessories. Then pick an occasion (Party, Diwali, Date Night) and click 'Style Outfit from My Closet'.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-q"><span>🎂 When will I see celebration alerts?</span> <span>➕</span></div>
+                    <div class="faq-a">Muse remembers your birthday entered in your profile and triggers celebration greetings and occasion styling exclusively on your special day!</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-q"><span>🔒 Are my wardrobe images private?</span> <span>➕</span></div>
+                    <div class="faq-a">Yes. Muse operates with privacy-first standards. Your closet data and photos remain encrypted and stored locally in your session.</div>
+                </div>
+            </div>
+
+            <button class="action-button" style="margin-top: 15px;" onclick="showInfoSection('home')">
+                ← Back to Dashboard & Styling
+            </button>
+        </div>
+
+        <!-- SCREEN 7: MAKEUP & BEAUTY LOOK RECOMMENDER SCREEN -->
+        <div id="makeupScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
+
+            <h2 id="makeupGreeting">
+                💄 Muse Makeup & Beauty Stylist
+            </h2>
+
+            <div class="subtitle">
+                Personalized beauty direction matched to your outfit vibe & undertones
+            </div>
+
+            <!-- Upload / Input Controls -->
+            <div style="background: rgba(255, 255, 255, 0.65); padding: 18px; border-radius: 16px; border: 1.5px dashed #FFC2D1; margin-bottom: 20px;">
+                <label style="margin-top: 0;" for="makeupVibeSelect">Target Outfit Vibe / Aesthetic:</label>
+                <select id="makeupVibeSelect">
+                    <option value="Soft Coquette & Modern Romantic 💕">Soft Coquette & Modern Romantic Glow 💕</option>
+                    <option value="90s Minimalist & Clean-Girl Chic ✨">90s Minimalist & Clean-Girl Chic ✨</option>
+                    <option value="Goth Siren & Smoky Grunge 🖤">Goth Siren & Smoky Grunge 🖤</option>
+                    <option value="Y2K Indie Pop & Retro Playful Glam 🌈">Y2K Indie Pop & Retro Playful Glam 🌈</option>
+                    <option value="Chic Parisian & Warm Luxury ☕">Chic Parisian & Warm Luxury ☕</option>
+                    <option value="Festive Royal & Luminous Glam 🥻">Festive Royal & Luminous Glam 🥻</option>
+                </select>
+
+                <label for="makeupUndertoneSelect">Skin Undertone / Tone:</label>
+                <select id="makeupUndertoneSelect">
+                    <option value="Warm Golden / Olive">Warm Golden / Olive (Pairs with Warm Terracotta & Peach)</option>
+                    <option value="Cool Rose / Fair">Cool Rose / Fair (Pairs with Soft Pink, Glazed Berry & Frosted Champagne)</option>
+                    <option value="Neutral / Balanced">Neutral / Balanced (Versatile with Nudes, Muted Plum & Classic Red)</option>
+                    <option value="Deep Rich / Espresso">Deep Rich / Espresso (Pairs with Bold Berry, Bronze & Glazed Wine)</option>
+                </select>
+
+                <label for="makeupOutfitFile">Upload Outfit Image (Optional):</label>
+                <input type="file" id="makeupOutfitFile" accept="image/*">
+
+                <div id="makeupPreviewContainer" class="hidden" style="margin-top: 10px; text-align: center;">
+                    <img id="makeupOutfitPreview" src="" alt="Outfit preview" style="max-height: 160px; border-radius: 10px; border: 1.5px solid #FFC2D1; object-fit: contain;">
+                </div>
+
+                <label for="makeupUserQ">Specific Question (Optional):</label>
+                <input type="text" id="makeupUserQ" placeholder="e.g. Best lip shade for a dark red dress? Dewy or matte finish?">
+
+                <button class="action-button makeup-btn" style="margin-top: 15px;" onclick="getMakeupRecommendation()">
+                    💄 Generate Makeup & Beauty Direction ✨
+                </button>
+            </div>
+
+            <!-- Result Box -->
+            <div id="makeupOutputBox"></div>
+
+        </div>
+
     </div>
 
     <script>
@@ -533,20 +904,28 @@
             localStorage.setItem('muse_wardrobe_items', JSON.stringify(items));
         }
 
-        // Live background updates as the user changes selections
+        // Live background & layout updates as theme changes
         function applyAestheticTheme() {
             const selectedOption = document.getElementById('userAesthetic').value;
             const currentTheme = themes[selectedOption] || themes.pink;
             const cardElement = document.getElementById('mainCard');
-            const allInputs = document.querySelectorAll('input[type="text"], input[type="date"], input[type="file"], textarea, select');
-            const navBtn = document.querySelector('.nav-btn');
+            const topNav = document.getElementById('topNav');
+            const allInputs = document.querySelectorAll('input, textarea, select');
+            const allNavBtns = document.querySelectorAll('.nav-btn, .user-status-pill, .info-card');
 
             document.body.style.backgroundColor = currentTheme.bg;
             document.body.style.color = currentTheme.accent;
 
             cardElement.style.backgroundColor = currentTheme.cardBg;
             cardElement.style.borderColor = currentTheme.border;
-            if (navBtn) navBtn.style.borderColor = currentTheme.border;
+
+            if (topNav) {
+                topNav.style.borderColor = currentTheme.border;
+            }
+
+            allNavBtns.forEach(b => {
+                b.style.borderColor = currentTheme.border;
+            });
 
             const imgPreview = document.getElementById('imagePreview');
             if (imgPreview) imgPreview.style.borderColor = currentTheme.border;
@@ -554,6 +933,104 @@
             allInputs.forEach(input => {
                 input.style.borderColor = currentTheme.border;
             });
+        }
+
+        // Switch between Sign Up & Log In tabs
+        function switchAuthTab(mode) {
+            const tabSignUp = document.getElementById('tabSignUp');
+            const tabLogIn = document.getElementById('tabLogIn');
+            const signUpPanel = document.getElementById('signUpPanel');
+            const loginPanel = document.getElementById('loginPanel');
+
+            if (mode === 'login') {
+                tabLogIn.classList.add('active');
+                tabSignUp.classList.remove('active');
+                loginPanel.classList.remove('hidden');
+                signUpPanel.classList.add('hidden');
+            } else {
+                tabSignUp.classList.add('active');
+                tabLogIn.classList.remove('active');
+                signUpPanel.classList.remove('hidden');
+                loginPanel.classList.add('hidden');
+            }
+        }
+
+        // Handle Log In Submit
+        function handleLoginSubmit() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+
+            if (!email) {
+                alert("Please enter your email or username!");
+                return;
+            }
+
+            // Extract display name from email/username
+            const displayName = email.split('@')[0];
+            const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+            localStorage.setItem('muse_userName', formattedName);
+            localStorage.setItem('muse_userEmail', email);
+
+            updateNavAuthStatus(formattedName);
+            alert(`✨ Welcome back, ${formattedName}! You are now logged in.`);
+            switchAuthTab('signup');
+            document.getElementById('userName').value = formattedName;
+        }
+
+        function updateNavAuthStatus(name) {
+            const badge = document.getElementById('navAuthBadge');
+            if (name && name !== 'Guest') {
+                badge.innerHTML = `<span>✨ <strong>${name}</strong> <a href="#" onclick="logoutUser(event)" style="color: inherit; margin-left: 4px; text-decoration: underline; font-size: 11px;">(Sign Out)</a></span>`;
+            } else {
+                badge.innerHTML = `<span>👤 Guest Stylist</span>`;
+            }
+        }
+
+        function logoutUser(e) {
+            if (e) e.preventDefault();
+            localStorage.removeItem('muse_userName');
+            localStorage.removeItem('muse_userEmail');
+            localStorage.removeItem('muse_userBirthday');
+            document.getElementById('userName').value = '';
+            document.getElementById('userEmail').value = '';
+            document.getElementById('userPassword').value = '';
+            document.getElementById('userBirthday').value = '';
+            updateNavAuthStatus('Guest');
+            alert("You have signed out.");
+        }
+
+        // Header Navigation Controller (Home, About, Key Features, FAQ)
+        function showInfoSection(section) {
+            const screens = ['onboardingScreen', 'uploadScreen', 'wardrobeScreen', 'aboutScreen', 'featuresScreen', 'faqScreen'];
+            screens.forEach(s => {
+                const el = document.getElementById(s);
+                if (el) el.classList.add('hidden');
+            });
+
+            // Update top nav button active state
+            document.querySelectorAll('.nav-link-btn').forEach(b => b.classList.remove('active'));
+
+            const navHeader = document.getElementById('navHeader');
+
+            if (section === 'about') {
+                document.getElementById('aboutScreen').classList.remove('hidden');
+                document.getElementById('navAboutBtn').classList.add('active');
+                navHeader.classList.remove('hidden');
+            } else if (section === 'features') {
+                document.getElementById('featuresScreen').classList.remove('hidden');
+                document.getElementById('navFeaturesBtn').classList.add('active');
+                navHeader.classList.remove('hidden');
+            } else if (section === 'faq') {
+                document.getElementById('faqScreen').classList.remove('hidden');
+                document.getElementById('navFaqBtn').classList.add('active');
+                navHeader.classList.remove('hidden');
+            } else {
+                // Home
+                document.getElementById('onboardingScreen').classList.remove('hidden');
+                document.getElementById('navHomeBtn').classList.add('active');
+                navHeader.classList.add('hidden');
+            }
         }
 
         // Check if today matches the user's birthday (MM-DD)
@@ -582,11 +1059,18 @@
         function saveUserProfile() {
             const nameInput = document.getElementById('userName').value.trim();
             const birthdayInput = document.getElementById('userBirthday').value;
+            const emailInput = document.getElementById('userEmail').value.trim();
+
             if (nameInput) localStorage.setItem('muse_userName', nameInput);
             if (birthdayInput) localStorage.setItem('muse_userBirthday', birthdayInput);
+            if (emailInput) localStorage.setItem('muse_userEmail', emailInput);
             localStorage.setItem('muse_userAesthetic', document.getElementById('userAesthetic').value);
+
+            const displayName = nameInput || "Stylist";
+            updateNavAuthStatus(displayName);
+
             return {
-                name: nameInput || "Stylist",
+                name: displayName,
                 birthday: birthdayInput
             };
         }
@@ -596,8 +1080,7 @@
             const profile = saveUserProfile();
             document.getElementById('dashboardGreeting').innerText = `✨ Welcome, ${profile.name}`;
 
-            document.getElementById('onboardingScreen').classList.add('hidden');
-            document.getElementById('wardrobeScreen').classList.add('hidden');
+            hideAllScreens();
             document.getElementById('uploadScreen').classList.remove('hidden');
             document.getElementById('navHeader').classList.remove('hidden');
 
@@ -609,8 +1092,7 @@
             const profile = saveUserProfile();
             document.getElementById('wardrobeGreeting').innerText = `👗 ${profile.name}'s Digital Wardrobe`;
 
-            document.getElementById('onboardingScreen').classList.add('hidden');
-            document.getElementById('uploadScreen').classList.add('hidden');
+            hideAllScreens();
             document.getElementById('wardrobeScreen').classList.remove('hidden');
             document.getElementById('navHeader').classList.remove('hidden');
 
@@ -618,12 +1100,24 @@
             checkBirthdayCelebration(profile.birthday, profile.name);
         }
 
-        // Navigation: Move back to onboarding
-        function goToOnboarding() {
-            document.getElementById('uploadScreen').classList.add('hidden');
-            document.getElementById('wardrobeScreen').classList.add('hidden');
-            document.getElementById('navHeader').classList.add('hidden');
-            document.getElementById('onboardingScreen').classList.remove('hidden');
+        // Navigation: Go to Makeup & Beauty Assistant
+        function goToMakeupScreen() {
+            const profile = saveUserProfile();
+            document.getElementById('makeupGreeting').innerText = `💄 ${profile.name}'s Makeup & Beauty Stylist`;
+
+            hideAllScreens();
+            document.getElementById('makeupScreen').classList.remove('hidden');
+            document.getElementById('navHeader').classList.remove('hidden');
+
+            checkBirthdayCelebration(profile.birthday, profile.name);
+        }
+
+        function hideAllScreens() {
+            const screens = ['onboardingScreen', 'uploadScreen', 'wardrobeScreen', 'makeupScreen', 'aboutScreen', 'featuresScreen', 'faqScreen'];
+            screens.forEach(s => {
+                const el = document.getElementById(s);
+                if (el) el.classList.add('hidden');
+            });
         }
 
         // Show/hide question box
@@ -764,7 +1258,7 @@
             `).join('');
         }
 
-        // Generate Outfit from Closet
+        // Generate Outfit from Closet (Shows photos next to descriptions)
         async function generateOutfitFromWardrobe() {
             const outBox = document.getElementById('wardrobeOutputBox');
             const occasion = document.getElementById('wardrobeOccasion').value;
@@ -903,8 +1397,16 @@
             const savedName = localStorage.getItem('muse_userName');
             const savedBday = localStorage.getItem('muse_userBirthday');
             const savedAesthetic = localStorage.getItem('muse_userAesthetic');
+            const savedEmail = localStorage.getItem('muse_userEmail');
 
-            if (savedName) document.getElementById('userName').value = savedName;
+            if (savedName) {
+                document.getElementById('userName').value = savedName;
+                updateNavAuthStatus(savedName);
+            }
+            if (savedEmail) {
+                document.getElementById('userEmail').value = savedEmail;
+                document.getElementById('loginEmail').value = savedEmail;
+            }
             if (savedBday) document.getElementById('userBirthday').value = savedBday;
             if (savedAesthetic) {
                 document.getElementById('userAesthetic').value = savedAesthetic;

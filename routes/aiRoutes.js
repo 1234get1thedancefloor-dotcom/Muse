@@ -315,4 +315,128 @@ router.post('/generate-outfit', async (req, res) => {
     }
 });
 
+// AI Makeup & Beauty Look Recommender
+router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, res) => {
+    let tempFilePath = null;
+    try {
+        const { vibe = "Soft Coquette & Modern Romantic 💕", undertone = "Warm Golden / Olive", userQuestion } = req.body;
+
+        if (req.file) {
+            tempFilePath = req.file.path;
+        }
+
+        // Tailored makeup palettes by vibe & undertone
+        const makeupGuides = {
+            coquette: {
+                title: "Soft Coquette & Modern Romantic Glow 💕",
+                skinBase: "Glass-skin hydrating cushion foundation with radiant rose-water mist. Soft diffuse berry-pink liquid blush tapped high on the cheekbones and bridge of the nose.",
+                eyes: "Champagne shimmer across the eyelid, ultra-fine brown liquid flick, and fluttery flared outer-corner lashes.",
+                lips: "Peachy-pink lip liner with a plumping glazed berry lip oil or gloss.",
+                hair: "Romantic loose French-pin updo or tousled blowout with face-framing tendrils.",
+                proTip: "Keep the base ultra-dewy so the soft pink blush radiates naturally under ambient light."
+            },
+            minimalist: {
+                title: "90s Minimalist & Clean-Girl Chic ✨",
+                skinBase: "Skin tint or spot-concealer base with a velvety satin finish. Warm taupe-bronzer sculpting the cheekbones and jawline.",
+                eyes: "Brushed-up soap brows, a wash of warm beige shadow in the crease, and brown mascara.",
+                lips: "Warm cocoa or 90s satin nude lipstick with defined neutral lip liner.",
+                hair: "Sleek low ballet bun or middle-parted polished low ponytail.",
+                proTip: "Focus on clean skin and defined eyebrows—keep eye color minimal to let your outfit silhouette lead."
+            },
+            goth: {
+                title: "Goth Siren & Smoky Grunge 🖤",
+                skinBase: "Velvet cloud matte complexion with subtle alabaster or cool-neutral undertone setting powder. Muted berry-plum contour.",
+                eyes: "Smudged diffused kohl eyeliner along top and bottom waterlines, deep espresso/slate shadow, and dramatic volumized mascara.",
+                lips: "Deep black cherry, espresso wine, or vampy burgundy velvet matte lip.",
+                hair: "Sleek glass hair, layered wolf cut, or textured undone wave.",
+                proTip: "Use a smudge brush to soften the kohl liner edges for that effortless editorial grunge allure."
+            },
+            indie: {
+                title: "Y2K Indie Pop & Retro Playful Glam 🌈",
+                skinBase: "Luminous dewy base with frosted champagne highlighter on the cheekbone peaks, brow bones, and cupid's bow.",
+                eyes: "Graphic baby blue or metallic silver eyeliner accent, inner corner glitter sparkle, and lifted doll lashes.",
+                lips: "Holographic high-shine gloss over a juicy pink or strawberry tint.",
+                hair: "Mini baby braids, bubble ponytail, or playful 90s claw clip twist.",
+                proTip: "Add a touch of icy chrome highlighter on your inner eye corners to instantly pop against vibrant clothes."
+            },
+            parisian: {
+                title: "Chic Parisian & Warm Luxury ☕",
+                skinBase: "Breathable radiant base with sun-kissed terracotta cream blush melted seamlessly into the temples.",
+                eyes: "Soft espresso winged shadow buffed outward and curled natural lashes.",
+                lips: "Iconic blotted Parisian red or warm brick-rose satin lipstick applied with finger taps for a blurred French edge.",
+                hair: "Effortless French curtain bangs with voluminous, touchable waves.",
+                proTip: "Blot your lip color with a tissue and tap edges with a ring finger for that authentic lived-in French chic look."
+            },
+            festive: {
+                title: "Festive Royal & Luminous Glam 🥻",
+                skinBase: "Long-wear luminous foundation, warm golden liquid illuminator on the cheekbones, and rich warm peach blush.",
+                eyes: "Gilded antique gold pigment on lids, winged jet-black gel liner, and dense kohl on the lower rim.",
+                lips: "Rich terracotta or deep ruby velvet lip with golden gloss center accent.",
+                hair: "Sleek braided bun wrapped with fresh jasmine (gajra) or cascading Hollywood waves.",
+                proTip: "Set with fine dewy fixing spray to keep your golden glow radiant throughout hours of celebrations."
+            }
+        };
+
+        const vibeKey = vibe.toLowerCase();
+        let selectedGuide;
+        if (vibeKey.includes("goth") || vibeKey.includes("grunge")) {
+            selectedGuide = makeupGuides.goth;
+        } else if (vibeKey.includes("chic") || vibeKey.includes("parisian") || vibeKey.includes("luxury")) {
+            selectedGuide = makeupGuides.parisian;
+        } else if (vibeKey.includes("minimalist") || vibeKey.includes("clean")) {
+            selectedGuide = makeupGuides.minimalist;
+        } else if (vibeKey.includes("indie") || vibeKey.includes("y2k") || vibeKey.includes("retro")) {
+            selectedGuide = makeupGuides.indie;
+        } else if (vibeKey.includes("festive") || vibeKey.includes("diwali") || vibeKey.includes("traditional") || vibeKey.includes("desi")) {
+            selectedGuide = makeupGuides.festive;
+        } else {
+            selectedGuide = makeupGuides.coquette;
+        }
+
+        // Custom question advice
+        let customAdvice = "";
+        if (userQuestion && userQuestion.trim() !== "") {
+            const q = userQuestion.toLowerCase();
+            if (q.includes("lip") || q.includes("lipstick") || q.includes("shade")) {
+                customAdvice = `💋 Custom Lip Verdict for "${userQuestion}": Harmonize with your ${undertone.split('/')[0].trim()} undertone by pairing ${selectedGuide.lips.toLowerCase()}`;
+            } else if (q.includes("eye") || q.includes("eyeliner") || q.includes("shadow")) {
+                customAdvice = `👁️ Custom Eye Direction for "${userQuestion}": Focus on ${selectedGuide.eyes.toLowerCase()}`;
+            } else if (q.includes("hair") || q.includes("hairstyle")) {
+                customAdvice = `💇‍♀️ Custom Hair Advice for "${userQuestion}": ${selectedGuide.hair}`;
+            } else {
+                customAdvice = `✨ Beauty Consultant Verdict for "${userQuestion}": This combination balances with your outfit silhouette! Follow the ${selectedGuide.title} palette to tie everything together.`;
+            }
+        }
+
+        res.json({
+            success: true,
+            makeup: {
+                title: selectedGuide.title,
+                undertoneMatched: undertone,
+                skinBase: selectedGuide.skinBase,
+                eyes: selectedGuide.eyes,
+                lips: selectedGuide.lips,
+                hair: selectedGuide.hair,
+                proTip: selectedGuide.proTip,
+                customAdvice: customAdvice
+            }
+        });
+
+    } catch (error) {
+        console.error("Makeup Recommender Error:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to generate makeup recommendation."
+        });
+    } finally {
+        if (tempFilePath && fs.existsSync(tempFilePath)) {
+            try {
+                fs.unlinkSync(tempFilePath);
+            } catch (e) {
+                console.error("Failed to remove temp file:", e);
+            }
+        }
+    }
+});
+
 module.exports = router;
