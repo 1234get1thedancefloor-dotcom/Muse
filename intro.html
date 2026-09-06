@@ -1,240 +1,871 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muse AI Stylist Dashboard</title>
-    <!-- Google Fonts: EB Garamond -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
 
     <style>
-        /* Apply EB Garamond globally */
-        * {
-            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+        /* Base Styling Rules */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #FFE5EC;
+            color: #4A1525;
+            max-width: 620px;
+            margin: 40px auto;
+            padding: 20px;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* Soft Coquette Editorial Color Palette Design */
-        body { 
-            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif; 
-            background: #FFE5EC; /* Light Pink Background */
-            color: #4A1525; /* Deep Velvet Wine Text */
-            max-width: 600px; 
-            margin: 50px auto; 
-            padding: 20px; 
-            font-size: 18px;
+        .card {
+            background: #FFF0F5;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(74, 21, 37, 0.08);
+            border: 2px solid #FFC2D1;
+            display: flex;
+            flex-direction: column;
+            min-height: 450px;
+            position: relative;
+            box-sizing: border-box;
+            transition: border-color 0.5s ease, background-color 0.5s ease;
         }
-        .card { 
-            background: #FFF0F5; /* Soft Peach / Lavender Blush Container */
-            padding: 32px; 
-            border-radius: 20px; 
-            box-shadow: 0 8px 24px rgba(74, 21, 37, 0.1); 
-            border: 2px solid #FFC2D1; 
-        }
-        h2 { 
-            font-family: 'EB Garamond', Georgia, serif;
-            color: #4A1525; /* Velvet Accent Heading */
+
+        h2 {
+            color: inherit;
             margin-top: 0;
             text-align: center;
-            font-size: 32px;
-            font-weight: 700;
+            font-size: 26px;
             letter-spacing: 0.5px;
         }
-        label { 
-            font-family: 'EB Garamond', Georgia, serif;
-            display: block; 
-            margin: 20px 0 8px; 
-            font-weight: 600; 
-            color: #4A1525; 
-            font-size: 19px;
-            letter-spacing: 0.3px;
+
+        .subtitle {
+            text-align: center;
+            opacity: 0.8;
+            margin-top: -10px;
+            margin-bottom: 25px;
+            font-size: 14px;
         }
-        input[type="file"], textarea { 
-            font-family: 'EB Garamond', Georgia, serif;
-            width: 100%; 
-            padding: 12px; 
-            background: #FFFFFF; 
-            border: 2px solid #FFC2D1; 
-            border-radius: 10px; 
-            color: #4A1525; 
-            box-sizing: border-box; 
-            font-size: 17px;
+
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: bold;
         }
-        textarea:focus, input[type="file"]:focus {
+
+        input[type="text"],
+        input[type="date"],
+        input[type="file"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            background: #FFFFFF;
+            border: 2px solid #FFC2D1;
+            border-radius: 12px;
+            color: #4A1525;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
             outline: none;
-            border-color: #A2D2FF; /* Soft Blue Focus Ring */
+            border-color: #A2D2FF;
         }
-        .row { 
-            display: flex; 
-            align-items: center; 
-            margin: 20px 0; 
-            gap: 12px; 
+
+        .row {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            gap: 12px;
         }
+
         input[type="checkbox"] {
             width: 18px;
             height: 18px;
             accent-color: #4A1525;
         }
-        button { 
-            font-family: 'EB Garamond', Georgia, serif;
-            background: #BDE0FE; /* Soft Blue Button Background */
-            color: #4A1525; /* Velvet Button Text */
-            border: none; 
-            padding: 14px 20px; 
-            font-size: 20px; 
-            font-weight: 700; 
-            letter-spacing: 0.5px;
-            border-radius: 10px; 
-            cursor: pointer; 
-            width: 100%; 
-            margin-top: 15px; 
-            box-shadow: 0 4px 10px rgba(189, 224, 254, 0.4);
+
+        /* Nav Header Button */
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid #FFC2D1;
+            padding: 8px 14px;
+            border-radius: 20px;
+            color: inherit;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 15px;
+            width: fit-content;
             transition: all 0.2s ease;
         }
-        button:hover { 
-            background: #A2D2FF; /* Slightly Deeper Soft Blue on Hover */
+
+        .nav-btn:hover {
+            background: #FFFFFF;
+        }
+
+        /* Primary Action Button */
+        .action-button {
+            background: #BDE0FE;
+            color: #4A1525;
+            border: none;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(189, 224, 254, 0.4);
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            background: #A2D2FF;
             transform: translateY(-1px);
         }
-        #outputBox { 
-            font-family: 'EB Garamond', Georgia, serif;
-            font-size: 18px;
-            margin-top: 30px; 
-            background: #FFFFFF; 
-            padding: 20px; 
-            border-left: 5px solid #BDE0FE; 
-            border-radius: 10px; 
-            display: none; 
-            white-space: pre-wrap; 
-            line-height: 1.6;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+
+        /* Secondary Action Button */
+        .secondary-btn {
+            background: #FFC2D1;
+            box-shadow: 0 4px 10px rgba(255, 194, 209, 0.4);
         }
-        .hidden { display: none; }
+
+        .secondary-btn:hover {
+            background: #FFAFCC;
+            transform: translateY(-1px);
+        }
+
+        #outputBox,
+        #wardrobeOutputBox {
+            margin-top: 20px;
+            background: #FFFFFF;
+            padding: 15px;
+            border-left: 5px solid #BDE0FE;
+            border-radius: 10px;
+            display: none;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            font-size: 14px;
+            color: #4A1525;
+        }
+
+        /* Wardrobe Tabs & Filter Chips */
+        .wardrobe-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            scrollbar-width: thin;
+        }
+
+        .tab-chip {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1.5px solid #FFC2D1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .tab-chip:hover,
+        .tab-chip.active {
+            background: #BDE0FE;
+            border-color: #A2D2FF;
+        }
+
+        /* Wardrobe Grid */
+        .wardrobe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .wardrobe-card {
+            background: #FFFFFF;
+            border: 1.5px solid #FFC2D1;
+            border-radius: 14px;
+            padding: 8px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .wardrobe-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .wardrobe-card img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #f8f8f8;
+        }
+
+        .wardrobe-badge {
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: #FFE5EC;
+            color: #4A1525;
+            width: fit-content;
+        }
+
+        .wardrobe-card-title {
+            font-size: 12px;
+            font-weight: bold;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(74, 21, 37, 0.7);
+            color: #FFF;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+            padding: 0;
+            transition: background 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 0, 0, 0.85);
+        }
+
+        /* Screen Visibility Control */
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body>
 
-<div style="margin-bottom: 20px;">
-    <a href="/" style="text-decoration: none; color: #4A1525; font-size: 19px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; background: #FFF0F5; border: 1.5px solid #FFC2D1; padding: 8px 18px; border-radius: 20px; transition: all 0.2s ease;">
-        ← Back to Smart Wardrobe & Planner
-    </a>
-</div>
-
-<div class="card">
-    <h2>✨ Muse AI Styling Assistant</h2>
-    
-    <!-- File Input Slot -->
-    <label for="outfitFile">Upload Your Outfit Image:</label>
-    <input type="file" id="outfitFile" accept="image/*">
-
-    <!-- Image Preview Slot -->
-    <div id="previewContainer" class="hidden" style="margin-top: 15px; text-align: center;">
-        <img id="imagePreview" src="" alt="Outfit preview" style="max-width: 100%; max-height: 320px; border-radius: 12px; border: 2px solid #FFC2D1; object-fit: contain;">
+    <!-- Global Navigation Back Arrow -->
+    <div id="navHeader" class="hidden">
+        <button class="nav-btn" onclick="goToOnboarding()">
+            ← Back to Onboarding / Preferences
+        </button>
     </div>
 
-    <div class="row">
-        <input type="checkbox" id="hasQ" onchange="toggleQuestionBox()">
-        <label style="margin:0; user-select: none;" for="hasQ">I have a specific question about the fit / style</label>
+    <div class="card" id="mainCard">
+
+        <!-- STEP 1: ONBOARDING / SIGN IN SCREEN PANEL -->
+        <div id="onboardingScreen" style="display: flex; flex-direction: column; flex-grow: 1;">
+
+            <h2>✨ Welcome to Muse</h2>
+
+            <div class="subtitle">
+                Set your style profile parameters to initialize
+            </div>
+
+            <label for="userName">
+                Enter Your Name:
+            </label>
+            <input type="text" id="userName" placeholder="e.g. Mahat">
+
+            <label for="userBirthday">
+                Enter Your Birthday:
+            </label>
+            <input type="date" id="userBirthday">
+
+            <label for="userAesthetic">
+                Select Daily Vibe / Aesthetic:
+            </label>
+            <select id="userAesthetic" onchange="applyAestheticTheme()">
+                <option value="pink">Cutesy / Soft Pink (Default)</option>
+                <option value="goth">Goth / Grunge Dark</option>
+                <option value="chic">Chic / Luxury Warm</option>
+                <option value="indie">Indie / Eclectic Teal</option>
+                <option value="minimalist">Minimalist / Clean Grey</option>
+            </select>
+
+            <!-- Onboarding Actions (Two Bottom Buttons) -->
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 25px;">
+                <button class="action-button" onclick="goToUploadScreen()">
+                    📸 Upload Outfit & Analyze Vibe 🚀
+                </button>
+                <button class="action-button secondary-btn" onclick="goToWardrobeScreen()">
+                    👗 Upload Your Wardrobe into Closet 🗄️
+                </button>
+            </div>
+
+        </div>
+
+        <!-- STEP 2: UPLOAD & VIBE CHECK SCREEN PANEL -->
+        <div id="uploadScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
+
+            <h2 id="dashboardGreeting">
+                ✨ Muse AI Styling Assistant
+            </h2>
+
+            <div class="subtitle">
+                Your style environment is personalized and ready
+            </div>
+
+            <label for="outfitFile">
+                Upload Your Outfit Image:
+            </label>
+            <input type="file" id="outfitFile" accept="image/*">
+
+            <!-- Live Image Preview Slot -->
+            <div id="previewContainer" class="hidden" style="margin-top: 15px; text-align: center;">
+                <img id="imagePreview" src="" alt="Outfit preview"
+                    style="max-width: 100%; max-height: 280px; border-radius: 14px; border: 2px solid #FFC2D1; object-fit: contain; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+            </div>
+
+            <div class="row">
+                <input type="checkbox" id="hasQ" onchange="toggleQuestionBox()">
+                <label style="margin: 0; user-select: none;" for="hasQ">
+                    I have a specific question about the fit / style
+                </label>
+            </div>
+
+            <div id="questionContainer" class="hidden">
+                <label for="userQ">
+                    Your Question:
+                </label>
+                <textarea id="userQ" rows="2" placeholder="Type your question here..."></textarea>
+            </div>
+
+            <div id="outputBox">
+                Waiting for response...
+            </div>
+
+            <!-- Core action button -->
+            <button class="action-button" style="margin-top: 25px;" onclick="uploadAndAnalyze()">
+                Analyze My Vibe 🚀
+            </button>
+
+        </div>
+
+        <!-- STEP 3: DIGITAL WARDROBE & CLOSET SCREEN PANEL -->
+        <div id="wardrobeScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
+
+            <h2 id="wardrobeGreeting">
+                👗 My Digital Wardrobe
+            </h2>
+
+            <div class="subtitle">
+                Upload & catalog your clothes, shoes, and accessories
+            </div>
+
+            <!-- Add Item Box -->
+            <div style="background: rgba(255, 255, 255, 0.65); padding: 18px; border-radius: 16px; border: 1.5px dashed #FFC2D1; margin-bottom: 20px;">
+                <label style="margin-top: 0;" for="wardrobeCategory">Category:</label>
+                <select id="wardrobeCategory">
+                    <option value="Top">👚 Top / Shirt / Blouse</option>
+                    <option value="Dress">👗 Dress / One-Piece</option>
+                    <option value="Bottom">👖 Bottom / Skirt / Pants</option>
+                    <option value="Shoes">👠 Shoes / Heels / Sneakers</option>
+                    <option value="Jewelry">💍 Jewelry & Accessories</option>
+                    <option value="Outerwear">🧥 Jacket & Outerwear</option>
+                </select>
+
+                <label for="wardrobeItemName">Piece Name / Description:</label>
+                <input type="text" id="wardrobeItemName" placeholder="e.g. Silk Ivory Corset, Chunky Loafers">
+
+                <label for="wardrobeItemColor">Color / Aesthetic Tag:</label>
+                <input type="text" id="wardrobeItemColor" placeholder="e.g. Powder Pink, Gold, Vintage">
+
+                <label for="wardrobeItemFile">Upload Piece Photo:</label>
+                <input type="file" id="wardrobeItemFile" accept="image/*">
+
+                <div id="wardrobePreviewContainer" class="hidden" style="margin-top: 10px; text-align: center;">
+                    <img id="wardrobeItemPreview" src="" alt="Item Preview" style="max-height: 140px; border-radius: 10px; border: 1.5px solid #FFC2D1; object-fit: contain;">
+                </div>
+
+                <button class="action-button secondary-btn" style="margin-top: 15px; padding: 11px 16px; font-size: 14px;" onclick="addWardrobeItem()">
+                    ➕ Add Piece to Wardrobe
+                </button>
+            </div>
+
+            <!-- Wardrobe Catalog Header & Filter Tabs -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-weight: bold; font-size: 16px;">🗄️ Closet Catalog</span>
+                <span id="wardrobeCount" style="font-size: 13px; opacity: 0.85;">0 pieces</span>
+            </div>
+
+            <div class="wardrobe-tabs" id="wardrobeTabs">
+                <button class="tab-chip active" onclick="filterWardrobe('All', this)">All</button>
+                <button class="tab-chip" onclick="filterWardrobe('Top', this)">Tops</button>
+                <button class="tab-chip" onclick="filterWardrobe('Dress', this)">Dresses</button>
+                <button class="tab-chip" onclick="filterWardrobe('Bottom', this)">Bottoms</button>
+                <button class="tab-chip" onclick="filterWardrobe('Shoes', this)">Shoes</button>
+                <button class="tab-chip" onclick="filterWardrobe('Jewelry', this)">Jewelry</button>
+                <button class="tab-chip" onclick="filterWardrobe('Outerwear', this)">Outerwear</button>
+            </div>
+
+            <!-- Wardrobe Grid -->
+            <div id="wardrobeGrid" class="wardrobe-grid">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Outfit Generator Section -->
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1.5px solid #FFC2D1;">
+                <label for="wardrobeOccasion">Generate Look from Closet for:</label>
+                <select id="wardrobeOccasion">
+                    <option value="Party">Party / Night Out 🎉</option>
+                    <option value="Diwali">Diwali / Traditional Festive ✨</option>
+                    <option value="Date Night">Romantic Date Night 💕</option>
+                    <option value="Birthday">Birthday Celebration 🎂</option>
+                    <option value="Casual Chic">Everyday Streetwear Chic ☕</option>
+                </select>
+
+                <button class="action-button" style="margin-top: 12px;" onclick="generateOutfitFromWardrobe()">
+                    ✨ Style Outfit from My Closet 🚀
+                </button>
+
+                <div id="wardrobeOutputBox"></div>
+            </div>
+
+        </div>
+
     </div>
 
-    <div id="questionContainer" class="hidden">
-        <label for="userQ">Your Question:</label>
-        <textarea id="userQ" rows="3" placeholder="e.g., Does this match with New Year's celebration? Gold or silver jewelry? What shoes should I pair?"></textarea>
-    </div>
-
-    <button id="analyzeBtn" onclick="uploadAndAnalyze()">Analyze My Vibe 🚀</button>
-
-    <div id="outputBox">Waiting for response...</div>
-</div>
-
-<script>
-    const fileInput = document.getElementById('outfitFile');
-    const previewContainer = document.getElementById('previewContainer');
-    const imagePreview = document.getElementById('imagePreview');
-
-    fileInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imagePreview.src = e.target.result;
-                previewContainer.classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
-        } else {
-            previewContainer.classList.add('hidden');
-        }
-    });
-
-    function toggleQuestionBox() {
-        const checkbox = document.getElementById('hasQ');
-        const container = document.getElementById('questionContainer');
-        if(checkbox.checked) {
-            container.classList.remove('hidden');
-        } else {
-            container.classList.add('hidden');
-        }
-    }
-
-    async function uploadAndAnalyze() {
-        const outBox = document.getElementById('outputBox');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        
-        if (fileInput.files.length === 0) {
-            alert("Please choose an image file (JPG or PNG) from your computer first!");
-            return;
-        }
-
-        const file = fileInput.files[0];
-        if (file.size > 15 * 1024 * 1024) {
-            alert("File is too large! Please choose an image smaller than 15MB.");
-            return;
-        }
-
-        outBox.style.display = "block";
-        outBox.innerText = "Analyzing your outfit and personal vibe... 💕";
-
-        analyzeBtn.disabled = true;
-        analyzeBtn.style.opacity = "0.7";
-        analyzeBtn.innerText = "Styling your look... ✨";
-
-        // Create multipart form payload for handling raw physical binary images
-        const formData = new FormData();
-        formData.append('outfitImage', file);
-        formData.append('hasQuestion', document.getElementById('hasQ').checked);
-        formData.append('userQuestion', document.getElementById('userQ').value);
-        formData.append('demoMode', 'true');
-
-        // Dynamically detect base URL so it works both on localhost:5000 and file://
-        const apiUrl = window.location.origin.startsWith('http') 
-            ? '/api/ai/detect-aesthetic' 
-            : 'http://localhost:5000/api/ai/detect-aesthetic';
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                body: formData 
-            });
-
-            const data = await response.json();
-            console.log("Raw Server Response:", data);
-
-            if (data.success && (data.text || data.results)) {
-                outBox.innerText = data.text || (typeof data.results === 'string' ? data.results : JSON.stringify(data.results, null, 2));
-            } else if (data.error) {
-                outBox.innerText = "⚠️ " + data.error;
-            } else {
-                outBox.innerText = "⚠️ Server responded, but could not parse the result: " + JSON.stringify(data);
+    <script>
+        // Dictionary mapping user aesthetics to custom theme configs
+        const themes = {
+            pink: {
+                bg: "#FFE5EC",
+                cardBg: "#FFF0F5",
+                border: "#FFC2D1",
+                accent: "#4A1525",
+                primaryBtn: "#BDE0FE",
+                secondaryBtn: "#FFC2D1"
+            },
+            goth: {
+                bg: "#1A1A1A",
+                cardBg: "#2D2D2D",
+                border: "#444444",
+                accent: "#F5F5F5",
+                primaryBtn: "#555555",
+                secondaryBtn: "#3D3D3D"
+            },
+            chic: {
+                bg: "#F4EAE1",
+                cardBg: "#FAF4EE",
+                border: "#E0D0C0",
+                accent: "#3E2723",
+                primaryBtn: "#D7CCC8",
+                secondaryBtn: "#EFEBE9"
+            },
+            indie: {
+                bg: "#E0F2F1",
+                cardBg: "#F0FDFB",
+                border: "#B2DFDB",
+                accent: "#004D40",
+                primaryBtn: "#80CBC4",
+                secondaryBtn: "#B2DFDB"
+            },
+            minimalist: {
+                bg: "#F5F5F5",
+                cardBg: "#FFFFFF",
+                border: "#E0E0E0",
+                accent: "#212121",
+                primaryBtn: "#E0E0E0",
+                secondaryBtn: "#EEEEEE"
             }
-        } catch (error) {
-            console.error("Fetch failed:", error);
-            outBox.innerText = "❌ Connection Failed! Ensure your backend node server is running on http://localhost:5000.\n(" + error.message + ")";
-        } finally {
-            analyzeBtn.disabled = false;
-            analyzeBtn.style.opacity = "1";
-            analyzeBtn.innerText = "Analyze My Vibe 🚀";
+        };
+
+        let currentFilter = 'All';
+
+        // Sample starter wardrobe items
+        const defaultWardrobe = [
+            { id: 'w1', name: 'Silk Ribbon Corset Top', category: 'Top', color: 'Powder Pink', image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&auto=format&fit=crop&q=60' },
+            { id: 'w2', name: 'Pleated Mini Tennis Skirt', category: 'Bottom', color: 'Ivory White', image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300&auto=format&fit=crop&q=60' },
+            { id: 'w3', name: 'Mary Jane Kitten Heels', category: 'Shoes', color: 'Wine Red', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60' },
+            { id: 'w4', name: 'Freshwater Pearl Drop Necklace', category: 'Jewelry', color: 'Gold / Pearl', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=60' }
+        ];
+
+        function getWardrobeItems() {
+            try {
+                const stored = localStorage.getItem('muse_wardrobe_items');
+                if (stored) return JSON.parse(stored);
+            } catch (e) {
+                console.error(e);
+            }
+            return defaultWardrobe;
         }
-    }
-</script>
+
+        function saveWardrobeItems(items) {
+            localStorage.setItem('muse_wardrobe_items', JSON.stringify(items));
+        }
+
+        // Live background updates as the user changes selections
+        function applyAestheticTheme() {
+            const selectedOption = document.getElementById('userAesthetic').value;
+            const currentTheme = themes[selectedOption] || themes.pink;
+            const cardElement = document.getElementById('mainCard');
+            const allInputs = document.querySelectorAll('input[type="text"], input[type="date"], input[type="file"], textarea, select');
+            const navBtn = document.querySelector('.nav-btn');
+
+            document.body.style.backgroundColor = currentTheme.bg;
+            document.body.style.color = currentTheme.accent;
+
+            cardElement.style.backgroundColor = currentTheme.cardBg;
+            cardElement.style.borderColor = currentTheme.border;
+            if (navBtn) navBtn.style.borderColor = currentTheme.border;
+
+            const imgPreview = document.getElementById('imagePreview');
+            if (imgPreview) imgPreview.style.borderColor = currentTheme.border;
+
+            allInputs.forEach(input => {
+                input.style.borderColor = currentTheme.border;
+            });
+        }
+
+        // Check if today matches the user's birthday (MM-DD)
+        function checkBirthdayCelebration(birthdayDateStr, userName) {
+            if (!birthdayDateStr) return;
+
+            const bdayParts = birthdayDateStr.split('-');
+            if (bdayParts.length >= 3) {
+                const bdayMonth = bdayParts[1];
+                const bdayDay = bdayParts[2];
+
+                const today = new Date();
+                const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
+                const currentDay = String(today.getDate()).padStart(2, '0');
+
+                if (bdayMonth === currentMonth && bdayDay === currentDay) {
+                    setTimeout(() => {
+                        alert(
+                            `🎂🎉 HAPPY BIRTHDAY, ${userName.toUpperCase()}! 🎉🎂\n\n✨ Today is your special celebration day! Time to pick your most showstopping outfit layout from your closet.`
+                        );
+                    }, 300);
+                }
+            }
+        }
+
+        function saveUserProfile() {
+            const nameInput = document.getElementById('userName').value.trim();
+            const birthdayInput = document.getElementById('userBirthday').value;
+            if (nameInput) localStorage.setItem('muse_userName', nameInput);
+            if (birthdayInput) localStorage.setItem('muse_userBirthday', birthdayInput);
+            localStorage.setItem('muse_userAesthetic', document.getElementById('userAesthetic').value);
+            return {
+                name: nameInput || "Stylist",
+                birthday: birthdayInput
+            };
+        }
+
+        // Navigation: Go to Outfit Vibe Check
+        function goToUploadScreen() {
+            const profile = saveUserProfile();
+            document.getElementById('dashboardGreeting').innerText = `✨ Welcome, ${profile.name}`;
+
+            document.getElementById('onboardingScreen').classList.add('hidden');
+            document.getElementById('wardrobeScreen').classList.add('hidden');
+            document.getElementById('uploadScreen').classList.remove('hidden');
+            document.getElementById('navHeader').classList.remove('hidden');
+
+            checkBirthdayCelebration(profile.birthday, profile.name);
+        }
+
+        // Navigation: Go to Digital Wardrobe Closet
+        function goToWardrobeScreen() {
+            const profile = saveUserProfile();
+            document.getElementById('wardrobeGreeting').innerText = `👗 ${profile.name}'s Digital Wardrobe`;
+
+            document.getElementById('onboardingScreen').classList.add('hidden');
+            document.getElementById('uploadScreen').classList.add('hidden');
+            document.getElementById('wardrobeScreen').classList.remove('hidden');
+            document.getElementById('navHeader').classList.remove('hidden');
+
+            renderWardrobe(currentFilter);
+            checkBirthdayCelebration(profile.birthday, profile.name);
+        }
+
+        // Navigation: Move back to onboarding
+        function goToOnboarding() {
+            document.getElementById('uploadScreen').classList.add('hidden');
+            document.getElementById('wardrobeScreen').classList.add('hidden');
+            document.getElementById('navHeader').classList.add('hidden');
+            document.getElementById('onboardingScreen').classList.remove('hidden');
+        }
+
+        // Show/hide question box
+        function toggleQuestionBox() {
+            const checkbox = document.getElementById('hasQ');
+            const container = document.getElementById('questionContainer');
+            container.classList.toggle('hidden', !checkbox.checked);
+        }
+
+        // Live preview of single outfit image
+        const fileInputEl = document.getElementById('outfitFile');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+
+        fileInputEl.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.src = '';
+                previewContainer.classList.add('hidden');
+            }
+        });
+
+        // Live preview of wardrobe item photo
+        const wardrobeFileInput = document.getElementById('wardrobeItemFile');
+        const wardrobePreviewContainer = document.getElementById('wardrobePreviewContainer');
+        const wardrobeItemPreview = document.getElementById('wardrobeItemPreview');
+
+        wardrobeFileInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    wardrobeItemPreview.src = e.target.result;
+                    wardrobePreviewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                wardrobeItemPreview.src = '';
+                wardrobePreviewContainer.classList.add('hidden');
+            }
+        });
+
+        // Add Piece to Digital Wardrobe
+        function addWardrobeItem() {
+            const cat = document.getElementById('wardrobeCategory').value;
+            const name = document.getElementById('wardrobeItemName').value.trim();
+            const color = document.getElementById('wardrobeItemColor').value.trim();
+            const file = wardrobeFileInput.files[0];
+
+            if (!name) {
+                alert("Please enter a name or description for this piece!");
+                return;
+            }
+
+            const items = getWardrobeItems();
+
+            const processAddition = (imgSrc) => {
+                const newItem = {
+                    id: 'w_' + Date.now(),
+                    name: name,
+                    category: cat,
+                    color: color || 'Neutral',
+                    image: imgSrc || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'
+                };
+
+                items.unshift(newItem);
+                saveWardrobeItems(items);
+
+                // Reset Form
+                document.getElementById('wardrobeItemName').value = '';
+                document.getElementById('wardrobeItemColor').value = '';
+                wardrobeFileInput.value = '';
+                wardrobeItemPreview.src = '';
+                wardrobePreviewContainer.classList.add('hidden');
+
+                renderWardrobe(currentFilter);
+            };
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    processAddition(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                processAddition(null);
+            }
+        }
+
+        // Delete item from wardrobe
+        function deleteWardrobeItem(id) {
+            let items = getWardrobeItems();
+            items = items.filter(item => item.id !== id);
+            saveWardrobeItems(items);
+            renderWardrobe(currentFilter);
+        }
+
+        // Filter Wardrobe Tabs
+        function filterWardrobe(cat, element) {
+            currentFilter = cat;
+            document.querySelectorAll('.tab-chip').forEach(c => c.classList.remove('active'));
+            if (element) element.classList.add('active');
+            renderWardrobe(cat);
+        }
+
+        // Render Wardrobe Grid
+        function renderWardrobe(filter = 'All') {
+            const grid = document.getElementById('wardrobeGrid');
+            const countEl = document.getElementById('wardrobeCount');
+            const items = getWardrobeItems();
+
+            const filtered = filter === 'All'
+                ? items
+                : items.filter(i => i.category === filter);
+
+            countEl.innerText = `${items.length} ${items.length === 1 ? 'piece' : 'pieces'}`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 25px; opacity: 0.7; font-size: 13px;">No pieces in this category yet. Upload one above!</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="wardrobe-card">
+                    <button class="delete-btn" onclick="deleteWardrobeItem('${item.id}')" title="Delete piece">×</button>
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'">
+                    <span class="wardrobe-badge">${item.category}</span>
+                    <span class="wardrobe-card-title" title="${item.name}">${item.name}</span>
+                    <span style="font-size: 11px; opacity: 0.75;">${item.color}</span>
+                </div>
+            `).join('');
+        }
+
+        // Generate Outfit from Closet
+        async function generateOutfitFromWardrobe() {
+            const outBox = document.getElementById('wardrobeOutputBox');
+            const occasion = document.getElementById('wardrobeOccasion').value;
+            const aesthetic = document.getElementById('userAesthetic').value;
+            const items = getWardrobeItems();
+
+            if (items.length === 0) {
+                alert("Your wardrobe is empty! Please add some clothing pieces first.");
+                return;
+            }
+
+            outBox.style.display = "block";
+            outBox.innerText = "✨ Consulting Muse Stylist to build the perfect look from your closet... 💕";
+
+            try {
+                const response = await fetch('http://localhost:5000/api/ai/generate-outfit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        items: items,
+                        vibe: aesthetic.charAt(0).toUpperCase() + aesthetic.slice(1),
+                        occasion: occasion
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.outfit) {
+                    const o = data.outfit;
+                    const mainPieces = (o.pieces.main || []).map(p => `• ${p.name} (${p.category})`).join('\n');
+                    const shoesPiece = (o.pieces.shoes || []).map(p => `• ${p.name}`).join('\n') || '• Your signature footwear';
+                    const jewelryPiece = (o.pieces.jewelry || []).map(p => `• ${p.name}`).join('\n') || '• Minimalist jewelry';
+
+                    outBox.innerText =
+                        `👗 ${o.title}\n\n` +
+                        `━━━━━━━━━━━━━━━━━━━━━\n` +
+                        `✨ Selected Wardrobe Pieces:\n${mainPieces}\n\n` +
+                        `👠 Footwear:\n${shoesPiece}\n\n` +
+                        `💎 Jewelry & Accents:\n${jewelryPiece}\n\n` +
+                        `━━━━━━━━━━━━━━━━━━━━━\n` +
+                        `💡 Styling Rationale:\n${o.stylingRationale}\n\n` +
+                        `💄 Hair & Beauty Touch:\n${o.beautyTip}`;
+                } else {
+                    outBox.innerText = "⚠️ Could not generate outfit: " + (data.error || "Unknown error");
+                }
+            } catch (err) {
+                outBox.innerText = "❌ Connection failed. Ensure server is running on http://localhost:5000.";
+            }
+        }
+
+        // Single Outfit Vibe Analysis
+        async function uploadAndAnalyze() {
+            const outBox = document.getElementById('outputBox');
+            const fileInput = document.getElementById('outfitFile');
+
+            if (fileInput.files.length === 0) {
+                return alert("Please select an image file first!");
+            }
+
+            outBox.style.display = "block";
+            outBox.innerText = "Analyzing wardrobe items through Llama Vision engine... 💕";
+
+            const formData = new FormData();
+            formData.append('outfitImage', fileInput.files[0]);
+            formData.append('hasQuestion', document.getElementById('hasQ').checked);
+            formData.append('userQuestion', document.getElementById('userQ').value);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/ai/detect-aesthetic', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.results) {
+                    if (Array.isArray(data.results) && data.results[0] && data.results[0].generated_text) {
+                        outBox.innerText = data.results[0].generated_text;
+                    } else if (data.results.generated_text) {
+                        outBox.innerText = data.results.generated_text;
+                    } else if (data.results.choices && data.results.choices[0]?.message?.content) {
+                        outBox.innerText = data.results.choices[0].message.content;
+                    } else {
+                        outBox.innerText = JSON.stringify(data.results, null, 2);
+                    }
+                } else if (data.error) {
+                    const errorMsg = typeof data.error === 'object' ? JSON.stringify(data.error) : data.error;
+                    outBox.innerText = "⚠️ " + errorMsg;
+                } else {
+                    outBox.innerText = "⚠️ Failed to extract layout data safely.";
+                }
+
+            } catch (error) {
+                outBox.innerText = "❌ Connection Error! Verify server execution status.";
+            }
+        }
+
+        // Restore saved profile on initial page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('muse_userName');
+            const savedBday = localStorage.getItem('muse_userBirthday');
+            const savedAesthetic = localStorage.getItem('muse_userAesthetic');
+
+            if (savedName) document.getElementById('userName').value = savedName;
+            if (savedBday) document.getElementById('userBirthday').value = savedBday;
+            if (savedAesthetic) {
+                document.getElementById('userAesthetic').value = savedAesthetic;
+                applyAestheticTheme();
+            }
+        });
+    </script>
+
 </body>
+
 </html>
