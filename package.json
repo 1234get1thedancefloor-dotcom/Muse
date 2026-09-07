@@ -1,31 +1,22 @@
 {
-  "name": "muse",
+  "name": "hackathon",
   "version": "1.0.0",
-  "description": "Your wardrobe becomes a game. Pick a vibe, upload your clothes, and AI builds your perfect look for festivals, parties or everyday life. Plan ahead, sync with friends, recreate inspo, discover affordable products, get beauty tips &amp; playlists—all in one private, encrypted space.",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "intro": "start http://localhost:5000/intro.html && node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/1234get1thedancefloor-dotcom/Muse.git"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/1234get1thedancefloor-dotcom/Muse/issues"
-  },
-  "homepage": "https://github.com/1234get1thedancefloor-dotcom/Muse#readme",
   "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "mongoose": "^9.9.5",
-    "multer": "^2.3.0",
-    "node-fetch": "^3.3.2"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.2.2"
   }
 }
