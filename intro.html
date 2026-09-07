@@ -5561,8 +5561,6 @@
             if (input) {
                 if (initialQuery) {
                     input.value = initialQuery;
-                } else if (!input.value) {
-                    input.value = 'Oversized Pure Linen Shirt';
                 }
             }
 
@@ -5572,7 +5570,10 @@
 
             modal.classList.add('open');
 
-            if (currentFindFitProducts.length === 0) {
+            const activeQ = input ? input.value.trim() : '';
+            if (activeQ) {
+                executeFindFitSearch();
+            } else if (currentFindFitProducts.length === 0) {
                 executeFindFitSearch();
             }
         }
@@ -5606,7 +5607,8 @@
             const submitBtn = document.getElementById('findFitSubmitBtn');
             const uploadBtn = document.getElementById('findFitUploadSubmitBtn');
 
-            const query = (queryInput ? queryInput.value.trim() : '') || (currentFindFitMode === 'upload' ? '' : 'Oversized Pure Linen Shirt');
+            const enteredQuery = queryInput ? queryInput.value.trim() : '';
+            const query = enteredQuery || (currentFindFitMode === 'upload' ? '' : 'Oversized Pure Linen Shirt');
             const category = categorySelect ? categorySelect.value : 'All';
             const retailer = retailerSelect ? retailerSelect.value : 'All';
             const maxBudget = budgetSelect ? budgetSelect.value : '0';
@@ -5640,25 +5642,39 @@
 
             try {
                 let res;
-                if (currentFindFitMode === 'upload' && pendingFindFitFile) {
-                    const formData = new FormData();
-                    formData.append('fitImage', pendingFindFitFile);
-                    if (query) formData.append('query', query);
-                    formData.append('category', category);
-                    formData.append('retailer', retailer);
-                    formData.append('maxBudget', maxBudget);
-                    if (apiKey) formData.append('apiKey', apiKey);
+                const endpoints = ['/api/ai/find-fit', 'http://localhost:5000/api/ai/find-fit'];
+                let fetchError = null;
 
-                    res = await fetch('http://localhost:5000/api/ai/find-fit', {
-                        method: 'POST',
-                        body: formData
-                    });
-                } else {
-                    res = await fetch('http://localhost:5000/api/ai/find-fit', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ query: query || 'Oversized Pure Linen Shirt', category, retailer, maxBudget, apiKey })
-                    });
+                for (const ep of endpoints) {
+                    try {
+                        if (currentFindFitMode === 'upload' && pendingFindFitFile) {
+                            const formData = new FormData();
+                            formData.append('fitImage', pendingFindFitFile);
+                            if (query) formData.append('query', query);
+                            formData.append('category', category);
+                            formData.append('retailer', retailer);
+                            formData.append('maxBudget', maxBudget);
+                            if (apiKey) formData.append('apiKey', apiKey);
+
+                            res = await fetch(ep, {
+                                method: 'POST',
+                                body: formData
+                            });
+                        } else {
+                            res = await fetch(ep, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ query: query || 'Oversized Pure Linen Shirt', category, retailer, maxBudget, apiKey })
+                            });
+                        }
+                        if (res && res.ok) break;
+                    } catch (epErr) {
+                        fetchError = epErr;
+                    }
+                }
+
+                if (!res || !res.ok) {
+                    throw new Error(fetchError ? fetchError.message : 'Backend response not OK');
                 }
 
                 const data = await res.json();
@@ -5821,7 +5837,6 @@
             `;
 
             const cardsHtml = products.map((item, idx) => {
-                const encodedItem = encodeURIComponent(JSON.stringify(item));
                 return `
                     <div class="find-fit-card">
                         <div class="find-fit-img-wrap">
@@ -5843,7 +5858,7 @@
                                 <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="action-button secondary-btn" style="padding: 7px 10px; font-size: 11.5px; text-decoration: none; flex: 1; margin-top: 0;">
                                     Shop on ${item.retailer || 'Store'} ↗
                                 </a>
-                                <button type="button" class="action-button" onclick="addProductToUserWardrobe('${encodedItem}')" style="padding: 7px 12px; font-size: 11.5px; flex: 1.1; margin-top: 0;">
+                                <button type="button" class="action-button" onclick="addProductToUserWardrobeByIndex(${idx})" style="padding: 7px 12px; font-size: 11.5px; flex: 1.1; margin-top: 0;">
                                     + Add to Closet
                                 </button>
                             </div>
@@ -5855,19 +5870,22 @@
             container.innerHTML = headerInfo + `<div class="find-fit-grid">${cardsHtml}</div>`;
         }
 
-        function addProductToUserWardrobe(encodedProductStr) {
+        function addProductToUserWardrobeByIndex(productIndex) {
             try {
-                const product = JSON.parse(decodeURIComponent(encodedProductStr));
+                const product = currentFindFitProducts && currentFindFitProducts[productIndex];
+                if (!product) return;
                 const wardrobe = getWardrobeItems();
 
                 // Determine category from title
                 const titleLower = (product.title || '').toLowerCase();
                 let category = 'Top';
-                if (titleLower.includes('skirt') || titleLower.includes('trousers') || titleLower.includes('pants') || titleLower.includes('jeans') || titleLower.includes('cargo')) {
+                if (titleLower.includes('skirt') || titleLower.includes('trousers') || titleLower.includes('pants') || titleLower.includes('jeans') || titleLower.includes('cargo') || titleLower.includes('bottom')) {
                     category = 'Bottom';
                 } else if (titleLower.includes('dress') || titleLower.includes('gown') || titleLower.includes('slip') || titleLower.includes('kurta') || titleLower.includes('anarkali') || titleLower.includes('saree')) {
                     category = 'Dress';
-                } else if (titleLower.includes('shoes') || titleLower.includes('sneakers') || titleLower.includes('heels') || titleLower.includes('sandals') || titleLower.includes('loafers')) {
+                } else if (titleLower.includes('blazer') || titleLower.includes('jacket') || titleLower.includes('coat')) {
+                    category = 'Outerwear';
+                } else if (titleLower.includes('shoes') || titleLower.includes('sneakers') || titleLower.includes('heels') || titleLower.includes('sandals') || titleLower.includes('loafers') || titleLower.includes('boots')) {
                     category = 'Shoes';
                 } else if (titleLower.includes('necklace') || titleLower.includes('earrings') || titleLower.includes('pearl') || titleLower.includes('bag') || titleLower.includes('jewelry')) {
                     category = 'Jewelry';
@@ -5875,7 +5893,7 @@
 
                 const newItem = {
                     id: 'w_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
-                    name: product.title.split(':')[1]?.trim() || product.title,
+                    name: product.title,
                     category: category,
                     color: product.brand || product.retailer || 'Curated Fit',
                     image: product.image || product.thumbnail
@@ -5883,14 +5901,10 @@
 
                 wardrobe.unshift(newItem);
                 saveWardrobeItems(wardrobe);
-
-                if (typeof renderWardrobe === 'function') renderWardrobe();
-                if (typeof renderCategoryCountPills === 'function') renderCategoryCountPills();
-
-                alert(`Added "${newItem.name}" (${product.retailer}) to your Muse Wardrobe!`);
+                renderWardrobeGallery();
+                alert(`Added "${product.title}" to your Muse Wardrobe!`);
             } catch (err) {
-                console.error('Add to wardrobe error:', err);
-                alert("Saved to Wardrobe!");
+                console.error('Failed to add product to wardrobe:', err);
             }
         }
 

@@ -1600,19 +1600,20 @@ router.all(['/find-fit', '/findfit'], upload.single('fitImage'), async (req, res
 
         if (apiKey) {
             try {
-                let serpSearchQuery = `${query} clothing apparel fashion`;
-                if (retailer && retailer !== 'All') {
+                let serpSearchQuery = query;
+                if (retailer && retailer !== 'All' && !query.toLowerCase().includes(retailer.toLowerCase())) {
                     serpSearchQuery += ` ${retailer}`;
                 }
-                serpSearchQuery += ' India';
 
                 const serpUrl = `https://serpapi.com/search.json?engine=google_shopping&q=${encodeURIComponent(serpSearchQuery)}&gl=in&hl=en&location=India&google_domain=google.co.in&api_key=${apiKey}`;
                 const response = await fetch(serpUrl);
                 const data = await response.json();
 
-                if (data && Array.isArray(data.shopping_results) && data.shopping_results.length > 0) {
+                const resultsList = (data && (Array.isArray(data.shopping_results) ? data.shopping_results : (Array.isArray(data.inline_shopping_results) ? data.inline_shopping_results : []))) || [];
+
+                if (resultsList.length > 0) {
                     sourceUsed = 'serpapi_live';
-                    products = data.shopping_results.map((item, idx) => {
+                    products = resultsList.map((item, idx) => {
                         let parsedPrice = item.price || (item.extracted_price ? `₹${item.extracted_price}` : '₹1,499');
                         if (!parsedPrice.includes('₹') && !parsedPrice.toLowerCase().includes('rs')) {
                             parsedPrice = `₹${parsedPrice}`;
