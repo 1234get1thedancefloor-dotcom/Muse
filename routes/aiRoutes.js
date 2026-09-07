@@ -8,6 +8,7 @@ const path = require('path');
 
 const { isolateClothing, isolateAndWhiteoutGarment } = require('../utils/clothingIsolation');
 const { extractColors, findClosestFashionColor, resolveColorHex } = require('../utils/colorExtractor');
+const { getTopFashionTrends } = require('../utils/googleTrends');
 
 // ============================================================
 // BASIC SETUP & STORAGE
@@ -964,7 +965,30 @@ router.post('/isolate-wardrobe-item', upload.single('itemImage'), async (req, re
 });
 
 // ============================================================
-// 4. MAKEUP RECOMMENDATION (ALL 13 TARGET VIBES + OTHER)
+// 4. REAL-TIME GOOGLE FASHION TRENDS
+// ============================================================
+
+router.get(['/trends', '/trending'], async (req, res) => {
+    try {
+        const geo = req.query.geo || '';
+        const limit = parseInt(req.query.limit, 10) || 3;
+        const trends = await getTopFashionTrends(limit, geo);
+        return res.json({
+            success: true,
+            trends
+        });
+    } catch (err) {
+        console.error('Trends API Error:', err);
+        return res.status(500).json({
+            success: false,
+            error: 'Failed to fetch fashion trends.',
+            trends: []
+        });
+    }
+});
+
+// ============================================================
+// 5. MAKEUP RECOMMENDATION (ALL 13 TARGET VIBES + OTHER)
 // ============================================================
 
 const makeupGuides = {

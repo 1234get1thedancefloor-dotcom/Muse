@@ -603,6 +603,106 @@
             margin: 0;
         }
 
+        /* Trending Style Cards */
+        .trend-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 16px 18px;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trend-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-subtle);
+        }
+
+        .trend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .trend-rank-pill {
+            font-size: 11px;
+            font-weight: 800;
+            background: var(--primary-red);
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            letter-spacing: 0.3px;
+        }
+
+        .trend-score-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            background: var(--surface-muted);
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+        }
+
+        .trend-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+            margin-bottom: 4px;
+        }
+
+        .trend-tagline {
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+
+        .trend-palette-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .trend-color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.12);
+            display: inline-block;
+        }
+
+        .trend-action-btn {
+            width: 100%;
+            background: var(--surface-muted);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-pill);
+            padding: 10px 16px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .trend-action-btn:hover {
+            background: var(--primary-red);
+            color: #ffffff;
+            border-color: var(--primary-red);
+            transform: translateY(-1px);
+        }
+
         /* Info Section Cards */
         .info-card {
             background: #ffffff;
@@ -977,6 +1077,28 @@
                     <p class="mentality-pillar-desc">
                         Multimodal vision analysis, silhouette balancing, personalized makeup pairings, and beauty direction tailored to your undertones.
                     </p>
+                </div>
+            </div>
+
+            <!-- REAL-TIME GOOGLE FASHION TRENDS SECTION -->
+            <div style="margin-top: 8px; margin-bottom: 22px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                        <span style="font-weight: 800; font-size: 15px; letter-spacing: -0.2px; color: var(--text-primary);">
+                            Google Fashion Trends
+                        </span>
+                        <span style="font-size: 11px; font-weight: 800; color: var(--primary-red); background: var(--primary-red-light); padding: 2px 8px; border-radius: var(--radius-pill); margin-left: 6px;">
+                            Top 3 Live
+                        </span>
+                    </div>
+                    <button class="tab-chip" style="font-size: 11px; padding: 4px 10px;" onclick="loadTrendingAesthetics(true)" title="Fetch latest Google Trends">
+                        Refresh
+                    </button>
+                </div>
+
+                <!-- Trending Cards Dynamic Container -->
+                <div id="trendingCardsContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Dynamically rendered -->
                 </div>
             </div>
 
@@ -1634,6 +1756,153 @@
                     minimalist: 'Minimalist / Clean Grey'
                 };
                 homeAesthetic.innerText = fullNames[savedAesthetic] || 'Custom Vibe';
+            }
+
+            // Load or refresh real-time Google Fashion Trends
+            loadTrendingAesthetics();
+        }
+
+        // =====================================================
+        // GOOGLE FASHION TRENDS CONTROLLER
+        // =====================================================
+
+        let currentTrendsData = [];
+
+        async function loadTrendingAesthetics(forceRefresh = false) {
+            const container = document.getElementById('trendingCardsContainer');
+            if (!container) return;
+
+            if (forceRefresh || currentTrendsData.length === 0) {
+                container.innerHTML = `
+                    <div style="background: var(--surface-muted); padding: 18px; border-radius: var(--radius-card); text-align: center; color: var(--text-secondary); font-size: 12.5px; font-weight: 600; border: 1px dashed var(--border-subtle);">
+                        Analyzing Google Trends search volume and fashion momentum...
+                    </div>
+                `;
+            }
+
+            try {
+                const res = await fetch('http://localhost:5000/api/ai/trends?limit=3');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.trends) && data.trends.length > 0) {
+                    currentTrendsData = data.trends;
+                    renderTrendingCards(currentTrendsData);
+                    return;
+                }
+            } catch (err) {
+                console.warn('Trends live fetch warning:', err.message);
+            }
+
+            // Resilient fallback baseline
+            if (currentTrendsData.length === 0) {
+                currentTrendsData = [
+                    {
+                        rank: 1,
+                        name: "Soft Coquette & Balletcore",
+                        shortName: "Soft Coquette",
+                        vibeKey: "Soft Coquette",
+                        trendScore: 96,
+                        growth: "+34% search surge",
+                        tagline: "Silk corsets, ribbon bows, pleated skirts & dreamy pastel pink tones.",
+                        palette: ["#F4C2C2", "#FFFFF0", "#DE5D83", "#C8A2C8"],
+                        mustHaves: "Silk Corset, Pleated Mini Skirt, Mary Jane Heels, Pearl Drops"
+                    },
+                    {
+                        rank: 2,
+                        name: "Streetwear Urban Edge",
+                        shortName: "Streetwear Chic",
+                        vibeKey: "Streetwear",
+                        trendScore: 91,
+                        growth: "Peak search volume",
+                        tagline: "Oversized silhouettes, cargo layerings, bold sneakers & graphic statement pieces.",
+                        palette: ["#111111", "#A9A9A9", "#000080", "#E60023"],
+                        mustHaves: "Bomber Jacket, Baggy Cargo Pants, Chunky Sneakers, Crossbody Bag"
+                    },
+                    {
+                        rank: 3,
+                        name: "Clean Girl & Quiet Luxury",
+                        shortName: "Clean Girl",
+                        vibeKey: "Clean Girl",
+                        trendScore: 87,
+                        growth: "+19% this week",
+                        tagline: "Sleek tailored blazers, crisp button-downs, minimalist neutrals & subtle gold accents.",
+                        palette: ["#F5F5DC", "#FFFFFF", "#C19A6B", "#36454F"],
+                        mustHaves: "Tailored Blazer, Straight-Leg Trousers, Leather Loafers, Gold Hoops"
+                    }
+                ];
+            }
+            renderTrendingCards(currentTrendsData);
+        }
+
+        function renderTrendingCards(trends) {
+            const container = document.getElementById('trendingCardsContainer');
+            if (!container) return;
+
+            container.innerHTML = trends.map(t => {
+                const paletteHtml = (t.palette || []).map(hex => `
+                    <span class="trend-color-dot" style="background: ${hex};" title="${hex}"></span>
+                `).join('');
+
+                return `
+                    <div class="trend-card">
+                        <div class="trend-header">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span class="trend-rank-pill">#${t.rank} Trending</span>
+                                <span style="font-size: 11px; font-weight: 700; color: var(--text-primary); background: var(--surface-muted); padding: 2px 8px; border-radius: var(--radius-pill);">${t.growth || 'High Volume'}</span>
+                            </div>
+                            <span class="trend-score-badge">Trend Score: ${t.trendScore}/100</span>
+                        </div>
+
+                        <div class="trend-title">${t.name}</div>
+                        <div class="trend-tagline">${t.tagline}</div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Palette:</span>
+                                <div class="trend-palette-bar">${paletteHtml}</div>
+                            </div>
+                            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">
+                                Must-Haves: <span style="color: var(--text-primary);">${t.mustHaves || 'Curated essentials'}</span>
+                            </div>
+                        </div>
+
+                        <button class="trend-action-btn" onclick="styleOutfitFromTrend('${t.vibeKey}', '${t.shortName || t.name}')">
+                            Style ${t.shortName || t.name} Outfit from Closet →
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Navigate to Wardrobe and automatically generate look matching the chosen trending style
+        async function styleOutfitFromTrend(vibeKey, trendName) {
+            goToWardrobeScreen();
+
+            // Set occasion dropdown to match the trending vibe
+            const occasionSelect = document.getElementById('wardrobeOccasion');
+            if (occasionSelect) {
+                let foundOption = false;
+                for (let i = 0; i < occasionSelect.options.length; i++) {
+                    if (occasionSelect.options[i].value.toLowerCase().includes(vibeKey.toLowerCase())) {
+                        occasionSelect.selectedIndex = i;
+                        foundOption = true;
+                        break;
+                    }
+                }
+                if (!foundOption) {
+                    const newOpt = new Option(`${trendName} (Trending)`, vibeKey, true, true);
+                    occasionSelect.add(newOpt);
+                }
+            }
+
+            // Automatically generate curated outfit matching the trend
+            await generateOutfitFromWardrobe(vibeKey, vibeKey);
+
+            // Smooth scroll down to generated look
+            const outBox = document.getElementById('wardrobeOutputBox');
+            if (outBox) {
+                setTimeout(() => {
+                    outBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
             }
         }
 
@@ -2319,10 +2588,10 @@
         }
 
         // Generate Outfit from Closet (Recommends up to 3 variations with dual match scores & learning)
-        async function generateOutfitFromWardrobe() {
+        async function generateOutfitFromWardrobe(overrideOccasion = null, overrideVibe = null) {
             const outBox = document.getElementById('wardrobeOutputBox');
-            const occasion = document.getElementById('wardrobeOccasion').value;
-            const aesthetic = document.getElementById('userAesthetic').value || 'chic';
+            const occasion = overrideOccasion || document.getElementById('wardrobeOccasion').value;
+            const aesthetic = overrideVibe || document.getElementById('userAesthetic').value || 'chic';
             const items = getWardrobeItems();
 
             if (items.length === 0) {
@@ -2331,7 +2600,7 @@
             }
 
             outBox.style.display = "block";
-            outBox.innerText = "Consulting Muse Stylist to build personalized look variations from your closet...";
+            outBox.innerText = `Consulting Muse Stylist to build personalized ${overrideOccasion ? overrideOccasion + ' ' : ''}look variations from your closet...`;
 
             const userRatings = getUserRatingsHistory();
 
