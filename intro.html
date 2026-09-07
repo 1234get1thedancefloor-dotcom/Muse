@@ -7167,6 +7167,10 @@
             notifyUI() {
                 renderWeeklyOutfits();
                 updateWeeklyRecapModalAudioState();
+                const recapModal = document.getElementById('weeklyVibeRecapModal');
+                if (recapModal && recapModal.classList.contains('open')) {
+                    renderWeeklyVibeRecapModal();
+                }
                 renderProfileBadges();
             }
         }
@@ -7503,6 +7507,8 @@
             const pillsBar = document.getElementById('weeklyDayPillsBar');
             if (!grid) return;
 
+            const prevScrollLeft = viewport ? viewport.scrollLeft : 0;
+
             const monday = getMondayOfWeek(currentWeeklyLogDate);
             const sunday = new Date(monday);
             sunday.setDate(monday.getDate() + 6);
@@ -7625,8 +7631,9 @@
                                 </div>
                                 <div class="weekly-soundtrack-title" title="${trackTitle}">${trackTitle}</div>
                                 <div class="weekly-soundtrack-artist">${trackArtist}</div>
-                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThisTrack ? 'playing' : ''}" onclick="togglePlayDailySoundtrack('${vibeKey}', '${trackTitle.replace(/'/g, "\\'")}', event)">
+                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThisTrack ? 'playing' : ''}" onclick="togglePlayDailySoundtrack('${vibeKey}', '${trackTitle.replace(/'/g, "\\'")}', event)" title="${isPlayingThisTrack ? 'Pause Soundtrack' : 'Listen to Soundtrack'}">
                                     ${isPlayingThisTrack ? `
+                                        <svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                         <div class="sound-wave-bars">
                                             <span class="bar bar1"></span>
                                             <span class="bar bar2"></span>
@@ -7700,9 +7707,11 @@
                 }, { passive: true });
             }
 
-            // Auto-focus on today if requested or initial render
+            // Auto-focus on today if requested or preserve previous scroll
             if (autoCenterToday && todayIndexInWeek >= 0) {
                 scrollToWeeklyDayIndex(todayIndexInWeek);
+            } else if (viewport && prevScrollLeft > 0) {
+                viewport.scrollLeft = prevScrollLeft;
             }
         }
 
@@ -8177,8 +8186,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThis ? 'playing' : ''}" style="width: auto; padding: 4px 10px;" onclick="togglePlayDailySoundtrack('${item.vibeKey}', '${trackTitle.replace(/'/g, "\\'")}', event)">
+                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThis ? 'playing' : ''}" style="width: auto; padding: 4px 10px;" onclick="togglePlayDailySoundtrack('${item.vibeKey}', '${trackTitle.replace(/'/g, "\\'")}', event)" title="${isPlayingThis ? 'Pause Track' : 'Play Track'}">
                                     ${isPlayingThis ? `
+                                        <svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                         <div class="sound-wave-bars">
                                             <span class="bar bar1"></span>
                                             <span class="bar bar2"></span>
@@ -8224,14 +8234,21 @@
         function updateWeeklyRecapModalAudioState() {
             const btn = document.getElementById('playWeeklyMixtapeBtn');
             const btnText = document.getElementById('playWeeklyMixtapeBtnText');
-            if (!btn || !btnText) return;
+            const btnIcon = document.getElementById('playWeeklyMixtapeIcon');
+            if (!btn) return;
 
             if (museAudio.isMixtapeActive && museAudio.isPlaying) {
-                btnText.innerText = "Pause Mixtape";
+                if (btnText) btnText.innerText = "Pause Mixtape";
                 btn.style.background = "#e60023";
+                if (btnIcon) {
+                    btnIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                }
             } else {
-                btnText.innerText = "Play Weekly Mixtape";
+                if (btnText) btnText.innerText = "Play Weekly Mixtape";
                 btn.style.background = "var(--text-primary)";
+                if (btnIcon) {
+                    btnIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                }
             }
         }
 
