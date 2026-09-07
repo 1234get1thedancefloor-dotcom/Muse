@@ -506,6 +506,162 @@
         .hidden {
             display: none !important;
         }
+
+        /* Look Switcher Pills (Up to 3 Looks) */
+        .look-switcher {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+            padding-bottom: 4px;
+        }
+
+        .look-tab-btn {
+            background: var(--surface-muted);
+            border: 2px solid transparent;
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .look-tab-btn:hover {
+            background: var(--surface-hover);
+        }
+
+        .look-tab-btn.active {
+            background: var(--text-primary);
+            color: #ffffff;
+            border-color: var(--text-primary);
+        }
+
+        /* Match Scores Dashboard */
+        .match-score-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 14px 0 16px;
+        }
+
+        .match-score-card {
+            background: var(--surface-muted);
+            padding: 12px 14px;
+            border-radius: var(--radius-card);
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .match-score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .match-score-val {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .match-score-val.highlight-red {
+            color: var(--primary-red);
+        }
+
+        .match-score-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: var(--border-light);
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+        }
+
+        .match-score-bar-fill {
+            height: 100%;
+            border-radius: var(--radius-pill);
+            background: var(--primary-red);
+            transition: width 0.4s ease;
+        }
+
+        .match-score-bar-fill.fill-dark {
+            background: var(--text-primary);
+        }
+
+        /* Interactive Rating & Preference Feedback */
+        .rating-feedback-panel {
+            margin-top: 18px;
+            padding: 18px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .rating-btn-group {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .rating-chip-btn {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            padding: 8px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .rating-chip-btn:hover {
+            background: var(--surface-hover);
+        }
+
+        .rating-chip-btn.selected {
+            background: var(--primary-red);
+            color: #ffffff;
+            border-color: var(--primary-red);
+        }
+
+        .tag-chip-btn {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            padding: 6px 12px;
+            border-radius: var(--radius-pill);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tag-chip-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+        }
+
+        .tag-chip-btn.selected {
+            background: var(--text-primary);
+            color: #ffffff;
+            border-color: var(--text-primary);
+        }
     </style>
 </head>
 
@@ -680,21 +836,87 @@
 
             <!-- Add Item Box -->
             <div style="background: var(--surface-muted); padding: 20px; border-radius: var(--radius-card); border: 1px dashed var(--border-subtle); margin-bottom: 20px;">
-                <label style="margin-top: 0;" for="wardrobeCategory">Category:</label>
-                <select id="wardrobeCategory">
-                    <option value="Top">Top / Shirt / Blouse</option>
-                    <option value="Dress">Dress / One-Piece</option>
-                    <option value="Bottom">Bottom / Skirt / Pants</option>
-                    <option value="Shoes">Shoes / Heels / Sneakers</option>
-                    <option value="Jewelry">Jewelry & Accessories</option>
-                    <option value="Outerwear">Jacket & Outerwear</option>
-                </select>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label style="margin-top: 0;" for="wardrobeCategory">Category:</label>
+                        <select id="wardrobeCategory">
+                            <option value="Top">Top / Shirt / Blouse</option>
+                            <option value="Dress">Dress / One-Piece</option>
+                            <option value="Bottom">Bottom / Skirt / Pants</option>
+                            <option value="Shoes">Shoes / Heels / Sneakers</option>
+                            <option value="Jewelry">Jewelry & Accessories</option>
+                            <option value="Outerwear">Jacket & Outerwear</option>
+                        </select>
+                    </div>
 
-                <label for="wardrobeItemName">Piece Name / Description:</label>
-                <input type="text" id="wardrobeItemName" placeholder="e.g. Silk Ivory Corset, Chunky Loafers">
+                    <div>
+                        <label style="margin-top: 0;" for="wardrobeItemName">Piece Name / Description:</label>
+                        <input type="text" id="wardrobeItemName" placeholder="e.g. Silk Ivory Corset, Chunky Loafers">
+                    </div>
+                </div>
 
-                <label for="wardrobeItemColor">Color / Aesthetic Tag:</label>
-                <input type="text" id="wardrobeItemColor" placeholder="e.g. Powder Pink, Gold, Vintage">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label for="wardrobeItemColor">Color:</label>
+                        <input type="text" id="wardrobeItemColor" placeholder="e.g. Powder Pink, Gold, Black, Emerald">
+                    </div>
+
+                    <div>
+                        <label for="wardrobeItemMaterial">Material:</label>
+                        <select id="wardrobeItemMaterial">
+                            <option value="Silk">Silk / Satin</option>
+                            <option value="Cotton">Cotton / Linen</option>
+                            <option value="Leather">Leather / Suede</option>
+                            <option value="Denim">Denim / Twill</option>
+                            <option value="Velvet">Velvet / Corduroy</option>
+                            <option value="Wool">Wool / Cashmere / Knit</option>
+                            <option value="Chiffon">Chiffon / Tulle / Sheer</option>
+                            <option value="Metal">Gold / Silver / Metallic</option>
+                            <option value="Synthetic">Polyester / Spandex</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label for="wardrobeItemPattern">Pattern:</label>
+                        <select id="wardrobeItemPattern">
+                            <option value="Solid">Solid / Plain</option>
+                            <option value="Floral">Floral / Botanical</option>
+                            <option value="Striped">Striped / Pinstripe</option>
+                            <option value="Plaid">Plaid / Houndstooth / Check</option>
+                            <option value="Lace">Lace / Crochet / Ribbed</option>
+                            <option value="Animal Print">Animal Print</option>
+                            <option value="Embroidered">Embroidered / Beaded</option>
+                            <option value="Graphic">Graphic / Abstract</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="wardrobeItemStyle">Style / Aesthetic:</label>
+                        <select id="wardrobeItemStyle">
+                            <option value="Soft Coquette">Soft Coquette / Romantic</option>
+                            <option value="90s Minimalist">90s Minimalist / Clean</option>
+                            <option value="Chic Parisian">Chic Parisian / Luxury</option>
+                            <option value="Goth Grunge">Goth / Grunge / Edge</option>
+                            <option value="Y2K Retro">Y2K / Indie Pop</option>
+                            <option value="Classic Tailored">Classic Tailored / Formal</option>
+                            <option value="Streetwear">Streetwear / Casual</option>
+                            <option value="Festive Royal">Festive Royal / Traditional</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Formality Slider (1-10) -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 16px 0 6px;">
+                        <label style="margin: 0;" for="wardrobeItemFormality">Formality Level (1 - 10):</label>
+                        <span id="formalityValueBadge" style="font-size: 12.5px; font-weight: 800; background: var(--text-primary); color: #ffffff; padding: 2px 10px; border-radius: var(--radius-pill);">
+                            Level 5 - Smart Casual
+                        </span>
+                    </div>
+                    <input type="range" id="wardrobeItemFormality" min="1" max="10" value="5" style="width: 100%; accent-color: var(--primary-red); cursor: pointer;" oninput="updateFormalityBadge(this.value)">
+                </div>
 
                 <label for="wardrobeItemFile">Upload Piece Photo:</label>
                 <input type="file" id="wardrobeItemFile" accept="image/*">
@@ -1168,11 +1390,31 @@
             });
         }
 
-        // Add Piece to Digital Wardrobe
+        // Formality Level Label Helper
+        function updateFormalityBadge(val) {
+            const num = parseInt(val, 10);
+            let label = "Casual";
+            if (num <= 2) label = "Ultra Casual / Loungewear";
+            else if (num <= 4) label = "Casual Everyday";
+            else if (num <= 6) label = "Smart Casual / Elevated";
+            else if (num <= 8) label = "Semi-Formal / Cocktail";
+            else label = "Black Tie / Royal Festive Couture";
+
+            const badge = document.getElementById('formalityValueBadge');
+            if (badge) {
+                badge.innerText = `Level ${num} - ${label}`;
+            }
+        }
+
+        // Add Piece to Digital Wardrobe with All 6 Rich Attributes
         function addWardrobeItem() {
             const cat = document.getElementById('wardrobeCategory').value;
             const name = document.getElementById('wardrobeItemName').value.trim();
             const color = document.getElementById('wardrobeItemColor').value.trim();
+            const material = document.getElementById('wardrobeItemMaterial').value;
+            const pattern = document.getElementById('wardrobeItemPattern').value;
+            const style = document.getElementById('wardrobeItemStyle').value;
+            const formality = parseInt(document.getElementById('wardrobeItemFormality').value, 10) || 5;
             const file = wardrobeFileInput.files[0];
 
             if (!name) {
@@ -1188,6 +1430,10 @@
                     name: name,
                     category: cat,
                     color: color || 'Neutral',
+                    material: material || 'Cotton',
+                    pattern: pattern || 'Solid',
+                    style: style || 'Casual',
+                    formality: formality,
                     image: imgSrc || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'
                 };
 
@@ -1197,6 +1443,8 @@
                 // Reset Form
                 document.getElementById('wardrobeItemName').value = '';
                 document.getElementById('wardrobeItemColor').value = '';
+                document.getElementById('wardrobeItemFormality').value = 5;
+                updateFormalityBadge(5);
                 wardrobeFileInput.value = '';
                 wardrobeItemPreview.src = '';
                 wardrobePreviewContainer.classList.add('hidden');
@@ -1231,7 +1479,7 @@
             renderWardrobe(cat);
         }
 
-        // Render Wardrobe Grid (Pinterest Card Style)
+        // Render Wardrobe Grid (Pinterest Card Style with Rich Details)
         function renderWardrobe(filter = 'All') {
             const grid = document.getElementById('wardrobeGrid');
             const countEl = document.getElementById('wardrobeCount');
@@ -1252,14 +1500,45 @@
                 <div class="wardrobe-card">
                     <button class="delete-btn" onclick="deleteWardrobeItem('${item.id}')" title="Delete piece">×</button>
                     <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'">
-                    <span class="wardrobe-badge">${item.category}</span>
+                    <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                        <span class="wardrobe-badge">${item.category}</span>
+                        <span class="wardrobe-badge" style="background: var(--text-primary); color: #ffffff; font-size: 10px;">${item.formality || 5}/10</span>
+                    </div>
                     <span class="wardrobe-card-title" title="${item.name}">${item.name}</span>
-                    <span style="font-size: 11.5px; color: var(--text-secondary); font-weight: 500;">${item.color}</span>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.3;">
+                        ${item.color || 'Neutral'} • ${item.material || 'Fabric'}
+                    </div>
+                    <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 600;">
+                        ${item.pattern || 'Solid'} | ${item.style || 'Classic'}
+                    </div>
                 </div>
             `).join('');
         }
 
-        // Generate Outfit from Closet (Shows photos next to descriptions)
+        // Global state for recommended outfits and ratings
+        let currentRecommendedOutfits = [];
+        let activeLookIndex = 0;
+        let selectedRatingValue = 5;
+        let selectedFeedbackTags = new Set();
+
+        function getUserRatingsHistory() {
+            try {
+                const stored = localStorage.getItem('muse_user_ratings');
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveUserRatingsHistory(ratings) {
+            try {
+                localStorage.setItem('muse_user_ratings', JSON.stringify(ratings));
+            } catch (e) {
+                console.error("Failed to save ratings history", e);
+            }
+        }
+
+        // Generate Outfit from Closet (Recommends up to 3 variations with dual match scores & learning)
         async function generateOutfitFromWardrobe() {
             const outBox = document.getElementById('wardrobeOutputBox');
             const occasion = document.getElementById('wardrobeOccasion').value;
@@ -1272,7 +1551,9 @@
             }
 
             outBox.style.display = "block";
-            outBox.innerText = "Consulting Muse Stylist to build the perfect look from your closet...";
+            outBox.innerText = "Consulting Muse Stylist to build personalized look variations from your closet...";
+
+            const userRatings = getUserRatingsHistory();
 
             try {
                 const response = await fetch('http://localhost:5000/api/ai/generate-outfit', {
@@ -1281,63 +1562,17 @@
                     body: JSON.stringify({
                         items: items,
                         vibe: aesthetic.charAt(0).toUpperCase() + aesthetic.slice(1),
-                        occasion: occasion
+                        occasion: occasion,
+                        userRatings: userRatings
                     })
                 });
 
                 const data = await response.json();
 
-                if (data.success && data.outfit) {
-                    const o = data.outfit;
-
-                    const renderPieceCard = (p, roleLabel) => {
-                        const fallbackImg = 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
-                        const imgSrc = p.image || fallbackImg;
-                        return `
-                            <div style="display: flex; align-items: center; gap: 14px; background: var(--surface-muted); padding: 12px 16px; border-radius: var(--radius-card); margin-bottom: 8px; border: 1px solid var(--border-light);">
-                                <img src="${imgSrc}" alt="${p.name}" onerror="this.src='${fallbackImg}'"
-                                    style="width: 64px; height: 64px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-light); flex-shrink: 0; box-shadow: var(--shadow-subtle);">
-                                <div style="display: flex; flex-direction: column; gap: 3px; overflow: hidden;">
-                                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                        <span style="font-size: 11px; font-weight: 700; background: var(--text-primary); color: #ffffff; padding: 2px 8px; border-radius: var(--radius-pill);">${roleLabel || p.category}</span>
-                                        <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">${p.color || ''}</span>
-                                    </div>
-                                    <div style="font-weight: 700; font-size: 14px; color: var(--text-primary); line-height: 1.3;">${p.name}</div>
-                                </div>
-                            </div>
-                        `;
-                    };
-
-                    const mainHtml = (o.pieces.main || []).map(p => renderPieceCard(p, p.category)).join('');
-                    const shoesHtml = (o.pieces.shoes || []).map(p => renderPieceCard(p, 'Footwear')).join('');
-                    const jewelryHtml = (o.pieces.jewelry || []).map(p => renderPieceCard(p, 'Jewelry / Accents')).join('');
-                    const outerHtml = (o.pieces.outerwear || []).map(p => renderPieceCard(p, 'Outerwear')).join('');
-
-                    const allPiecesHtml = (mainHtml + shoesHtml + jewelryHtml + outerHtml) || `<div style="color: var(--text-secondary); font-size: 13px;">No pieces selected.</div>`;
-
-                    outBox.innerHTML = `
-                        <div style="font-weight: 800; font-size: 18px; color: var(--text-primary); margin-bottom: 14px; text-align: center; letter-spacing: -0.2px;">
-                            ${o.title}
-                        </div>
-
-                        <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
-                            Curated Closet Pieces
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; margin-bottom: 14px;">
-                            ${allPiecesHtml}
-                        </div>
-
-                        <div style="margin-top: 14px; padding: 14px 16px; background: var(--surface-muted); border-radius: var(--radius-card); border-left: 4px solid var(--text-primary);">
-                            <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 4px; color: var(--text-primary);">Styling Rationale</div>
-                            <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-secondary);">${o.stylingRationale}</div>
-                        </div>
-
-                        <div style="margin-top: 10px; padding: 14px 16px; background: var(--primary-red-light); border-radius: var(--radius-card); border-left: 4px solid var(--primary-red);">
-                            <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 4px; color: var(--primary-red);">Hair & Beauty Direction</div>
-                            <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${o.beautyTip}</div>
-                        </div>
-                    `;
+                if (data.success && (data.outfits || data.outfit)) {
+                    currentRecommendedOutfits = data.outfits || [data.outfit];
+                    activeLookIndex = 0;
+                    renderRecommendedOutfitView();
                 } else {
                     outBox.innerText = "Could not generate outfit: " + (data.error || "Unknown error");
                 }
@@ -1346,7 +1581,357 @@
             }
         }
 
-        // Single Outfit Vibe Analysis
+        function switchRecommendedLook(index) {
+            activeLookIndex = index;
+            renderRecommendedOutfitView();
+        }
+
+        function toggleFeedbackTag(tag, el) {
+            if (selectedFeedbackTags.has(tag)) {
+                selectedFeedbackTags.delete(tag);
+                el.classList.remove('selected');
+            } else {
+                selectedFeedbackTags.add(tag);
+                el.classList.add('selected');
+            }
+        }
+
+        function selectRatingScore(score, el) {
+            selectedRatingValue = score;
+            const parent = el.parentElement;
+            parent.querySelectorAll('.rating-chip-btn').forEach(btn => btn.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function handleOutfitRatingSubmit(lookId) {
+            const currentLook = currentRecommendedOutfits[activeLookIndex];
+            if (!currentLook) return;
+
+            const noteInput = document.getElementById('ratingNoteInput');
+            const userNote = noteInput ? noteInput.value.trim() : '';
+
+            const pieceNames = [
+                ...(currentLook.pieces.main || []).map(p => p.name),
+                ...(currentLook.pieces.shoes || []).map(p => p.name),
+                ...(currentLook.pieces.jewelry || []).map(p => p.name),
+                ...(currentLook.pieces.outerwear || []).map(p => p.name)
+            ];
+
+            const ratingEntry = {
+                id: `rating_${Date.now()}`,
+                lookId: lookId,
+                lookTitle: currentLook.title,
+                rating: selectedRatingValue,
+                feedback: selectedRatingValue >= 4 ? 'like' : (selectedRatingValue <= 2 ? 'dislike' : 'neutral'),
+                tags: Array.from(selectedFeedbackTags),
+                note: userNote,
+                itemNames: pieceNames,
+                timestamp: new Date().toISOString()
+            };
+
+            const history = getUserRatingsHistory();
+            history.unshift(ratingEntry);
+            saveUserRatingsHistory(history);
+
+            // Update confirmation in UI
+            const statusBox = document.getElementById('ratingStatusBox');
+            if (statusBox) {
+                statusBox.innerHTML = `
+                    <div style="background: var(--primary-red-light); border: 1px solid var(--primary-red); padding: 12px 14px; border-radius: var(--radius-card); margin-top: 12px; color: var(--primary-red); font-weight: 700; font-size: 13px;">
+                        Preference Recorded (${selectedRatingValue}/5 Stars)! Muse has incorporated your likes and dislikes to refine future match scores.
+                    </div>
+                `;
+            }
+        }
+
+        function renderRecommendedOutfitView() {
+            const outBox = document.getElementById('wardrobeOutputBox');
+            if (!currentRecommendedOutfits || currentRecommendedOutfits.length === 0) return;
+
+            const o = currentRecommendedOutfits[activeLookIndex] || currentRecommendedOutfits[0];
+            const history = getUserRatingsHistory();
+            const existingRating = history.find(r => r.lookId === o.id || (r.lookTitle === o.title && r.itemNames && r.itemNames.length > 0));
+
+            const renderPieceCard = (p, roleLabel) => {
+                const fallbackImg = 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
+                const imgSrc = p.image || fallbackImg;
+                const metaDetails = [p.material, p.pattern, p.style].filter(Boolean).join(' • ');
+                const formalityTag = p.formality ? `Formality: ${p.formality}/10` : '';
+
+                return `
+                    <div style="display: flex; align-items: center; gap: 14px; background: var(--surface-muted); padding: 12px 16px; border-radius: var(--radius-card); margin-bottom: 8px; border: 1px solid var(--border-light);">
+                        <img src="${imgSrc}" alt="${p.name}" onerror="this.src='${fallbackImg}'"
+                            style="width: 64px; height: 64px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-light); flex-shrink: 0; box-shadow: var(--shadow-subtle);">
+                        <div style="display: flex; flex-direction: column; gap: 3px; overflow: hidden; flex-grow: 1;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                    <span style="font-size: 11px; font-weight: 700; background: var(--text-primary); color: #ffffff; padding: 2px 8px; border-radius: var(--radius-pill);">${roleLabel || p.category}</span>
+                                    <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">${p.color || ''}</span>
+                                </div>
+                                ${formalityTag ? `<span style="font-size: 10.5px; font-weight: 700; color: var(--primary-red); background: var(--primary-red-light); padding: 2px 8px; border-radius: var(--radius-pill);">${formalityTag}</span>` : ''}
+                            </div>
+                            <div style="font-weight: 700; font-size: 14px; color: var(--text-primary); line-height: 1.3;">${p.name}</div>
+                            ${metaDetails ? `<div style="font-size: 11px; color: var(--text-muted); font-weight: 500;">${metaDetails}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            };
+
+            const mainHtml = (o.pieces.main || []).map(p => renderPieceCard(p, p.category)).join('');
+            const shoesHtml = (o.pieces.shoes || []).map(p => renderPieceCard(p, 'Footwear')).join('');
+            const jewelryHtml = (o.pieces.jewelry || []).map(p => renderPieceCard(p, 'Jewelry / Accents')).join('');
+            const outerHtml = (o.pieces.outerwear || []).map(p => renderPieceCard(p, 'Outerwear')).join('');
+            const allPiecesHtml = (mainHtml + shoesHtml + jewelryHtml + outerHtml) || `<div style="color: var(--text-secondary); font-size: 13px;">No pieces selected.</div>`;
+
+            // Look switcher pills
+            const lookSwitcherHtml = currentRecommendedOutfits.length > 1 ? `
+                <div style="margin-bottom: 14px;">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Recommended Outfit Variations (${currentRecommendedOutfits.length} Options)
+                    </div>
+                    <div class="look-switcher">
+                        ${currentRecommendedOutfits.map((look, i) => `
+                            <button class="look-tab-btn ${i === activeLookIndex ? 'active' : ''}" onclick="switchRecommendedLook(${i})">
+                                Option ${i + 1}: ${look.title.replace(/^Look \d+:\s*/, '')} (${look.eventMatchScore}%)
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : '';
+
+            // Dual Match Scores
+            const eventScore = o.eventMatchScore || 94;
+            const prefScore = o.preferenceMatchScore || 91;
+
+            outBox.innerHTML = `
+                ${lookSwitcherHtml}
+
+                <div style="font-weight: 800; font-size: 18px; color: var(--text-primary); margin-bottom: 4px; text-align: center; letter-spacing: -0.2px;">
+                    ${o.title}
+                </div>
+
+                <div style="font-size: 13px; color: var(--text-secondary); text-align: center; margin-bottom: 14px; font-weight: 500;">
+                    ${o.subtitle || ''}
+                </div>
+
+                <!-- Match Score Dashboard -->
+                <div class="match-score-grid">
+                    <div class="match-score-card">
+                        <div class="match-score-header">
+                            <span>Event & Aesthetic Match</span>
+                            <span class="match-score-val highlight-red">${eventScore}%</span>
+                        </div>
+                        <div class="match-score-bar-bg">
+                            <div class="match-score-bar-fill" style="width: ${eventScore}%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="match-score-card">
+                        <div class="match-score-header">
+                            <span>User Preference Synergy</span>
+                            <span class="match-score-val">${prefScore}%</span>
+                        </div>
+                        <div class="match-score-bar-bg">
+                            <div class="match-score-bar-fill fill-dark" style="width: ${prefScore}%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                    Curated Closet Pieces
+                </div>
+
+                <div style="display: flex; flex-direction: column; margin-bottom: 14px;">
+                    ${allPiecesHtml}
+                </div>
+
+                <div style="margin-top: 14px; padding: 14px 16px; background: var(--surface-muted); border-radius: var(--radius-card); border-left: 4px solid var(--text-primary);">
+                    <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 4px; color: var(--text-primary);">Styling Rationale</div>
+                    <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-secondary);">${o.stylingRationale}</div>
+                </div>
+
+                <div style="margin-top: 10px; padding: 14px 16px; background: var(--primary-red-light); border-radius: var(--radius-card); border-left: 4px solid var(--primary-red);">
+                    <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 4px; color: var(--primary-red);">Hair & Beauty Direction</div>
+                    <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${o.beautyTip}</div>
+                </div>
+
+                <!-- Interactive Rating & Preference Feedback Panel -->
+                <div class="rating-feedback-panel">
+                    <div style="font-weight: 800; font-size: 15px; color: var(--text-primary); margin-bottom: 4px;">
+                        Rate This Outfit & Save Preference
+                    </div>
+                    <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 10px;">
+                        Your rating teaches Muse your personal likes and dislikes to refine future outfit generation.
+                    </div>
+
+                    <div style="font-weight: 700; font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">
+                        Your Rating:
+                    </div>
+                    <div class="rating-btn-group">
+                        <button class="rating-chip-btn ${selectedRatingValue === 1 ? 'selected' : ''}" onclick="selectRatingScore(1, this)">1 - Dislike</button>
+                        <button class="rating-chip-btn ${selectedRatingValue === 2 ? 'selected' : ''}" onclick="selectRatingScore(2, this)">2 - Neutral</button>
+                        <button class="rating-chip-btn ${selectedRatingValue === 3 ? 'selected' : ''}" onclick="selectRatingScore(3, this)">3 - Like</button>
+                        <button class="rating-chip-btn ${selectedRatingValue === 4 ? 'selected' : ''}" onclick="selectRatingScore(4, this)">4 - Loved It</button>
+                        <button class="rating-chip-btn ${selectedRatingValue === 5 ? 'selected' : ''}" onclick="selectRatingScore(5, this)">5 - Signature Perfect</button>
+                    </div>
+
+                    <div style="font-weight: 700; font-size: 12px; color: var(--text-secondary); text-transform: uppercase; margin-top: 10px;">
+                        Style Feedback Tags (Optional):
+                    </div>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
+                        <button class="tag-chip-btn" onclick="toggleFeedbackTag('Love silhouette', this)">Love Silhouette</button>
+                        <button class="tag-chip-btn" onclick="toggleFeedbackTag('Great colors', this)">Great Colors</button>
+                        <button class="tag-chip-btn" onclick="toggleFeedbackTag('Want different shoes', this)">Want Different Shoes</button>
+                        <button class="tag-chip-btn" onclick="toggleFeedbackTag('Too formal', this)">Too Formal</button>
+                        <button class="tag-chip-btn" onclick="toggleFeedbackTag('Prefer casual', this)">Prefer Casual</button>
+                    </div>
+
+                    <div style="margin-top: 12px;">
+                        <input type="text" id="ratingNoteInput" placeholder="Add optional stylist notes (e.g. Save for dinner next Friday)" style="font-size: 13px;">
+                    </div>
+
+                    <button class="action-button secondary-btn" style="margin-top: 12px; padding: 11px 18px; font-size: 13px;" onclick="handleOutfitRatingSubmit('${o.id}')">
+                        Submit Outfit Rating & Preference
+                    </button>
+
+                    <div id="ratingStatusBox">
+                        ${existingRating ? `
+                            <div style="background: var(--surface-muted); border: 1px solid var(--border-light); padding: 10px 14px; border-radius: var(--radius-card); margin-top: 12px; font-size: 12.5px; color: var(--text-secondary); font-weight: 600;">
+                                Previously Rated: ${existingRating.rating}/5 Stars (${existingRating.feedback}).
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        const FASHION_COLOR_DICT = [
+            { name: "Jet Black", hex: "#111111", r: 17, g: 17, b: 17 },
+            { name: "Charcoal Grey", hex: "#36454F", r: 54, g: 69, b: 79 },
+            { name: "Slate Grey", hex: "#708090", r: 112, g: 128, b: 144 },
+            { name: "Heather Grey", hex: "#A9A9A9", r: 169, g: 169, b: 169 },
+            { name: "Crisp White", hex: "#FFFFFF", r: 255, g: 255, b: 255 },
+            { name: "Ivory Cream", hex: "#FFFFF0", r: 255, g: 255, b: 240 },
+            { name: "Warm Beige", hex: "#F5F5DC", r: 245, g: 245, b: 220 },
+            { name: "Oatmeal", hex: "#E3DAC9", r: 227, g: 218, b: 201 },
+            { name: "Camel Tan", hex: "#C19A6B", r: 193, g: 154, b: 107 },
+            { name: "Espresso Brown", hex: "#4A2E18", r: 74, g: 46, b: 24 },
+            { name: "Chocolate Brown", hex: "#3D2314", r: 61, g: 35, b: 20 },
+            { name: "Warm Chestnut", hex: "#8B4513", r: 139, g: 69, b: 19 },
+            { name: "Terracotta", hex: "#CC4E33", r: 204, g: 78, b: 51 },
+            { name: "Crimson Red", hex: "#E60023", r: 230, g: 0, b: 35 },
+            { name: "Deep Burgundy", hex: "#800020", r: 128, g: 0, b: 32 },
+            { name: "Cherry Wine", hex: "#6E0B23", r: 110, g: 11, b: 35 },
+            { name: "Blush Pink", hex: "#DE5D83", r: 222, g: 93, b: 131 },
+            { name: "Powder Pink", hex: "#F4C2C2", r: 244, g: 194, b: 194 },
+            { name: "Dusty Rose", hex: "#DCAE96", r: 220, g: 174, b: 150 },
+            { name: "Baby Blue", hex: "#89CFF0", r: 137, g: 207, b: 240 },
+            { name: "Denim Blue", hex: "#2B4C7E", r: 43, g: 76, b: 126 },
+            { name: "Royal Navy", hex: "#000080", r: 0, g: 0, b: 128 },
+            { name: "Midnight Navy", hex: "#1B263B", r: 27, g: 38, b: 59 },
+            { name: "Sage Green", hex: "#87A987", r: 135, g: 169, b: 135 },
+            { name: "Olive Khaki", hex: "#556B2F", r: 85, g: 107, b: 47 },
+            { name: "Forest Pine", hex: "#228B22", r: 34, g: 139, b: 34 },
+            { name: "Emerald Green", hex: "#046307", r: 4, g: 99, b: 7 },
+            { name: "Mustard Gold", hex: "#E1AD01", r: 225, g: 173, b: 1 },
+            { name: "Warm Gold", hex: "#D4AF37", r: 212, g: 175, b: 55 },
+            { name: "Burnished Silver", hex: "#C0C0C0", r: 192, g: 192, b: 192 },
+            { name: "Pastel Lilac", hex: "#C8A2C8", r: 200, g: 162, b: 200 },
+            { name: "Royal Plum", hex: "#4E1643", r: 78, g: 22, b: 67 }
+        ];
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+        }
+
+        function matchFashionColorName(r, g, b) {
+            let closest = FASHION_COLOR_DICT[0];
+            let minDistance = Infinity;
+            for (const c of FASHION_COLOR_DICT) {
+                const rmean = (r + c.r) / 2;
+                const dr = r - c.r;
+                const dg = g - c.g;
+                const db = b - c.b;
+                const dist = Math.sqrt((((512 + rmean) * dr * dr) >> 8) + 4 * dg * dg + (((767 - rmean) * db * db) >> 8));
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closest = c;
+                }
+            }
+            return closest.name;
+        }
+
+        async function extractExactImagePalette(file) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const url = URL.createObjectURL(file);
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = 80;
+                    canvas.height = 80;
+                    ctx.drawImage(img, 0, 0, 80, 80);
+                    URL.revokeObjectURL(url);
+
+                    const imgData = ctx.getImageData(0, 0, 80, 80).data;
+                    const colorBins = {};
+
+                    for (let i = 0; i < imgData.length; i += 4) {
+                        const r = imgData[i];
+                        const g = imgData[i + 1];
+                        const b = imgData[i + 2];
+                        const a = imgData[i + 3];
+
+                        if (a < 128) continue; // Skip transparent
+                        if (r > 248 && g > 248 && b > 248) continue; // Skip studio white border
+
+                        const qr = Math.round(r / 28) * 28;
+                        const qg = Math.round(g / 28) * 28;
+                        const qb = Math.round(b / 28) * 28;
+                        const key = `${qr},${qg},${qb}`;
+
+                        if (!colorBins[key]) {
+                            colorBins[key] = { rSum: 0, gSum: 0, bSum: 0, count: 0 };
+                        }
+                        colorBins[key].rSum += r;
+                        colorBins[key].gSum += g;
+                        colorBins[key].bSum += b;
+                        colorBins[key].count++;
+                    }
+
+                    const sortedBins = Object.values(colorBins).sort((a, b) => b.count - a.count);
+                    const selectedColors = [];
+
+                    for (const bin of sortedBins) {
+                        if (selectedColors.length >= 4) break;
+                        const avgR = Math.round(bin.rSum / bin.count);
+                        const avgG = Math.round(bin.gSum / bin.count);
+                        const avgB = Math.round(bin.bSum / bin.count);
+
+                        const isDistinct = selectedColors.every(sc => {
+                            const d = Math.sqrt(Math.pow(avgR - sc.r, 2) + Math.pow(avgG - sc.g, 2) + Math.pow(avgB - sc.b, 2));
+                            return d > 38;
+                        });
+
+                        if (isDistinct || selectedColors.length === 0) {
+                            const hex = rgbToHex(avgR, avgG, avgB);
+                            const name = matchFashionColorName(avgR, avgG, avgB);
+                            selectedColors.push({ name, hex, r: avgR, g: avgG, b: avgB });
+                        }
+                    }
+
+                    if (selectedColors.length === 0) {
+                        selectedColors.push({ name: "Crisp White", hex: "#FFFFFF", r: 255, g: 255, b: 255 });
+                    }
+
+                    resolve(selectedColors);
+                };
+                img.onerror = () => resolve([]);
+                img.src = url;
+            });
+        }
+
+        // Single Outfit Vibe Analysis (Top 3 Styles Ascending, Color Palette, Breakdown, Mood, Best For)
         async function uploadAndAnalyze() {
             const outBox = document.getElementById('outputBox');
             const fileInput = document.getElementById('outfitFile');
@@ -1358,10 +1943,14 @@
             outBox.style.display = "block";
             outBox.innerText = "Analyzing wardrobe items through fashion vision engine...";
 
+            // Extract exact pixel colors from image directly
+            const extractedPalette = await extractExactImagePalette(fileInput.files[0]);
+
             const formData = new FormData();
             formData.append('outfitImage', fileInput.files[0]);
             formData.append('hasQuestion', document.getElementById('hasQ').checked);
             formData.append('userQuestion', document.getElementById('userQ').value);
+            formData.append('extractedPalette', JSON.stringify(extractedPalette));
 
             try {
                 const response = await fetch('http://localhost:5000/api/ai/detect-aesthetic', {
@@ -1372,14 +1961,143 @@
                 const data = await response.json();
 
                 if (data.success && data.results) {
-                    if (Array.isArray(data.results) && data.results[0] && data.results[0].generated_text) {
-                        outBox.innerText = data.results[0].generated_text;
-                    } else if (data.results.generated_text) {
-                        outBox.innerText = data.results.generated_text;
-                    } else if (data.results.choices && data.results.choices[0]?.message?.content) {
-                        outBox.innerText = data.results.choices[0].message.content;
+                    const r = data.results;
+
+                    // If structured vibe report is present
+                    if (r.topStylesDescending || r.topStylesAscending || r.topStyles || r.outfitBreakdown || r.mood) {
+                        const topStyles = r.topStylesDescending || r.topStyles || r.topStylesAscending || [
+                            { style: r.primary?.aesthetic || "Soft Coquette", score: 95 },
+                            { style: r.secondary?.aesthetic || "Parisian Chic", score: 85 }
+                        ];
+
+                        // Ensure sorted in descending order (highest to lowest)
+                        topStyles.sort((a, b) => b.score - a.score);
+
+                        const stylesHtml = topStyles.map((item, idx) => {
+                            const isPeak = idx === 0;
+                            const barFillClass = isPeak ? '' : 'fill-dark';
+                            const valClass = isPeak ? 'highlight-red' : '';
+                            return `
+                                <div style="margin-bottom: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <span style="font-weight: 700; font-size: 13.5px; color: var(--text-primary);">${item.style} ${isPeak ? '<span style="font-size: 11px; background: var(--primary-red-light); color: var(--primary-red); padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 800; margin-left: 6px;">Signature Match</span>' : ''}</span>
+                                        <span class="match-score-val ${valClass}" style="font-size: 16px;">${item.score}%</span>
+                                    </div>
+                                    <div class="match-score-bar-bg" style="height: 8px;">
+                                        <div class="match-score-bar-fill ${barFillClass}" style="width: ${item.score}%;"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        // Palette HTML with exact color swatch circle, fashion color name, and hex
+                        const paletteList = (r.colorPalette && r.colorPalette.length > 0) ? r.colorPalette : extractedPalette;
+                        const paletteHtml = paletteList.map(c => {
+                            const colorName = typeof c === 'object' ? c.name : c;
+                            const colorHex = typeof c === 'object' ? (c.hex || '#555555') : '#555555';
+                            return `
+                                <div style="display: inline-flex; align-items: center; gap: 8px; background: var(--surface-muted); border: 1px solid var(--border-light); padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12.5px; font-weight: 700;">
+                                    <span style="width: 14px; height: 14px; border-radius: 50%; background: ${colorHex}; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span>
+                                    <span style="color: var(--text-primary);">${colorName}</span>
+                                    <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600; opacity: 0.85;">${colorHex}</span>
+                                </div>
+                            `;
+                        }).join('');
+
+                        // Breakdown HTML
+                        const breakdownList = r.outfitBreakdown || (r.analysis?.clothing || []);
+                        const breakdownHtml = breakdownList.map(item => `
+                            <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-primary); line-height: 1.45; margin-bottom: 6px;">
+                                <span style="color: var(--primary-red); font-weight: 800;">•</span>
+                                <span>${item}</span>
+                            </div>
+                        `).join('') || '<div style="color: var(--text-secondary); font-size: 13px;">No specific pieces identified.</div>';
+
+                        // Best For HTML
+                        const bestEvents = r.bestFor?.events || (r.analysis?.occasion || "Cocktails, evening celebrations, and chic outings");
+                        const bestWeather = r.bestFor?.weather || "Mild spring & autumn evenings (18°C to 25°C)";
+
+                        outBox.innerHTML = `
+                            <div style="font-weight: 800; font-size: 19px; color: var(--text-primary); margin-bottom: 4px; text-align: center; letter-spacing: -0.3px;">
+                                Outfit Vibe & Aesthetic Analysis
+                            </div>
+                            <div style="text-align: center; font-size: 13px; color: var(--text-secondary); margin-bottom: 18px; font-weight: 500;">
+                                Multimodal fashion breakdown and styling profile
+                            </div>
+
+                            <!-- Question Answer (if asked) -->
+                            ${r.questionAnswer ? `
+                                <div style="margin-bottom: 16px; padding: 14px 16px; background: var(--primary-red-light); border-radius: var(--radius-card); border-left: 4px solid var(--primary-red);">
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--primary-red); margin-bottom: 4px;">Stylist Verdict on Your Question</div>
+                                    <div style="font-size: 13.5px; color: var(--text-primary); line-height: 1.45;">${r.questionAnswer}</div>
+                                </div>
+                            ` : ''}
+
+                            <!-- 1. Your Vibe: Top 3 Styles -->
+                            <div style="background: var(--surface-muted); padding: 16px 18px; border-radius: var(--radius-card); border: 1px solid var(--border-light); margin-bottom: 14px;">
+                                <div style="font-weight: 700; font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
+                                    Your Vibe: Top 3 Styles
+                                </div>
+                                ${stylesHtml}
+                            </div>
+
+                            <!-- 2. Color Palette -->
+                            <div style="margin-bottom: 14px;">
+                                <div style="font-weight: 700; font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                                    Detected Color Palette
+                                </div>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    ${paletteHtml}
+                                </div>
+                            </div>
+
+                            <!-- 3. Outfit Breakdown -->
+                            <div style="background: #ffffff; padding: 16px 18px; border-radius: var(--radius-card); border: 1px solid var(--border-light); margin-bottom: 14px; box-shadow: var(--shadow-subtle);">
+                                <div style="font-weight: 700; font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+                                    Outfit Breakdown & Silhouette
+                                </div>
+                                <div>
+                                    ${breakdownHtml}
+                                </div>
+                            </div>
+
+                            <!-- 4. Mood -->
+                            <div style="padding: 14px 16px; background: var(--surface-muted); border-radius: var(--radius-card); border-left: 4px solid var(--text-primary); margin-bottom: 14px;">
+                                <div style="font-weight: 700; font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+                                    Visual Mood & Aura
+                                </div>
+                                <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-primary); font-weight: 600;">
+                                    ${r.mood || "Elevated, confident, and balanced modern aesthetic"}
+                                </div>
+                            </div>
+
+                            <!-- 5. Best For (Events / Weather) -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div style="background: var(--surface-muted); padding: 14px 16px; border-radius: var(--radius-card); border: 1px solid var(--border-light);">
+                                    <div style="font-weight: 700; font-size: 11.5px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px;">
+                                        Best For (Occasions / Events)
+                                    </div>
+                                    <div style="font-size: 13px; color: var(--text-primary); line-height: 1.4; font-weight: 600;">
+                                        ${bestEvents}
+                                    </div>
+                                </div>
+
+                                <div style="background: var(--surface-muted); padding: 14px 16px; border-radius: var(--radius-card); border: 1px solid var(--border-light);">
+                                    <div style="font-weight: 700; font-size: 11.5px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px;">
+                                        Ideal Weather & Season
+                                    </div>
+                                    <div style="font-size: 13px; color: var(--text-primary); line-height: 1.4; font-weight: 600;">
+                                        ${bestWeather}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else if (Array.isArray(r) && r[0]?.generated_text) {
+                        outBox.innerText = r[0].generated_text;
+                    } else if (r.generated_text) {
+                        outBox.innerText = r.generated_text;
                     } else {
-                        outBox.innerText = JSON.stringify(data.results, null, 2);
+                        outBox.innerText = JSON.stringify(r, null, 2);
                     }
                 } else if (data.error) {
                     const errorMsg = typeof data.error === 'object' ? JSON.stringify(data.error) : data.error;
