@@ -1,0 +1,5 @@
+:root{
+    --burgundy:#5B1E2D;
+    --ivory:#F8F1E7;
+    --gold:#D4AF37;
+}
