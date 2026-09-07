@@ -1952,7 +1952,7 @@
         async function generateOutfitFromWardrobe() {
             const outBox = document.getElementById('wardrobeOutputBox');
             const occasion = document.getElementById('wardrobeOccasion').value;
-            const aesthetic = document.getElementById('userAesthetic').value;
+            const aesthetic = document.getElementById('userAesthetic').value || 'chic';
             const items = getWardrobeItems();
 
             if (items.length === 0) {
@@ -1977,6 +1977,13 @@
                     })
                 });
 
+                if (!response.ok) {
+                    const errJson = await response.json().catch(() => null);
+                    const errMsg = (errJson && errJson.error) ? errJson.error : `HTTP ${response.status}: ${response.statusText}`;
+                    outBox.innerText = "Could not generate outfit: " + errMsg;
+                    return;
+                }
+
                 const data = await response.json();
 
                 if (data.success && (data.outfits || data.outfit)) {
@@ -1987,7 +1994,8 @@
                     outBox.innerText = "Could not generate outfit: " + (data.error || "Unknown error");
                 }
             } catch (err) {
-                outBox.innerText = "Connection failed. Ensure server is running on http://localhost:5000.";
+                console.error("Outfit Generation Error:", err);
+                outBox.innerText = "Connection failed (" + err.message + "). Ensure server is running on http://localhost:5000.";
             }
         }
 

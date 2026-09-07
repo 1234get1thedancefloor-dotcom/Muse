@@ -873,32 +873,55 @@ router.post('/generate-outfit', async (req, res) => {
             return res.status(400).json({ success: false, error: 'No closet items provided.' });
         }
 
-        const tops = items.filter(i => (i.category || '').toLowerCase().includes('top') || (i.category || '').toLowerCase().includes('shirt'));
+        const dresses = items.filter(i => (i.category || '').toLowerCase().includes('dress') || (i.category || '').toLowerCase().includes('one-piece'));
+        const tops = items.filter(i => (i.category || '').toLowerCase().includes('top') || (i.category || '').toLowerCase().includes('shirt') || (i.category || '').toLowerCase().includes('blouse'));
         const bottoms = items.filter(i => (i.category || '').toLowerCase().includes('bottom') || (i.category || '').toLowerCase().includes('skirt') || (i.category || '').toLowerCase().includes('pant'));
-        const shoes = items.filter(i => (i.category || '').toLowerCase().includes('shoe') || (i.category || '').toLowerCase().includes('heel') || (i.category || '').toLowerCase().includes('boot'));
-        const jewelry = items.filter(i => (i.category || '').toLowerCase().includes('jewel') || (i.category || '').toLowerCase().includes('access') || (i.category || '').toLowerCase().includes('bag'));
+        const shoes = items.filter(i => (i.category || '').toLowerCase().includes('shoe') || (i.category || '').toLowerCase().includes('heel') || (i.category || '').toLowerCase().includes('boot') || (i.category || '').toLowerCase().includes('sneaker'));
+        const jewelry = items.filter(i => (i.category || '').toLowerCase().includes('jewel') || (i.category || '').toLowerCase().includes('access') || (i.category || '').toLowerCase().includes('bag') || (i.category || '').toLowerCase().includes('necklace'));
+        const outerwear = items.filter(i => (i.category || '').toLowerCase().includes('outer') || (i.category || '').toLowerCase().includes('coat') || (i.category || '').toLowerCase().includes('jacket') || (i.category || '').toLowerCase().includes('blazer'));
 
-        const maxLooks = Math.min(3, Math.max(1, Math.min(tops.length || 1, bottoms.length || 1)));
+        const totalOptions = Math.max(1, dresses.length + Math.min(tops.length || 1, bottoms.length || 1));
+        const maxLooks = Math.min(3, Math.max(1, totalOptions));
         const outfits = [];
 
         for (let idx = 0; idx < maxLooks; idx++) {
-            const lookPieces = [];
-            if (tops.length > 0) lookPieces.push(tops[idx % tops.length]);
-            if (bottoms.length > 0) lookPieces.push(bottoms[idx % bottoms.length]);
-            if (shoes.length > 0) lookPieces.push(shoes[idx % shoes.length]);
-            if (jewelry.length > 0) lookPieces.push(jewelry[idx % jewelry.length]);
+            const mainPieces = [];
+            
+            // If dress available on certain index, use dress, otherwise top + bottom
+            if (dresses.length > 0 && (idx === 1 || (tops.length === 0 && bottoms.length === 0))) {
+                mainPieces.push(dresses[idx % dresses.length]);
+            } else {
+                if (tops.length > 0) mainPieces.push(tops[idx % tops.length]);
+                if (bottoms.length > 0) mainPieces.push(bottoms[idx % bottoms.length]);
+                if (mainPieces.length === 0 && items.length > 0) mainPieces.push(items[idx % items.length]);
+            }
 
-            const aestheticScore = Math.floor(Math.random() * 7) + (92 - idx * 4);
-            const userScore = calculatePreferenceScore(lookPieces, userRatings);
+            const shoePieces = shoes.length > 0 ? [shoes[idx % shoes.length]] : [];
+            const jewelryPieces = jewelry.length > 0 ? [jewelry[idx % jewelry.length]] : [];
+            const outerPieces = outerwear.length > 0 && idx === 0 ? [outerwear[0]] : [];
+
+            const allLookPieces = [...mainPieces, ...shoePieces, ...jewelryPieces, ...outerPieces];
+            const aestheticScore = Math.floor(Math.random() * 6) + (93 - idx * 3);
+            const userScore = calculatePreferenceScore(allLookPieces, userRatings);
 
             outfits.push({
+                id: `look_${idx + 1}`,
                 lookId: `look_${idx + 1}`,
-                title: idx === 0 ? `Signature ${vibe} Ensemble` : (idx === 1 ? `Alternative ${vibe} Edit` : `Chic Minimalist ${vibe} Look`),
-                aestheticScore,
+                title: idx === 0 ? `Option 1: Signature ${vibe} Ensemble` : (idx === 1 ? `Option 2: Alternative ${vibe} Edit` : `Option 3: Chic Minimalist ${vibe} Look`),
+                subtitle: `Tailored for ${occasion} with ${aestheticScore}% aesthetic alignment`,
+                eventMatchScore: aestheticScore,
+                aestheticScore: aestheticScore,
+                preferenceMatchScore: userScore,
                 userPreferenceScore: userScore,
-                pieces: lookPieces,
-                rationale: `Artfully balances ${vibe} silhouette with cohesive styling suited for ${occasion}.`,
-                hairAndBeauty: `Sleek hair and glowing skin to harmonize with the ensemble.`
+                pieces: {
+                    main: mainPieces,
+                    shoes: shoePieces,
+                    jewelry: jewelryPieces,
+                    outerwear: outerPieces
+                },
+                rawPieces: allLookPieces,
+                rationale: `Artfully balances ${vibe} proportions with cohesive styling suited for ${occasion}.`,
+                hairAndBeauty: `Polished hairstyle and glowing makeup to harmonize with your wardrobe pieces.`
             });
         }
 
