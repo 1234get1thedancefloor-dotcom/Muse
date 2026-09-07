@@ -2413,7 +2413,7 @@
 
     <!-- VIEW & INTERACT CO-STYLING ROOM MODAL -->
     <div id="viewCoStylingModal" class="modal-backdrop" onclick="handleViewRoomModalBackdropClick(event)">
-        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 600px;">
+        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 860px; width: 95%; max-height: 90vh; overflow-y: auto;">
             <div class="modal-header">
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -2460,7 +2460,7 @@
                         <!-- Add Fit button or Access Restricted banner -->
                     </div>
                 </div>
-                <div id="viewRoomOutfitsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div id="viewRoomOutfitsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 14px;">
                     <!-- Rendered dynamically -->
                 </div>
             </div>
@@ -4149,6 +4149,32 @@
                             { slot: o.category || 'Piece', name: o.title, category: o.category || 'Top', color: o.color || '', image: o.image }
                         ];
 
+                        const isOwnFit = (o.author === currentUserName);
+                        const votedByList = Array.isArray(o.votedBy) ? o.votedBy : [];
+                        const hasVotedThisFit = votedByList.includes(currentUserName);
+                        const displayVotes = (typeof o.votes === 'number') ? o.votes : votedByList.length;
+
+                        let voteBtnHtml = '';
+                        if (isOwnFit) {
+                            voteBtnHtml = `
+                                <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary); background: var(--surface-muted); padding: 4px 10px; border-radius: var(--radius-pill); border: 1px solid var(--border-light);">
+                                    Your Look (${displayVotes})
+                                </span>
+                            `;
+                        } else if (hasVotedThisFit) {
+                            voteBtnHtml = `
+                                <button class="tab-chip" style="font-size: 11px; padding: 4px 12px; background: var(--primary-red); color: #ffffff; border: none; font-weight: 800; cursor: pointer;" onclick="voteOutfitInRoom('${room.id}', '${o.id}')" title="Click to undo your upvote">
+                                    Upvoted (${displayVotes})
+                                </button>
+                            `;
+                        } else {
+                            voteBtnHtml = `
+                                <button class="tab-chip" style="font-size: 11px; padding: 4px 12px; background: #ffffff; color: var(--text-primary); border: 1px solid var(--border-light); font-weight: 700; cursor: pointer;" onclick="voteOutfitInRoom('${room.id}', '${o.id}')" title="Upvote this collaborator's look (1 vote per person)">
+                                    Upvote Look (${displayVotes})
+                                </button>
+                            `;
+                        }
+
                         return `
                             <div class="collab-complete-look-card">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 6px;">
@@ -4186,9 +4212,7 @@
                                     <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">
                                         ${pieces.length} Pieces in Look
                                     </span>
-                                    <button class="tab-chip" style="font-size: 11px; padding: 3px 10px;" onclick="voteOutfitInRoom('${room.id}', '${o.id}')">
-                                        Upvote Look (${o.votes || 0})
-                                    </button>
+                                    ${voteBtnHtml}
                                 </div>
                             </div>
                         `;
@@ -4210,6 +4234,54 @@
                     `).join('');
                 }
             }
+        }
+
+        function voteOutfitInRoom(roomId, fitId) {
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === roomId);
+            if (!room || !room.outfits) return;
+
+            const targetFit = room.outfits.find(f => f.id === fitId);
+            if (!targetFit) return;
+
+            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+
+            // Prevent self-upvoting
+            if (targetFit.author === currentUserName) {
+                alert('You cannot upvote your own outfit look.');
+                return;
+            }
+
+            // Ensure votedBy array exists on all outfits
+            room.outfits.forEach(f => {
+                if (!Array.isArray(f.votedBy)) {
+                    f.votedBy = [];
+                }
+            });
+
+            const targetAuthor = targetFit.author;
+            const hasAlreadyVotedThisFit = targetFit.votedBy.includes(currentUserName);
+
+            if (hasAlreadyVotedThisFit) {
+                // Toggle off upvote
+                targetFit.votedBy = targetFit.votedBy.filter(u => u !== currentUserName);
+                targetFit.votes = Math.max(0, (targetFit.votes || 1) - 1);
+            } else {
+                // Remove vote on any other look by the same author in this room (1 vote per person on the collaboration)
+                room.outfits.forEach(f => {
+                    if (f.id !== targetFit.id && f.author === targetAuthor && f.votedBy.includes(currentUserName)) {
+                        f.votedBy = f.votedBy.filter(u => u !== currentUserName);
+                        f.votes = Math.max(0, (f.votes || 1) - 1);
+                    }
+                });
+
+                // Add upvote to this outfit
+                targetFit.votedBy.push(currentUserName);
+                targetFit.votes = (targetFit.votes || 0) + 1;
+            }
+
+            saveCollabRooms(rooms);
+            renderActiveRoomDetails(room);
         }
 
         function requestRoomAccess(roomId) {
@@ -4690,45 +4762,12 @@
                     harmonyScore: harmony,
                     pieces: pieces,
                     image: pieces[0].image,
-                    votes: 1
+                    votes: 0,
+                    votedBy: []
                 });
                 room.harmonyScore = Math.min(99, Math.max(room.harmonyScore, harmony));
                 saveCollabRooms(rooms);
                 closeSelectOutfitModal();
-                renderActiveRoomDetails(room);
-            }
-        }
-
-        function voteOutfitInRoom(roomId, fitId) {
-            const rooms = getCollabRooms();
-            const room = rooms.find(r => r.id === roomId);
-            if (room && room.outfits) {
-                const fit = room.outfits.find(f => f.id === fitId);
-                if (fit) {
-                    fit.votes = (fit.votes || 0) + 1;
-                    saveCollabRooms(rooms);
-                    renderActiveRoomDetails(room);
-                }
-            }
-        }
-
-        function addNoteToRoom() {
-            if (!activeViewingRoomId) return;
-            const input = document.getElementById('viewRoomNewNoteInput');
-            const text = input ? input.value.trim() : '';
-            if (!text) return;
-
-            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
-            const rooms = getCollabRooms();
-            const room = rooms.find(r => r.id === activeViewingRoomId);
-            if (room) {
-                if (!room.notes) room.notes = [];
-                room.notes.push({
-                    author: currentUserName,
-                    text: text
-                });
-                saveCollabRooms(rooms);
-                if (input) input.value = '';
                 renderActiveRoomDetails(room);
             }
         }
