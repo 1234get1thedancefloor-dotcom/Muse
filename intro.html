@@ -1004,17 +1004,23 @@
             padding: 18px 20px;
             margin-bottom: 18px;
             box-shadow: var(--shadow-subtle);
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .home-calendar-layout {
             display: grid;
-            grid-template-columns: 1.05fr 1.35fr;
+            grid-template-columns: 1.55fr 1fr;
             gap: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            align-items: stretch;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 860px) {
             .home-calendar-layout {
                 grid-template-columns: 1fr;
+                gap: 14px;
             }
         }
 
@@ -1022,28 +1028,33 @@
             background: #ffffff;
             border: 1px solid var(--border-light);
             border-radius: var(--radius-card);
-            padding: 14px;
+            padding: 16px 18px;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         }
 
         .calendar-widget-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .calendar-nav-btn {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: var(--surface-muted);
             border: 1px solid var(--border-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--text-primary);
             cursor: pointer;
@@ -1059,48 +1070,53 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             text-align: center;
-            font-size: 10.5px;
+            font-size: 11px;
             font-weight: 800;
             color: var(--text-secondary);
-            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
         }
 
         .calendar-days-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 3px;
+            gap: 4px;
         }
 
         .calendar-day-cell {
-            padding: 5px 2px;
-            border-radius: 8px;
-            font-size: 11.5px;
-            font-weight: 600;
+            padding: 6px 3px;
+            border-radius: 9px;
+            font-size: 12.5px;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
-            min-height: 32px;
+            min-height: 40px;
             transition: all 0.15s ease;
             user-select: none;
+            border: 1.5px solid transparent;
         }
 
         .calendar-day-cell.other-month {
             color: #b0b0b0;
-            opacity: 0.45;
+            opacity: 0.4;
         }
 
         .calendar-day-cell.today {
-            border: 1.5px solid var(--primary-red);
+            border-color: var(--primary-red);
             font-weight: 800;
+            color: var(--primary-red);
         }
 
         .calendar-day-cell.selected {
             background: var(--text-primary);
-            color: #ffffff;
+            color: #ffffff !important;
             font-weight: 800;
+            border-color: var(--text-primary);
         }
 
         .calendar-day-cell:hover:not(.selected) {
@@ -1108,11 +1124,11 @@
         }
 
         .calendar-event-indicator {
-            width: 4.5px;
-            height: 4.5px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: var(--primary-red);
-            margin-top: 2px;
+            margin-top: 3px;
         }
 
         .calendar-day-cell.selected .calendar-event-indicator {
@@ -1123,29 +1139,39 @@
             background: #ffffff;
             border: 1px solid var(--border-light);
             border-radius: var(--radius-card);
-            padding: 14px;
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         }
 
         .home-events-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 255px;
+            gap: 7px;
+            max-height: 295px;
             overflow-y: auto;
-            padding-right: 4px;
+            overflow-x: hidden;
+            padding-right: 3px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .event-card-item {
             background: var(--surface-muted);
             border: 1px solid var(--border-light);
-            border-radius: var(--radius-card);
-            padding: 10px 12px;
+            border-radius: 10px;
+            padding: 7px 9px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            min-width: 0;
             transition: all 0.2s ease;
         }
 
@@ -1158,25 +1184,27 @@
         .event-date-badge {
             background: #ffffff;
             border: 1px solid var(--border-light);
-            border-radius: 8px;
-            padding: 4px 8px;
+            border-radius: 7px;
+            padding: 3px 5px;
             text-align: center;
-            min-width: 48px;
+            min-width: 38px;
             flex-shrink: 0;
         }
 
         .event-date-month {
-            font-size: 9px;
+            font-size: 8.5px;
             font-weight: 800;
             color: var(--primary-red);
             text-transform: uppercase;
+            line-height: 1;
         }
 
         .event-date-day {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             color: var(--text-primary);
             line-height: 1.1;
+            margin-top: 1px;
         }
 
         /* Outfit Selection Modal Styles */
@@ -1785,7 +1813,7 @@
                     <div class="home-calendar-widget">
                         <div class="calendar-widget-header">
                             <button type="button" class="calendar-nav-btn" onclick="prevCalendarMonth()" title="Previous Month">‹</button>
-                            <div id="calendarMonthYearLabel" style="font-size: 13.5px; font-weight: 800; color: var(--text-primary);">
+                            <div id="calendarMonthYearLabel" style="font-size: 15px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px;">
                                 September 2026
                             </div>
                             <button type="button" class="calendar-nav-btn" onclick="nextCalendarMonth()" title="Next Month">›</button>
@@ -4576,58 +4604,58 @@
 
                 return `
                     <div class="event-card-item">
-                        <div style="display: flex; align-items: center; gap: 10px; flex-grow: 1; overflow: hidden;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; overflow: hidden;">
                             <div class="event-date-badge">
                                 <div class="event-date-month">${monthStr}</div>
                                 <div class="event-date-day">${dayStr}</div>
                             </div>
-                            <div style="overflow: hidden; flex-grow: 1;">
-                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                    <span style="font-weight: 800; font-size: 12.5px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${ev.title}">
-                                        ${ev.title}
-                                    </span>
-                                    <span style="font-size: 9.5px; font-weight: 800; ${badgeStyle} padding: 1px 6px; border-radius: var(--radius-pill);">
+                            <div style="overflow: hidden; flex: 1 1 auto; min-width: 0;">
+                                <div style="font-weight: 800; font-size: 11.5px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${ev.title}">
+                                    ${ev.title}
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 1px;">
+                                    <span style="font-size: 9px; font-weight: 800; ${badgeStyle} padding: 1px 5px; border-radius: var(--radius-pill);">
                                         ${badgeLabel}
                                     </span>
                                     ${hasSavedLook ? `
-                                        <span style="font-size: 9.5px; font-weight: 800; background: #e8f5e9; color: #2e7d32; padding: 1px 6px; border-radius: var(--radius-pill);">
+                                        <span style="font-size: 9px; font-weight: 800; background: #e8f5e9; color: #2e7d32; padding: 1px 5px; border-radius: var(--radius-pill);">
                                             Look Planned (${savedLook.pieces.length} pcs)
                                         </span>
                                     ` : ''}
                                 </div>
 
-                                <div style="font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-top: 2px;">
+                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: 500; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     ${ev.occasion} • <strong style="color: var(--text-primary);">${ev.aesthetic}</strong>
                                 </div>
 
                                 ${ev.paletteText ? `
-                                    <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px; display: flex; align-items: center; gap: 4px;">
-                                        <div style="display: flex; gap: 3px;">${paletteSwatches}</div>
+                                    <div style="font-size: 9.5px; color: var(--text-secondary); margin-top: 1px; display: flex; align-items: center; gap: 4px;">
+                                        <div style="display: flex; gap: 2px;">${paletteSwatches}</div>
                                         <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${ev.paletteText}</span>
                                     </div>
                                 ` : ''}
 
                                 ${hasSavedLook && savedLook.pieces ? `
-                                    <div style="display: flex; gap: 4px; align-items: center; margin-top: 4px;">
+                                    <div style="display: flex; gap: 3px; align-items: center; margin-top: 3px;">
                                         ${savedLook.pieces.map(p => `
-                                            <img src="${p.image}" alt="${p.name}" style="width: 22px; height: 22px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border-light);" title="${p.slot}: ${p.name}">
+                                            <img src="${p.image}" alt="${p.name}" style="width: 18px; height: 18px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border-light);" title="${p.slot}: ${p.name}">
                                         `).join('')}
-                                        <span style="font-size: 9.5px; color: #2e7d32; font-weight: 700;">${savedLook.harmonyScore || 95}% Synergy</span>
+                                        <span style="font-size: 9px; color: #2e7d32; font-weight: 700;">${savedLook.harmonyScore || 95}% Synergy</span>
                                     </div>
                                 ` : (ev.notes ? `
-                                    <div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <div style="font-size: 9.5px; color: var(--text-secondary); margin-top: 1px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         Note: ${ev.notes}
                                     </div>
                                 ` : '')}
                             </div>
                         </div>
 
-                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0;">
-                            <button class="tab-chip" style="font-size: 10.5px; padding: 3px 10px; background: ${hasSavedLook ? 'var(--surface-muted)' : 'var(--text-primary)'}; color: ${hasSavedLook ? 'var(--text-primary)' : '#ffffff'}; border: 1px solid var(--border-light); font-weight: 700; cursor: pointer;" onclick="openStyleEventLookModal('${ev.id}')" title="Style and save outfit for this occasion">
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0;">
+                            <button class="tab-chip" style="font-size: 9.5px; padding: 2px 7px; background: ${hasSavedLook ? 'var(--surface-muted)' : 'var(--text-primary)'}; color: ${hasSavedLook ? 'var(--text-primary)' : '#ffffff'}; border: 1px solid var(--border-light); font-weight: 700; cursor: pointer; white-space: nowrap;" onclick="openStyleEventLookModal('${ev.id}')" title="Style and save outfit for this occasion">
                                 ${hasSavedLook ? 'Edit Look →' : 'Style Look →'}
                             </button>
                             ${!ev.isCelebration ? `
-                                <button type="button" class="tab-chip" onclick="deleteCustomEvent('${ev.id}')" style="font-size: 9.5px; padding: 2px 6px; color: var(--primary-red); border-color: transparent;">
+                                <button type="button" class="tab-chip" onclick="deleteCustomEvent('${ev.id}')" style="font-size: 9px; padding: 1px 4px; color: var(--primary-red); border-color: transparent;">
                                     Delete
                                 </button>
                             ` : ''}
