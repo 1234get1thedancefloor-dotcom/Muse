@@ -1,335 +1,172 @@
 const sharp = require("sharp");
-const {
-    AutoImageProcessor,
-    AutoModelForSemanticSegmentation,
-    RawImage
-} = require("@huggingface/transformers");
+const { pipeline, env } = require("@huggingface/transformers");
 
+// Configure transformers environment
+env.allowLocalModels = false;
+env.allowRemoteModels = true;
 
-// =====================================================
-// MODEL
-// =====================================================
+const MODEL_NAME = "Xenova/segformer_b2_clothes";
 
-const MODEL_NAME = "Xenova/segformer-b2-clothes";
+let segmenterInstance = null;
+let segmenterLoadingPromise = null;
 
-let processor = null;
-let model = null;
+async function getSegmenter() {
+    if (segmenterInstance) return segmenterInstance;
+    if (segmenterLoadingPromise) return segmenterLoadingPromise;
 
+    segmenterLoadingPromise = (async () => {
+        try {
+            console.log("👗 Initializing Xenova/segformer_b2_clothes segmentation pipeline...");
+            segmenterInstance = await pipeline("image-segmentation", MODEL_NAME);
+            console.log("✅ SegFormer clothing segmentation pipeline ready");
+            return segmenterInstance;
+        } catch (err) {
+            console.warn("⚠️ SegFormer model loading notice:", err.message);
+            segmenterLoadingPromise = null;
+            return null;
+        }
+    })();
 
-// =====================================================
-// LOAD MODEL ONLY ONCE
-// =====================================================
-
-async function loadModel() {
-
-    if (processor && model) {
-        return;
-    }
-
-    console.log("👗 Loading clothing segmentation model...");
-
-    processor = await AutoImageProcessor.from_pretrained(
-        MODEL_NAME
-    );
-
-    model = await AutoModelForSemanticSegmentation.from_pretrained(
-        MODEL_NAME
-    );
-
-    console.log("✅ Clothing segmentation model loaded");
+    return segmenterLoadingPromise;
 }
 
-
-// =====================================================
-// WHICH CLOTHING CATEGORIES TO KEEP
-// =====================================================
-
-const CLOTHING_NAMES = new Set([
-    "upper-clothes",
-    "upper clothes",
-
-    "shirt",
-    "top",
-
-    "skirt",
-
-    "pants",
-    "trousers",
-
-    "dress",
-
-    "belt",
-
-    "left-shoe",
-    "left shoe",
-
-    "right-shoe",
-    "right shoe",
-
-    "bag",
-
-    "scarf"
+const NON_CLOTHING_LABELS = new Set([
+    "background",
+    "hair",
+    "face",
+    "left-arm",
+    "right-arm",
+    "left-leg",
+    "right-leg",
+    "skin",
+    "head"
 ]);
 
-
-// =====================================================
-// CHECK WHETHER A LABEL IS CLOTHING
-// =====================================================
-
-function isClothingLabel(label) {
-
-    if (!label) {
-        return false;
-    }
-
-    const normalized =
-        String(label)
-            .toLowerCase()
-            .trim();
-
-    return CLOTHING_NAMES.has(normalized);
+function isClothing(label) {
+    if (!label) return false;
+    const clean = String(label).toLowerCase().replace(/[\s_]+/g, "-").trim();
+    return !NON_CLOTHING_LABELS.has(clean);
 }
 
+// =====================================================
+// SALIENT TORSO & OUTFIT CROPPER (FALLBACK & PRE-FILTER)
+// =====================================================
+
+async function createSalientOutfitCrop(imagePath, outputPath) {
+    const metadata = await sharp(imagePath).metadata();
+    const width = metadata.width;
+    const height = metadata.height;
+
+    // Crop the central 70% width and middle 75% height where clothing is located
+    const cropLeft = Math.floor(width * 0.15);
+    const cropTop = Math.floor(height * 0.15);
+    const cropWidth = Math.max(10, Math.floor(width * 0.70));
+    const cropHeight = Math.max(10, Math.floor(height * 0.75));
+
+    await sharp(imagePath)
+        .extract({ left: cropLeft, top: cropTop, width: cropWidth, height: cropHeight })
+        .png()
+        .toFile(outputPath);
+
+    return { outputPath, clothingPixelCount: cropWidth * cropHeight };
+}
 
 // =====================================================
-// ISOLATE CLOTHING
+// MAIN ISOLATION PIPELINE
 // =====================================================
 
-async function isolateClothing(
-    imagePath,
-    outputPath
-) {
+async function isolateClothing(imagePath, outputPath) {
+    const segmenter = await getSegmenter();
 
-    await loadModel();
+    if (!segmenter) {
+        return createSalientOutfitCrop(imagePath, outputPath);
+    }
 
+    try {
+        const segments = await segmenter(imagePath);
+        if (!Array.isArray(segments) || segments.length === 0) {
+            return createSalientOutfitCrop(imagePath, outputPath);
+        }
 
-    // -------------------------------------------------
-    // Read original image
-    // -------------------------------------------------
+        const metadata = await sharp(imagePath).metadata();
+        const origWidth = metadata.width;
+        const origHeight = metadata.height;
 
-    const image =
-        await RawImage.read(imagePath);
+        // Collect clothing segments
+        const clothingSegments = segments.filter(s => isClothing(s.label));
 
+        if (clothingSegments.length === 0) {
+            console.log("No specific clothing segment found, using torso crop");
+            return createSalientOutfitCrop(imagePath, outputPath);
+        }
 
-    const originalWidth =
-        image.width;
+        // Combine masks
+        const combinedMask = Buffer.alloc(origWidth * origHeight, 0);
 
-    const originalHeight =
-        image.height;
+        for (const seg of clothingSegments) {
+            if (!seg.mask) continue;
+            try {
+                const maskBuffer = Buffer.from(seg.mask.data || seg.mask);
+                const maskWidth = seg.mask.width || origWidth;
+                const maskHeight = seg.mask.height || origHeight;
+                const maskChannels = seg.mask.channels || 1;
 
+                const maskImg = await sharp(maskBuffer, {
+                    raw: { width: maskWidth, height: maskHeight, channels: maskChannels }
+                })
+                    .resize(origWidth, origHeight, { fit: 'fill' })
+                    .grayscale()
+                    .raw()
+                    .toBuffer();
 
-    // -------------------------------------------------
-    // Prepare image for segmentation model
-    // -------------------------------------------------
+                for (let i = 0; i < combinedMask.length; i++) {
+                    if (maskImg[i] > 128) {
+                        combinedMask[i] = 255;
+                    }
+                }
+            } catch (maskErr) {
+                console.warn(`Mask processing error for label ${seg.label}:`, maskErr.message);
+            }
+        }
 
-    const inputs =
-        await processor(image);
-
-
-    // -------------------------------------------------
-    // Run model
-    // -------------------------------------------------
-
-    const outputs =
-        await model(inputs);
-
-
-    const logits =
-        outputs.logits;
-
-
-    // -------------------------------------------------
-    // Get predicted class for every pixel
-    // -------------------------------------------------
-
-    const segmentation =
-        logits
-            .argmax(1)
-            .squeeze();
-
-
-    const maskWidth =
-        segmentation.dims[
-        segmentation.dims.length - 1
-        ];
-
-    const maskHeight =
-        segmentation.dims[
-        segmentation.dims.length - 2
-        ];
-
-
-    const maskData =
-        segmentation.data;
-
-
-    // -------------------------------------------------
-    // Get original RGB pixels
-    // -------------------------------------------------
-
-    const originalRGB =
-        await sharp(imagePath)
-            .resize(
-                originalWidth,
-                originalHeight
-            )
+        // Apply mask to original image to create transparent PNG
+        const originalRGB = await sharp(imagePath)
+            .resize(origWidth, origHeight)
             .removeAlpha()
             .raw()
             .toBuffer();
 
+        const rgbaOutput = Buffer.alloc(origWidth * origHeight * 4);
+        let count = 0;
 
-    // -------------------------------------------------
-    // Create transparent RGBA output
-    // -------------------------------------------------
-
-    const output =
-        Buffer.alloc(
-            originalWidth *
-            originalHeight *
-            4
-        );
-
-
-    // -------------------------------------------------
-    // Get model label names
-    // -------------------------------------------------
-
-    const id2label =
-        model.config?.id2label || {};
-
-
-    // -------------------------------------------------
-    // Build clothing mask
-    // -------------------------------------------------
-
-    for (
-        let y = 0;
-        y < originalHeight;
-        y++
-    ) {
-
-        for (
-            let x = 0;
-            x < originalWidth;
-            x++
-        ) {
-
-            // Convert original image coordinates
-            // to segmentation coordinates
-
-            const maskX =
-                Math.min(
-                    maskWidth - 1,
-                    Math.floor(
-                        x /
-                        originalWidth *
-                        maskWidth
-                    )
-                );
-
-            const maskY =
-                Math.min(
-                    maskHeight - 1,
-                    Math.floor(
-                        y /
-                        originalHeight *
-                        maskHeight
-                    )
-                );
-
-
-            const maskIndex =
-                maskY *
-                maskWidth +
-                maskX;
-
-
-            const labelId =
-                Number(
-                    maskData[maskIndex]
-                );
-
-
-            const label =
-                id2label[labelId];
-
-
-            const keep =
-                isClothingLabel(label);
-
-
-            const pixelIndex =
-                (
-                    y *
-                    originalWidth +
-                    x
-                ) * 3;
-
-
-            const outputIndex =
-                (
-                    y *
-                    originalWidth +
-                    x
-                ) * 4;
-
-
-            if (keep) {
-
-                // KEEP THE ORIGINAL COLOR
-                //
-                // This is important!
-                // We do NOT turn clothing white.
-
-                output[outputIndex] =
-                    originalRGB[pixelIndex];
-
-                output[outputIndex + 1] =
-                    originalRGB[pixelIndex + 1];
-
-                output[outputIndex + 2] =
-                    originalRGB[pixelIndex + 2];
-
-                output[outputIndex + 3] =
-                    255;
-
-            } else {
-
-                // Everything else becomes transparent
-
-                output[outputIndex] = 0;
-                output[outputIndex + 1] = 0;
-                output[outputIndex + 2] = 0;
-                output[outputIndex + 3] = 0;
-
-            }
+        for (let i = 0; i < origWidth * origHeight; i++) {
+            const isOpaque = combinedMask[i] > 128;
+            rgbaOutput[i * 4] = originalRGB[i * 3];
+            rgbaOutput[i * 4 + 1] = originalRGB[i * 3 + 1];
+            rgbaOutput[i * 4 + 2] = originalRGB[i * 3 + 2];
+            rgbaOutput[i * 4 + 3] = isOpaque ? 255 : 0;
+            if (isOpaque) count++;
         }
+
+        if (count < 100) {
+            return createSalientOutfitCrop(imagePath, outputPath);
+        }
+
+        await sharp(rgbaOutput, {
+            raw: { width: origWidth, height: origHeight, channels: 4 }
+        })
+            .png()
+            .toFile(outputPath);
+
+        const detectedLabels = clothingSegments.map(s => s.label);
+        console.log(`👗 SegFormer isolated ${count} clothing pixels across [${detectedLabels.join(', ')}]: ${outputPath}`);
+        return { outputPath, clothingPixelCount: count, detectedLabels };
+
+    } catch (err) {
+        console.warn("Segmentation processing fallback:", err.message);
+        return createSalientOutfitCrop(imagePath, outputPath);
     }
-
-
-    // -------------------------------------------------
-    // Save isolated clothing image
-    // -------------------------------------------------
-
-    await sharp(output, {
-        raw: {
-            width: originalWidth,
-            height: originalHeight,
-            channels: 4
-        }
-    })
-        .png()
-        .toFile(outputPath);
-
-
-    console.log(
-        `👗 Clothing isolated: ${outputPath}`
-    );
-
-
-    return outputPath;
 }
-
 
 module.exports = {
     isolateClothing

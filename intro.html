@@ -1874,6 +1874,13 @@
             return closest.name;
         }
 
+        function isClientSkinTone(r, g, b) {
+            if (r > 135 && g > 75 && b > 55 && r > g && g > b) {
+                if ((r - b) > 28 && (g - b) > 10) return true;
+            }
+            return false;
+        }
+
         async function extractExactImagePalette(file) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -1881,35 +1888,112 @@
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    canvas.width = 80;
-                    canvas.height = 80;
-                    ctx.drawImage(img, 0, 0, 80, 80);
+                    const width = 80;
+                    const height = 80;
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
                     URL.revokeObjectURL(url);
 
-                    const imgData = ctx.getImageData(0, 0, 80, 80).data;
-                    const colorBins = {};
+                    const imgData = ctx.getImageData(0, 0, width, height).data;
 
-                    for (let i = 0; i < imgData.length; i += 4) {
-                        const r = imgData[i];
-                        const g = imgData[i + 1];
-                        const b = imgData[i + 2];
-                        const a = imgData[i + 3];
-
-                        if (a < 128) continue; // Skip transparent
-                        if (r > 248 && g > 248 && b > 248) continue; // Skip studio white border
-
-                        const qr = Math.round(r / 28) * 28;
-                        const qg = Math.round(g / 28) * 28;
-                        const qb = Math.round(b / 28) * 28;
-                        const key = `${qr},${qg},${qb}`;
-
-                        if (!colorBins[key]) {
-                            colorBins[key] = { rSum: 0, gSum: 0, bSum: 0, count: 0 };
+                    // 1. Collect Background Anchor Colors from Outer Perimeter
+                    const backgroundAnchors = [];
+                    for (let y = 0; y < height; y++) {
+                        for (let x = 0; x < width; x++) {
+                            const isBorder = (x < width * 0.12 || x > width * 0.88 || y < height * 0.12 || y > height * 0.92);
+                            if (isBorder) {
+                                const idx = (y * width + x) * 4;
+                                const r = imgData[idx];
+                                const g = imgData[idx + 1];
+                                const b = imgData[idx + 2];
+                                const a = imgData[idx + 3];
+                                if (a > 150) {
+                                    const isUnique = backgroundAnchors.every(ba => {
+                                        const d = Math.sqrt(Math.pow(r - ba[0], 2) + Math.pow(g - ba[1], 2) + Math.pow(b - ba[2], 2));
+                                        return d > 25;
+                                    });
+                                    if (isUnique && backgroundAnchors.length < 8) {
+                                        backgroundAnchors.push([r, g, b]);
+                                    }
+                                }
+                            }
                         }
-                        colorBins[key].rSum += r;
-                        colorBins[key].gSum += g;
-                        colorBins[key].bSum += b;
-                        colorBins[key].count++;
+                    }
+
+                    // 2. Sample Central Torso / Outfit Region
+                    const colorBins = {};
+                    let validPixelCount = 0;
+
+                    for (let y = 0; y < height; y++) {
+                        for (let x = 0; x < width; x++) {
+                            const idx = (y * width + x) * 4;
+                            const r = imgData[idx];
+                            const g = imgData[idx + 1];
+                            const b = imgData[idx + 2];
+                            const a = imgData[idx + 3];
+
+                            if (a < 128) continue; // Skip transparent
+                            if (r > 248 && g > 248 && b > 248) continue; // Skip studio white
+
+                            // Focus on central torso box where garments reside
+                            const isTorso = (x >= width * 0.15 && x <= width * 0.85 && y >= height * 0.14 && y <= height * 0.88);
+                            if (!isTorso) continue;
+
+                            // Exclude background perimeter match
+                            const isBg = backgroundAnchors.some(ba => {
+                                const d = Math.sqrt(Math.pow(r - ba[0], 2) + Math.pow(g - ba[1], 2) + Math.pow(b - ba[2], 2));
+                                return d < 32;
+                            });
+                            if (isBg && backgroundAnchors.length > 0) continue;
+
+                            // Exclude skin tones
+                            if (isClientSkinTone(r, g, b)) continue;
+
+                            const qr = Math.round(r / 24) * 24;
+                            const qg = Math.round(g / 24) * 24;
+                            const qb = Math.round(b / 24) * 24;
+                            const key = `${qr},${qg},${qb}`;
+
+                            if (!colorBins[key]) {
+                                colorBins[key] = { rSum: 0, gSum: 0, bSum: 0, count: 0 };
+                            }
+                            colorBins[key].rSum += r;
+                            colorBins[key].gSum += g;
+                            colorBins[key].bSum += b;
+                            colorBins[key].count++;
+                            validPixelCount++;
+                        }
+                    }
+
+                    // Fallback: If torso filter was too aggressive, re-sample without skin filter
+                    if (validPixelCount < 30) {
+                        for (let y = 0; y < height; y++) {
+                            for (let x = 0; x < width; x++) {
+                                const idx = (y * width + x) * 4;
+                                const r = imgData[idx];
+                                const g = imgData[idx + 1];
+                                const b = imgData[idx + 2];
+                                const a = imgData[idx + 3];
+
+                                if (a < 128) continue;
+                                const isTorso = (x >= width * 0.20 && x <= width * 0.80 && y >= height * 0.18 && y <= height * 0.82);
+                                if (!isTorso) continue;
+
+                                const qr = Math.round(r / 24) * 24;
+                                const qg = Math.round(g / 24) * 24;
+                                const qb = Math.round(b / 24) * 24;
+                                const key = `${qr},${qg},${qb}`;
+
+                                if (!colorBins[key]) {
+                                    colorBins[key] = { rSum: 0, gSum: 0, bSum: 0, count: 0 };
+                                }
+                                colorBins[key].rSum += r;
+                                colorBins[key].gSum += g;
+                                colorBins[key].bSum += b;
+                                colorBins[key].count++;
+                            }
+                        }
                     }
 
                     const sortedBins = Object.values(colorBins).sort((a, b) => b.count - a.count);
@@ -1923,7 +2007,7 @@
 
                         const isDistinct = selectedColors.every(sc => {
                             const d = Math.sqrt(Math.pow(avgR - sc.r, 2) + Math.pow(avgG - sc.g, 2) + Math.pow(avgB - sc.b, 2));
-                            return d > 38;
+                            return d > 32;
                         });
 
                         if (isDistinct || selectedColors.length === 0) {
@@ -2064,11 +2148,17 @@
                                 </div>
                             </div>
 
-                            <!-- 3. Outfit Breakdown -->
+                            <!-- 3. Outfit Breakdown & Silhouette -->
                             <div style="background: #ffffff; padding: 16px 18px; border-radius: var(--radius-card); border: 1px solid var(--border-light); margin-bottom: 14px; box-shadow: var(--shadow-subtle);">
                                 <div style="font-weight: 700; font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
                                     Outfit Breakdown & Silhouette
                                 </div>
+                                ${(r.silhouette || r.analysis?.silhouette) ? `
+                                    <div style="margin-bottom: 12px; padding: 10px 14px; background: var(--surface-muted); border-radius: var(--radius-card); font-size: 13px; font-weight: 600; color: var(--text-primary); border-left: 3px solid var(--primary-red);">
+                                        <div style="color: var(--primary-red); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; margin-bottom: 2px;">Silhouette & Proportion</div>
+                                        <div>${r.silhouette || r.analysis?.silhouette}</div>
+                                    </div>
+                                ` : ''}
                                 <div>
                                     ${breakdownHtml}
                                 </div>
