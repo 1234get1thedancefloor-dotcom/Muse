@@ -1506,6 +1506,142 @@
             background: #ffffff;
         }
 
+        /* Outfits of the Week Styles */
+        .home-weekly-outfits-card {
+            background: linear-gradient(135deg, #ffffff 0%, var(--surface-muted) 100%);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 18px 20px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-subtle);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .weekly-days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 992px) {
+            .weekly-days-grid {
+                grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+                gap: 8px;
+            }
+        }
+
+        .weekly-day-col {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 9px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 230px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .weekly-day-col:hover {
+            transform: translateY(-1px);
+            border-color: var(--border-subtle);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .weekly-day-col.today {
+            border: 1.5px solid var(--primary-red);
+            background: #fffdfd;
+            box-shadow: 0 2px 10px rgba(230, 0, 35, 0.08);
+        }
+
+        .weekly-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .weekly-day-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .weekly-day-date {
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .weekly-today-tag {
+            font-size: 8.5px;
+            font-weight: 800;
+            background: var(--primary-red-light);
+            color: var(--primary-red);
+            padding: 1px 5px;
+            border-radius: var(--radius-pill);
+        }
+
+        .weekly-outfit-preview-box {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            margin-bottom: 6px;
+        }
+
+        .weekly-outfit-img {
+            width: 100%;
+            height: 95px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .weekly-mini-collage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            height: 95px;
+            background: var(--surface-muted);
+        }
+
+        .weekly-mini-collage img {
+            width: 100%;
+            height: 46px;
+            object-fit: cover;
+        }
+
+        .weekly-day-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            padding: 16px 6px;
+            border: 1px dashed var(--border-subtle);
+            border-radius: 8px;
+            background: var(--surface-muted);
+            text-align: center;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .weekly-day-empty:hover {
+            border-color: var(--text-secondary);
+            background: var(--surface-hover);
+        }
+
         /* Info Section Cards */
         .info-card {
             background: #ffffff;
@@ -1968,6 +2104,44 @@
                             <!-- Populated dynamically by renderUpcomingEventsList() -->
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Outfits of the Week Section (Weekly Refresh & Wardrobe Sync) -->
+            <div class="home-weekly-outfits-card" id="weeklyOutfitsCard">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <div style="font-size: 11px; font-weight: 800; color: var(--primary-red); text-transform: uppercase; letter-spacing: 0.8px;">
+                            Weekly Style Log
+                        </div>
+                        <div style="font-size: 15px; font-weight: 800; color: var(--text-primary); margin-top: 1px;">
+                            Outfits of the Week
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 4px; background: var(--surface-muted); padding: 3px 8px; border-radius: var(--radius-pill); border: 1px solid var(--border-light);">
+                            <button type="button" class="calendar-nav-btn" onclick="prevWeeklyOutfitsWeek()" title="Previous Week" style="width: 22px; height: 22px; font-size: 13px;">‹</button>
+                            <span id="weeklyOutfitsRangeLabel" style="font-size: 11px; font-weight: 700; color: var(--text-primary); padding: 0 4px;">
+                                Sep 7 - Sep 13, 2026
+                            </span>
+                            <button type="button" class="calendar-nav-btn" onclick="nextWeeklyOutfitsWeek()" title="Next Week" style="width: 22px; height: 22px; font-size: 13px;">›</button>
+                        </div>
+                        <button type="button" class="tab-chip" onclick="jumpWeeklyOutfitsToCurrentWeek()" style="font-size: 10.5px; padding: 4px 10px;">
+                            Current Week
+                        </button>
+                        <button type="button" class="tab-chip" onclick="openLogWeeklyOutfitModal()" style="font-size: 11px; padding: 5px 12px; background: var(--text-primary); color: #ffffff; border: none; font-weight: 700; cursor: pointer;">
+                            + Log Daily Outfit
+                        </button>
+                    </div>
+                </div>
+
+                <div style="font-size: 11.5px; color: var(--text-secondary); margin-bottom: 12px;">
+                    Logs your daily outfits and refreshes every week. Save any outfit directly into your permanent Wardrobe collection with 1 click.
+                </div>
+
+                <!-- 7-Day Weekly Grid -->
+                <div id="weeklyDaysGrid" class="weekly-days-grid">
+                    <!-- Populated dynamically by renderWeeklyOutfits() -->
                 </div>
             </div>
 
@@ -2773,6 +2947,111 @@
                 </button>
                 <button type="button" class="action-button" onclick="saveCustomOutfitFromModal()" style="padding: 10px 24px; width: auto; margin-top: 0;">
                     Save Outfit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOG DAILY OUTFIT FOR WEEK MODAL -->
+    <div id="logWeeklyOutfitModal" class="modal-backdrop" onclick="handleLogWeeklyOutfitModalBackdropClick(event)">
+        <div class="modal-box" style="max-width: 560px;" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-title">Log Outfit for the Week</span>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                        Save your daily look to this week's rotation & sync with wardrobe
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeLogWeeklyOutfitModal()">×</button>
+            </div>
+
+            <!-- Day Selector -->
+            <div style="margin-bottom: 12px;">
+                <label style="margin-top: 0;" for="logWeeklyDaySelect">Select Day of Week:</label>
+                <select id="logWeeklyDaySelect" onchange="onWeeklyLogDayChanged()" style="font-weight: 700;"></select>
+            </div>
+
+            <!-- Outfit Source Switcher Tabs -->
+            <div style="display: flex; gap: 6px; margin-bottom: 14px; background: var(--surface-muted); padding: 4px; border-radius: var(--radius-pill); border: 1px solid var(--border-light);">
+                <button type="button" id="logSourceSavedBtn" class="tab-chip active" onclick="setWeeklyLogSource('saved')" style="font-size: 11px; padding: 5px 12px; flex: 1;">
+                    Saved Outfits
+                </button>
+                <button type="button" id="logSourceClosetBtn" class="tab-chip" onclick="setWeeklyLogSource('closet')" style="font-size: 11px; padding: 5px 12px; flex: 1;">
+                    Pick from Closet
+                </button>
+                <button type="button" id="logSourceUploadBtn" class="tab-chip" onclick="setWeeklyLogSource('upload')" style="font-size: 11px; padding: 5px 12px; flex: 1;">
+                    Upload Photo
+                </button>
+            </div>
+
+            <!-- SOURCE 1: FROM SAVED OUTFITS -->
+            <div id="logWeeklySavedPanel" style="margin-bottom: 14px;">
+                <label style="margin: 0 0 4px; font-size: 12px;" for="logWeeklySavedSelect">Choose from Your Saved Looks:</label>
+                <select id="logWeeklySavedSelect" onchange="onWeeklySavedOutfitSelected()"></select>
+            </div>
+
+            <!-- SOURCE 2: FROM CLOSET PIECES -->
+            <div id="logWeeklyClosetPanel" class="hidden" style="margin-bottom: 14px; background: var(--surface-muted); padding: 12px; border-radius: var(--radius-card); border: 1px solid var(--border-light);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11px;" for="logWeeklySlotTop">Top / Blouse:</label>
+                        <select id="logWeeklySlotTop" onchange="updateWeeklyLogLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11px;" for="logWeeklySlotBottom">Bottom / Skirt:</label>
+                        <select id="logWeeklySlotBottom" onchange="updateWeeklyLogLivePreview()"></select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11px;" for="logWeeklySlotShoes">Shoes / Footwear:</label>
+                        <select id="logWeeklySlotShoes" onchange="updateWeeklyLogLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11px;" for="logWeeklySlotJewelry">Jewelry / Accents (Opt):</label>
+                        <select id="logWeeklySlotJewelry" onchange="updateWeeklyLogLivePreview()"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SOURCE 3: UPLOAD PHOTO -->
+            <div id="logWeeklyUploadPanel" class="hidden" style="margin-bottom: 14px;">
+                <label style="margin: 0 0 4px; font-size: 12px;" for="logWeeklyPhotoFile">Upload Today's Outfit Photo:</label>
+                <input type="file" id="logWeeklyPhotoFile" accept="image/*" onchange="handleWeeklyPhotoUpload(this)">
+                <div id="logWeeklyUploadPreviewBox" class="hidden" style="margin-top: 8px; text-align: center;">
+                    <img id="logWeeklyUploadPreviewImg" src="" alt="Upload Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--border-light);">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div>
+                    <label style="margin-top: 0; font-size: 11.5px;" for="logWeeklyTitle">Outfit Title:</label>
+                    <input type="text" id="logWeeklyTitle" placeholder="e.g. Soft Linen Streetwear Chic" style="margin-bottom: 0;">
+                </div>
+                <div>
+                    <label style="margin-top: 0; font-size: 11.5px;" for="logWeeklyOccasion">Vibe / Occasion:</label>
+                    <input type="text" id="logWeeklyOccasion" placeholder="e.g. Work, Date Night, Casual" style="margin-bottom: 0;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="margin-top: 0; font-size: 11.5px;" for="logWeeklyNotes">Daily Notes / How It Felt:</label>
+                <input type="text" id="logWeeklyNotes" placeholder="e.g. Extremely comfortable and got compliments at lunch" style="margin-bottom: 0;">
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px; background: var(--surface-muted); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-light); margin-bottom: 14px;">
+                <input type="checkbox" id="logWeeklyAlsoSaveWardrobe" checked style="width: auto; margin: 0; accent-color: var(--primary-red); cursor: pointer;">
+                <label for="logWeeklyAlsoSaveWardrobe" style="margin: 0; font-size: 11.5px; font-weight: 600; cursor: pointer;">
+                    Also save this outfit to my permanent Wardrobe collection
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                <button type="button" class="tab-chip" onclick="closeLogWeeklyOutfitModal()" style="padding: 9px 16px;">
+                    Cancel
+                </button>
+                <button type="button" class="action-button" onclick="confirmSaveWeeklyOutfit()" style="padding: 9px 22px; width: auto; margin-top: 0;">
+                    Log Outfit
                 </button>
             </div>
         </div>
@@ -3593,6 +3872,9 @@
             // Render Style Calendar & Upcoming Events
             renderStyleCalendar();
             renderUpcomingEventsList();
+
+            // Render Outfits of the Week Log
+            renderWeeklyOutfits();
 
             // Load or refresh real-time Google Fashion Trends
             loadTrendingAesthetics();
@@ -4991,6 +5273,501 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // =====================================================
+        // OUTFITS OF THE WEEK (WEEKLY STYLE LOG & WARDROBE SYNC)
+        // =====================================================
+
+        let currentWeeklyLogDate = new Date();
+        let currentWeeklyLogSource = 'saved';
+        let currentWeeklyPhotoData = null;
+
+        function getMondayOfWeek(d) {
+            const date = new Date(d);
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+            const monday = new Date(date.setDate(diff));
+            monday.setHours(0, 0, 0, 0);
+            return monday;
+        }
+
+        function getWeekKey(d) {
+            const monday = getMondayOfWeek(d);
+            return `week_${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, '0')}-${String(monday.getDate()).padStart(2, '0')}`;
+        }
+
+        function getWeeklyOutfitsStore() {
+            try {
+                const stored = localStorage.getItem('muse_weekly_outfits_store');
+                if (stored) return JSON.parse(stored);
+            } catch (e) {
+                console.error(e);
+            }
+
+            // Default Starter Outfits of the current week for initial demonstration
+            const currentWeekKey = getWeekKey(new Date());
+
+            const initialStore = {};
+            initialStore[currentWeekKey] = {
+                0: { // Monday
+                    id: 'weekly_look_mon',
+                    title: 'Linen Tailored Monochrome Chic',
+                    occasion: 'Casual Chic',
+                    vibe: '90s Minimalist',
+                    notes: 'Crisp white linen shirt with charcoal pleated trousers for morning studio planning.',
+                    image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&auto=format&fit=crop&q=60',
+                    pieces: [
+                        { slot: 'Top', name: 'Oversized Linen Shirt', image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&auto=format&fit=crop&q=60', color: 'Crisp White' },
+                        { slot: 'Bottom', name: 'Wide-Leg Pleated Trousers', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&auto=format&fit=crop&q=60', color: 'Charcoal Black' },
+                        { slot: 'Shoes', name: 'Mary Jane Kitten Heels', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60', color: 'Wine Red' }
+                    ],
+                    savedInWardrobe: true,
+                    loggedAt: new Date().toISOString()
+                },
+                1: { // Tuesday
+                    id: 'weekly_look_tue',
+                    title: 'Silk Ribbon Corset & Pleats',
+                    occasion: 'Party / Night Out',
+                    vibe: 'Romantic Coquette',
+                    notes: 'Powder pink corset with tennis skirt and pearl necklace for styling dinner.',
+                    image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&auto=format&fit=crop&q=60',
+                    pieces: [
+                        { slot: 'Top', name: 'Silk Ribbon Corset Top', image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&auto=format&fit=crop&q=60', color: 'Powder Pink' },
+                        { slot: 'Bottom', name: 'Pleated Mini Skirt', image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300&auto=format&fit=crop&q=60', color: 'Ivory White' },
+                        { slot: 'Jewelry', name: 'Freshwater Pearl Drop', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=60', color: 'Gold / Pearl' }
+                    ],
+                    savedInWardrobe: true,
+                    loggedAt: new Date().toISOString()
+                }
+            };
+
+            return initialStore;
+        }
+
+        function saveWeeklyOutfitsStore(store) {
+            localStorage.setItem('muse_weekly_outfits_store', JSON.stringify(store));
+        }
+
+        function prevWeeklyOutfitsWeek() {
+            currentWeeklyLogDate.setDate(currentWeeklyLogDate.getDate() - 7);
+            renderWeeklyOutfits();
+        }
+
+        function nextWeeklyOutfitsWeek() {
+            currentWeeklyLogDate.setDate(currentWeeklyLogDate.getDate() + 7);
+            renderWeeklyOutfits();
+        }
+
+        function jumpWeeklyOutfitsToCurrentWeek() {
+            currentWeeklyLogDate = new Date();
+            renderWeeklyOutfits();
+        }
+
+        function renderWeeklyOutfits() {
+            const grid = document.getElementById('weeklyDaysGrid');
+            const rangeLabel = document.getElementById('weeklyOutfitsRangeLabel');
+            if (!grid) return;
+
+            const monday = getMondayOfWeek(currentWeeklyLogDate);
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const rangeStr = `${monthNames[monday.getMonth()]} ${monday.getDate()} - ${monthNames[sunday.getMonth()]} ${sunday.getDate()}, ${sunday.getFullYear()}`;
+            if (rangeLabel) rangeLabel.innerText = rangeStr;
+
+            const weekKey = getWeekKey(monday);
+            const store = getWeeklyOutfitsStore();
+            const weekData = store[weekKey] || {};
+
+            const savedWardrobeOutfits = getSavedWardrobeOutfits();
+
+            const daysOfWeek = [
+                { name: 'Monday', short: 'Mon' },
+                { name: 'Tuesday', short: 'Tue' },
+                { name: 'Wednesday', short: 'Wed' },
+                { name: 'Thursday', short: 'Thu' },
+                { name: 'Friday', short: 'Fri' },
+                { name: 'Saturday', short: 'Sat' },
+                { name: 'Sunday', short: 'Sun' }
+            ];
+
+            const today = new Date();
+            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+            grid.innerHTML = daysOfWeek.map((d, index) => {
+                const dayDate = new Date(monday);
+                dayDate.setDate(monday.getDate() + index);
+
+                const dateStr = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, '0')}-${String(dayDate.getDate()).padStart(2, '0')}`;
+                const isToday = (dateStr === todayStr);
+                const dayFormatted = `${monthNames[dayDate.getMonth()]} ${dayDate.getDate()}`;
+
+                const outfit = weekData[index];
+
+                if (!outfit) {
+                    return `
+                        <div class="weekly-day-col ${isToday ? 'today' : ''}">
+                            <div>
+                                <div class="weekly-day-header">
+                                    <span class="weekly-day-title">${d.short}</span>
+                                    <div style="display: flex; align-items: center; gap: 4px;">
+                                        <span class="weekly-day-date">${dayFormatted}</span>
+                                        ${isToday ? '<span class="weekly-today-tag">Today</span>' : ''}
+                                    </div>
+                                </div>
+                                <div class="weekly-day-empty" onclick="openLogWeeklyOutfitModal(${index})">
+                                    <div style="font-size: 11px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">+ Log Outfit</div>
+                                    <div style="font-size: 9.5px; color: var(--text-secondary);">Add look worn</div>
+                                </div>
+                            </div>
+                            <button type="button" class="tab-chip" onclick="openLogWeeklyOutfitModal(${index})" style="font-size: 9.5px; padding: 3px 6px; width: 100%; text-align: center;">
+                                + Add Look
+                            </button>
+                        </div>
+                    `;
+                }
+
+                const fallbackImg = 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
+                const mainImg = outfit.image || (outfit.pieces && outfit.pieces[0]?.image) || fallbackImg;
+
+                // Check if outfit is saved in wardrobe
+                const isSavedInWardrobe = outfit.savedInWardrobe || savedWardrobeOutfits.some(o => o.title === outfit.title || o.id === outfit.id);
+
+                return `
+                    <div class="weekly-day-col ${isToday ? 'today' : ''}">
+                        <div>
+                            <div class="weekly-day-header">
+                                <span class="weekly-day-title">${d.short}</span>
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <span class="weekly-day-date">${dayFormatted}</span>
+                                    ${isToday ? '<span class="weekly-today-tag">Today</span>' : ''}
+                                </div>
+                            </div>
+
+                            <div class="weekly-outfit-preview-box" title="${outfit.title}">
+                                <img src="${mainImg}" alt="${outfit.title}" onerror="this.src='${fallbackImg}'" class="weekly-outfit-img">
+                            </div>
+
+                            <div style="font-weight: 800; font-size: 11px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${outfit.title}">
+                                ${outfit.title}
+                            </div>
+
+                            <div style="display: flex; gap: 3px; flex-wrap: wrap; margin-top: 3px;">
+                                <span class="wardrobe-badge" style="font-size: 8.5px; padding: 1px 4px; background: var(--text-primary); color: #ffffff;">${outfit.occasion || 'Casual'}</span>
+                                ${outfit.vibe ? `<span class="wardrobe-badge" style="font-size: 8.5px; padding: 1px 4px;">${outfit.vibe}</span>` : ''}
+                            </div>
+
+                            ${outfit.notes ? `
+                                <div style="font-size: 9px; color: var(--text-secondary); margin-top: 3px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${outfit.notes}">
+                                    ${outfit.notes}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 3px; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border-light);">
+                            ${isSavedInWardrobe ? `
+                                <span style="font-size: 9px; font-weight: 700; color: #2e7d32; background: #e8f5e9; padding: 2px 4px; border-radius: var(--radius-pill); text-align: center;">
+                                    In Wardrobe
+                                </span>
+                            ` : `
+                                <button type="button" class="tab-chip" onclick="saveWeeklyDayOutfitToWardrobe('${weekKey}', ${index})" style="font-size: 9px; padding: 2px 5px; background: var(--text-primary); color: #ffffff; border: none; font-weight: 700; width: 100%;">
+                                    + Save to Wardrobe
+                                </button>
+                            `}
+                            <div style="display: flex; justify-content: space-between; gap: 4px;">
+                                <button type="button" onclick="openLogWeeklyOutfitModal(${index})" style="background: none; border: none; font-size: 9px; color: var(--text-secondary); cursor: pointer; text-decoration: underline; padding: 0;">
+                                    Change
+                                </button>
+                                <button type="button" onclick="clearWeeklyOutfitDay('${weekKey}', ${index})" style="background: none; border: none; font-size: 9px; color: var(--primary-red); cursor: pointer; padding: 0;">
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function setWeeklyLogSource(src) {
+            currentWeeklyLogSource = src;
+            const btnSaved = document.getElementById('logSourceSavedBtn');
+            const btnCloset = document.getElementById('logSourceClosetBtn');
+            const btnUpload = document.getElementById('logSourceUploadBtn');
+
+            const panelSaved = document.getElementById('logWeeklySavedPanel');
+            const panelCloset = document.getElementById('logWeeklyClosetPanel');
+            const panelUpload = document.getElementById('logWeeklyUploadPanel');
+
+            if (btnSaved) btnSaved.classList.toggle('active', src === 'saved');
+            if (btnCloset) btnCloset.classList.toggle('active', src === 'closet');
+            if (btnUpload) btnUpload.classList.toggle('active', src === 'upload');
+
+            if (panelSaved) panelSaved.classList.toggle('hidden', src !== 'saved');
+            if (panelCloset) panelCloset.classList.toggle('hidden', src !== 'closet');
+            if (panelUpload) panelUpload.classList.toggle('hidden', src !== 'upload');
+
+            if (src === 'saved') {
+                onWeeklySavedOutfitSelected();
+            }
+        }
+
+        function populateWeeklyLogDaySelect(selectedDayIndex = 0) {
+            const select = document.getElementById('logWeeklyDaySelect');
+            if (!select) return;
+
+            const monday = getMondayOfWeek(currentWeeklyLogDate);
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+            const today = new Date();
+            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+            let defaultIdx = selectedDayIndex !== null ? selectedDayIndex : 0;
+
+            select.innerHTML = daysOfWeek.map((name, i) => {
+                const dayDate = new Date(monday);
+                dayDate.setDate(monday.getDate() + i);
+                const dateStr = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, '0')}-${String(dayDate.getDate()).padStart(2, '0')}`;
+                const isToday = (dateStr === todayStr);
+
+                if (selectedDayIndex === null && isToday) {
+                    defaultIdx = i;
+                }
+
+                return `<option value="${i}" ${i === defaultIdx ? 'selected' : ''}>${name} (${monthNames[dayDate.getMonth()]} ${dayDate.getDate()})${isToday ? ' - Today' : ''}</option>`;
+            }).join('');
+        }
+
+        function populateWeeklyLogClosetDropdowns() {
+            populateBuildOutfitSelect('logWeeklySlotTop', 'Top', false);
+            populateBuildOutfitSelect('logWeeklySlotBottom', 'Bottom', false);
+            populateBuildOutfitSelect('logWeeklySlotShoes', 'Shoes', false);
+            populateBuildOutfitSelect('logWeeklySlotJewelry', 'Jewelry', true);
+        }
+
+        function populateWeeklySavedOutfitsSelect() {
+            const select = document.getElementById('logWeeklySavedSelect');
+            if (!select) return;
+            const savedOutfits = getSavedWardrobeOutfits();
+
+            if (savedOutfits.length === 0) {
+                select.innerHTML = '<option value="">No saved outfits found. Pick from closet or upload!</option>';
+                return;
+            }
+
+            select.innerHTML = savedOutfits.map(o => `
+                <option value="${o.id}">${o.title} (${o.occasion || 'Everyday'} • ${o.pieces ? o.pieces.length : 3} pcs)</option>
+            `).join('');
+        }
+
+        function onWeeklySavedOutfitSelected() {
+            const select = document.getElementById('logWeeklySavedSelect');
+            if (!select || !select.value) return;
+            const savedOutfits = getSavedWardrobeOutfits();
+            const found = savedOutfits.find(o => o.id === select.value);
+            if (found) {
+                const titleInput = document.getElementById('logWeeklyTitle');
+                const occInput = document.getElementById('logWeeklyOccasion');
+                if (titleInput) titleInput.value = found.title;
+                if (occInput) occInput.value = found.occasion || 'Casual Chic';
+            }
+        }
+
+        function handleWeeklyPhotoUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentWeeklyPhotoData = e.target.result;
+                    const previewBox = document.getElementById('logWeeklyUploadPreviewBox');
+                    const previewImg = document.getElementById('logWeeklyUploadPreviewImg');
+                    if (previewBox && previewImg) {
+                        previewImg.src = currentWeeklyPhotoData;
+                        previewBox.classList.remove('hidden');
+                    }
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function onWeeklyLogDayChanged() {
+            const select = document.getElementById('logWeeklyDaySelect');
+            if (!select) return;
+            const dayIdx = parseInt(select.value, 10);
+            const weekKey = getWeekKey(currentWeeklyLogDate);
+            const store = getWeeklyOutfitsStore();
+            const existing = store[weekKey] ? store[weekKey][dayIdx] : null;
+
+            if (existing) {
+                const titleInput = document.getElementById('logWeeklyTitle');
+                const occInput = document.getElementById('logWeeklyOccasion');
+                const notesInput = document.getElementById('logWeeklyNotes');
+                if (titleInput) titleInput.value = existing.title || '';
+                if (occInput) occInput.value = existing.occasion || '';
+                if (notesInput) notesInput.value = existing.notes || '';
+            }
+        }
+
+        function openLogWeeklyOutfitModal(dayIndex = null) {
+            const modal = document.getElementById('logWeeklyOutfitModal');
+            if (!modal) return;
+
+            currentWeeklyPhotoData = null;
+            const previewBox = document.getElementById('logWeeklyUploadPreviewBox');
+            if (previewBox) previewBox.classList.add('hidden');
+            const fileInput = document.getElementById('logWeeklyPhotoFile');
+            if (fileInput) fileInput.value = '';
+
+            populateWeeklyLogDaySelect(dayIndex);
+            populateWeeklySavedOutfitsSelect();
+            populateWeeklyLogClosetDropdowns();
+            setWeeklyLogSource('saved');
+
+            onWeeklyLogDayChanged();
+            modal.classList.add('active');
+        }
+
+        function closeLogWeeklyOutfitModal() {
+            const modal = document.getElementById('logWeeklyOutfitModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function handleLogWeeklyOutfitModalBackdropClick(e) {
+            if (e.target && e.target.id === 'logWeeklyOutfitModal') {
+                closeLogWeeklyOutfitModal();
+            }
+        }
+
+        function confirmSaveWeeklyOutfit() {
+            const daySelect = document.getElementById('logWeeklyDaySelect');
+            if (!daySelect) return;
+            const dayIdx = parseInt(daySelect.value, 10);
+
+            const titleInput = document.getElementById('logWeeklyTitle');
+            const occInput = document.getElementById('logWeeklyOccasion');
+            const notesInput = document.getElementById('logWeeklyNotes');
+            const alsoSaveCheckbox = document.getElementById('logWeeklyAlsoSaveWardrobe');
+
+            const title = (titleInput && titleInput.value.trim()) || 'Daily Styled Look';
+            const occasion = (occInput && occInput.value.trim()) || 'Casual Chic';
+            const notes = (notesInput && notesInput.value.trim()) || '';
+            const shouldSaveToWardrobe = Boolean(alsoSaveCheckbox && alsoSaveCheckbox.checked);
+
+            let outfitPieces = [];
+            let outfitImage = null;
+
+            if (currentWeeklyLogSource === 'saved') {
+                const savedSelect = document.getElementById('logWeeklySavedSelect');
+                const savedOutfits = getSavedWardrobeOutfits();
+                const found = savedOutfits.find(o => o.id === savedSelect?.value);
+                if (found) {
+                    outfitPieces = found.pieces || [];
+                    outfitImage = (outfitPieces[0] && outfitPieces[0].image) || null;
+                }
+            } else if (currentWeeklyLogSource === 'closet') {
+                const top = getSelectedPieceDetails('logWeeklySlotTop', 'Top');
+                const bot = getSelectedPieceDetails('logWeeklySlotBottom', 'Bottom');
+                const shoe = getSelectedPieceDetails('logWeeklySlotShoes', 'Shoes');
+                const jew = getSelectedPieceDetails('logWeeklySlotJewelry', 'Jewelry');
+
+                if (top) outfitPieces.push(top);
+                if (bot) outfitPieces.push(bot);
+                if (shoe) outfitPieces.push(shoe);
+                if (jew) outfitPieces.push(jew);
+
+                outfitImage = (outfitPieces[0] && outfitPieces[0].image) || null;
+            } else if (currentWeeklyLogSource === 'upload') {
+                outfitImage = currentWeeklyPhotoData || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&auto=format&fit=crop&q=60';
+                outfitPieces = [{ slot: 'Look', id: `piece_${Date.now()}`, name: title, image: outfitImage, color: 'Custom' }];
+            }
+
+            if (outfitPieces.length === 0 && !outfitImage) {
+                alert("Please select or upload an outfit to log.");
+                return;
+            }
+
+            const weekKey = getWeekKey(currentWeeklyLogDate);
+            const store = getWeeklyOutfitsStore();
+            if (!store[weekKey]) store[weekKey] = {};
+
+            const loggedOutfit = {
+                id: `weekly_${Date.now()}`,
+                title,
+                occasion,
+                vibe: localStorage.getItem('muse_userAesthetic') || 'Custom Vibe',
+                notes,
+                image: outfitImage || (outfitPieces[0] && outfitPieces[0].image),
+                pieces: outfitPieces,
+                savedInWardrobe: shouldSaveToWardrobe,
+                loggedAt: new Date().toISOString()
+            };
+
+            store[weekKey][dayIdx] = loggedOutfit;
+            saveWeeklyOutfitsStore(store);
+
+            // Sync with Wardrobe if requested
+            if (shouldSaveToWardrobe) {
+                const wardrobeOutfits = getSavedWardrobeOutfits();
+                if (!wardrobeOutfits.some(o => o.title === title)) {
+                    wardrobeOutfits.unshift({
+                        id: `outfit_${Date.now()}`,
+                        title,
+                        occasion,
+                        vibe: loggedOutfit.vibe,
+                        notes: notes || 'Logged from Outfits of the Week',
+                        pieces: outfitPieces,
+                        harmonyScore: 96,
+                        createdAt: new Date().toISOString().split('T')[0]
+                    });
+                    saveSavedWardrobeOutfits(wardrobeOutfits);
+                    const outfitsBadge = document.getElementById('wardrobeOutfitsBadge');
+                    if (outfitsBadge) outfitsBadge.innerText = wardrobeOutfits.length;
+                }
+            }
+
+            closeLogWeeklyOutfitModal();
+            renderWeeklyOutfits();
+        }
+
+        function clearWeeklyOutfitDay(weekKey, dayIdx) {
+            const store = getWeeklyOutfitsStore();
+            if (store[weekKey] && store[weekKey][dayIdx]) {
+                delete store[weekKey][dayIdx];
+                saveWeeklyOutfitsStore(store);
+                renderWeeklyOutfits();
+            }
+        }
+
+        function saveWeeklyDayOutfitToWardrobe(weekKey, dayIdx) {
+            const store = getWeeklyOutfitsStore();
+            const outfit = store[weekKey] ? store[weekKey][dayIdx] : null;
+            if (!outfit) return;
+
+            const wardrobeOutfits = getSavedWardrobeOutfits();
+            if (!wardrobeOutfits.some(o => o.title === outfit.title || o.id === outfit.id)) {
+                wardrobeOutfits.unshift({
+                    id: `outfit_${Date.now()}`,
+                    title: outfit.title,
+                    occasion: outfit.occasion || 'Casual Chic',
+                    vibe: outfit.vibe || 'Signature Look',
+                    notes: outfit.notes || 'Saved from Outfits of the Week log',
+                    pieces: outfit.pieces || [{ slot: 'Main', id: `p_${Date.now()}`, name: outfit.title, image: outfit.image, color: 'Curated' }],
+                    harmonyScore: 96,
+                    createdAt: new Date().toISOString().split('T')[0]
+                });
+                saveSavedWardrobeOutfits(wardrobeOutfits);
+            }
+
+            // Update weekly log flag
+            outfit.savedInWardrobe = true;
+            saveWeeklyOutfitsStore(store);
+
+            const outfitsBadge = document.getElementById('wardrobeOutfitsBadge');
+            if (outfitsBadge) outfitsBadge.innerText = wardrobeOutfits.length;
+
+            renderWeeklyOutfits();
+            alert(`"${outfit.title}" has been saved to your permanent Wardrobe collection!`);
         }
 
         // =====================================================
