@@ -337,6 +337,125 @@
             color: var(--primary-red);
         }
 
+        /* Google Account Quick Selector Chip */
+        .google-account-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-pill);
+            padding: 6px 12px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .google-account-chip:hover {
+            border-color: var(--text-primary);
+            background: var(--surface-hover);
+        }
+
+        .google-chip-avatar {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4285F4;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Aesthetic Option Cards Grid */
+        .aesthetic-chooser-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 540px) {
+            .aesthetic-chooser-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .aesthetic-card-option {
+            background: var(--surface-muted);
+            border: 2px solid transparent;
+            border-radius: var(--radius-card);
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            position: relative;
+        }
+
+        .aesthetic-card-option:hover {
+            background: #ffffff;
+            border-color: var(--border-subtle);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .aesthetic-card-option.selected {
+            background: #ffffff;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.12);
+        }
+
+        .aesthetic-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .aesthetic-card-swatches {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .aesthetic-card-dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .aesthetic-card-check {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--primary-red);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .aesthetic-card-option.selected .aesthetic-card-check {
+            opacity: 1;
+        }
+
+        .aesthetic-card-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .aesthetic-card-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.35;
+        }
+
         /* Navigation Back Button */
         .nav-btn {
             background: var(--surface-muted);
@@ -4866,6 +4985,166 @@
         </div>
     </div>
 
+    <!-- GOOGLE AUTH MODAL (STEP 1: GOOGLE ACCOUNT) -->
+    <div id="googleAuthModal" class="modal-backdrop" onclick="handleGoogleModalBackdropClick(event)">
+        <div class="modal-box" style="max-width: 490px;" onclick="event.stopPropagation()">
+            <div class="modal-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div>
+                        <span class="modal-title" style="font-size: 17px;" id="googleAuthModalTitle">Sign in with Google</span>
+                        <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                            Step 1 of 2: Connect your Google account to create your encrypted profile
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeGoogleAuthModal()">×</button>
+            </div>
+
+            <div style="background: var(--surface-muted); border-radius: var(--radius-card); padding: 12px 14px; margin-bottom: 16px; border: 1px solid var(--border-light);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">
+                    Quick Select Account or Enter Yours Below
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button type="button" class="google-account-chip" onclick="fillGoogleDemoAccount('Mahat Stylist', 'mahat.stylist@gmail.com')">
+                        <span class="google-chip-avatar">M</span>
+                        <span>Mahat (mahat.stylist@gmail.com)</span>
+                    </button>
+                    <button type="button" class="google-account-chip" onclick="fillGoogleDemoAccount('Alex Studio', 'alex.muse.vibe@gmail.com')">
+                        <span class="google-chip-avatar">A</span>
+                        <span>Alex (alex.muse.vibe@gmail.com)</span>
+                    </button>
+                </div>
+            </div>
+
+            <form onsubmit="submitGoogleAccountToAestheticStep(event)">
+                <label for="googleAuthName" style="margin-top: 0;">Google Account Display Name:</label>
+                <input type="text" id="googleAuthName" placeholder="e.g. Mahat" required>
+
+                <label for="googleAuthEmail">Google Account Email:</label>
+                <input type="email" id="googleAuthEmail" placeholder="e.g. mahat@gmail.com" required>
+
+                <label for="googleAuthBirthday">Birthday (Optional for celebrations):</label>
+                <input type="date" id="googleAuthBirthday">
+
+                <div class="auth-privacy-banner" style="margin: 14px 0;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    <span>The platform prioritizes user privacy through end-to-end encryption and strong controls over personal images, wardrobe data, and shared content.</span>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 16px;">
+                    <button type="button" class="tab-chip" onclick="closeGoogleAuthModal()" style="padding: 10px 18px;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="action-button" style="padding: 10px 22px; width: auto; margin-top: 0;">
+                        Next: Choose Aesthetic →
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- GOOGLE AESTHETIC MODAL (STEP 2: CHOOSE AESTHETIC) -->
+    <div id="googleAestheticModal" class="modal-backdrop" onclick="handleGoogleAestheticModalBackdropClick(event)">
+        <div class="modal-box" style="max-width: 560px;" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-title">Choose Your Daily Aesthetic</span>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                        Step 2 of 2: Personalize your palette, theme, and procedural soundtracks
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeGoogleAestheticModal()">×</button>
+            </div>
+
+            <div style="margin-bottom: 12px; font-size: 12.5px; color: var(--text-secondary);">
+                Stylist profile for <strong id="googleAestheticTargetUser" style="color: var(--text-primary);">Google Stylist</strong>. Select your primary aesthetic archetype:
+            </div>
+
+            <!-- Aesthetic Cards Grid -->
+            <div class="aesthetic-chooser-grid" id="onboardingAestheticGrid">
+                <div class="aesthetic-card-option selected" onclick="selectOnboardingAesthetic('pink')" data-aesthetic="pink">
+                    <div class="aesthetic-card-header">
+                        <div class="aesthetic-card-swatches">
+                            <span class="aesthetic-card-dot" style="background: #e60023;"></span>
+                            <span class="aesthetic-card-dot" style="background: #ff6b8b;"></span>
+                            <span class="aesthetic-card-dot" style="background: #ffebee;"></span>
+                        </div>
+                        <svg class="aesthetic-card-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <div class="aesthetic-card-title">Cutesy / Soft Pink</div>
+                    <div class="aesthetic-card-desc">Romantic coquette, silk ribbon accents, balletcore & dreamy pastel palettes.</div>
+                </div>
+
+                <div class="aesthetic-card-option" onclick="selectOnboardingAesthetic('goth')" data-aesthetic="goth">
+                    <div class="aesthetic-card-header">
+                        <div class="aesthetic-card-swatches">
+                            <span class="aesthetic-card-dot" style="background: #111111;"></span>
+                            <span class="aesthetic-card-dot" style="background: #4a4a4a;"></span>
+                            <span class="aesthetic-card-dot" style="background: #8e44ad;"></span>
+                        </div>
+                        <svg class="aesthetic-card-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <div class="aesthetic-card-title">Goth / Grunge Dark</div>
+                    <div class="aesthetic-card-desc">Noir monochrome, distressed textures, layered leather & brooding darkwave vibes.</div>
+                </div>
+
+                <div class="aesthetic-card-option" onclick="selectOnboardingAesthetic('chic')" data-aesthetic="chic">
+                    <div class="aesthetic-card-header">
+                        <div class="aesthetic-card-swatches">
+                            <span class="aesthetic-card-dot" style="background: #8c5d35;"></span>
+                            <span class="aesthetic-card-dot" style="background: #d4a373;"></span>
+                            <span class="aesthetic-card-dot" style="background: #faedcd;"></span>
+                        </div>
+                        <svg class="aesthetic-card-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <div class="aesthetic-card-title">Chic / Luxury Warm</div>
+                    <div class="aesthetic-card-desc">Tailored silhouettes, cashmere neutrals, quiet luxury & warm Parisian elegance.</div>
+                </div>
+
+                <div class="aesthetic-card-option" onclick="selectOnboardingAesthetic('indie')" data-aesthetic="indie">
+                    <div class="aesthetic-card-header">
+                        <div class="aesthetic-card-swatches">
+                            <span class="aesthetic-card-dot" style="background: #008f7a;"></span>
+                            <span class="aesthetic-card-dot" style="background: #028090;"></span>
+                            <span class="aesthetic-card-dot" style="background: #f4a261;"></span>
+                        </div>
+                        <svg class="aesthetic-card-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <div class="aesthetic-card-title">Indie / Eclectic Teal</div>
+                    <div class="aesthetic-card-desc">Vintage thrift curation, teal & mustard accents, bold layers & indie synthesizer beats.</div>
+                </div>
+
+                <div class="aesthetic-card-option" onclick="selectOnboardingAesthetic('minimalist')" data-aesthetic="minimalist">
+                    <div class="aesthetic-card-header">
+                        <div class="aesthetic-card-swatches">
+                            <span class="aesthetic-card-dot" style="background: #2d3748;"></span>
+                            <span class="aesthetic-card-dot" style="background: #718096;"></span>
+                            <span class="aesthetic-card-dot" style="background: #edf2f7;"></span>
+                        </div>
+                        <svg class="aesthetic-card-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <div class="aesthetic-card-title">Minimalist / Clean Grey</div>
+                    <div class="aesthetic-card-desc">Architectural lines, tonal slate and crisp white capsule basics & effortless drape.</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-top: 18px;">
+                <button type="button" class="tab-chip" onclick="backToGoogleAuthModal()" style="padding: 10px 18px;">
+                    ← Back to Account
+                </button>
+                <button type="button" class="action-button" onclick="finalizeGoogleOnboarding()" style="padding: 10px 24px; width: auto; margin-top: 0;">
+                    Create Profile & Launch Muse →
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentFilter = 'All';
 
@@ -5005,31 +5284,167 @@
             updateHomeDashboardDisplay();
         }
 
-        // Handle Google Sign In / Sign Up
+        // Apply Aesthetic Visual Theme
+        function applyTheme(themeKey) {
+            const validThemes = ['pink', 'goth', 'chic', 'indie', 'minimalist'];
+            const theme = validThemes.includes(themeKey) ? themeKey : 'pink';
+
+            const themeColors = {
+                pink: { primary: '#e60023', hover: '#ad081b', light: '#ffebee' },
+                goth: { primary: '#2b2b2b', hover: '#111111', light: '#ececec' },
+                chic: { primary: '#8c5d35', hover: '#6a4424', light: '#f7eee4' },
+                indie: { primary: '#008f7a', hover: '#006b5b', light: '#e0f4f1' },
+                minimalist: { primary: '#4a5568', hover: '#2d3748', light: '#edf2f7' }
+            };
+
+            const colors = themeColors[theme] || themeColors.pink;
+            document.documentElement.style.setProperty('--primary-red', colors.primary);
+            document.documentElement.style.setProperty('--primary-red-hover', colors.hover);
+            document.documentElement.style.setProperty('--primary-red-light', colors.light);
+            document.documentElement.setAttribute('data-theme', theme);
+
+            const userAestheticEl = document.getElementById('userAesthetic');
+            if (userAestheticEl) userAestheticEl.value = theme;
+        }
+
+        // =====================================================
+        // TWO-STEP GOOGLE ONBOARDING FLOW CONTROLLER
+        // Step 1: Prompt for Google Account Details
+        // Step 2: Choose Stylist Daily Aesthetic Archetype
+        // =====================================================
+
+        let pendingGoogleAccount = {
+            name: '',
+            email: '',
+            birthday: '',
+            mode: 'signup'
+        };
+        let pendingChosenAesthetic = 'pink';
+
+        // Entry Point from Google Login / Sign Up buttons
         function handleGoogleAuth(mode = 'signup') {
-            const savedEmail = localStorage.getItem('muse_userEmail') || '';
+            openGoogleAuthModal(mode);
+        }
+
+        // Step 1: Open Google Account Setup Modal
+        function openGoogleAuthModal(mode = 'signup') {
+            pendingGoogleAccount.mode = mode;
+            const modal = document.getElementById('googleAuthModal');
+            if (!modal) return;
+
+            const titleEl = document.getElementById('googleAuthModalTitle');
+            if (titleEl) {
+                titleEl.innerText = mode === 'login' ? 'Log in with Google' : 'Sign in with Google';
+            }
+
             const savedName = localStorage.getItem('muse_userName') || '';
+            const savedEmail = localStorage.getItem('muse_userEmail') || '';
+            const savedBday = localStorage.getItem('muse_userBirthday') || '';
+
+            const nameInput = document.getElementById('googleAuthName');
+            const emailInput = document.getElementById('googleAuthEmail');
+            const bdayInput = document.getElementById('googleAuthBirthday');
+
+            if (nameInput) nameInput.value = (savedName && savedName !== 'Guest Stylist' && savedName !== 'Stylist') ? savedName : '';
+            if (emailInput) emailInput.value = savedEmail || '';
+            if (bdayInput) bdayInput.value = savedBday || '';
+
+            modal.classList.add('open');
+        }
+
+        function closeGoogleAuthModal() {
+            const modal = document.getElementById('googleAuthModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function handleGoogleModalBackdropClick(e) {
+            if (e.target && e.target.id === 'googleAuthModal') {
+                closeGoogleAuthModal();
+            }
+        }
+
+        function fillGoogleDemoAccount(name, email) {
+            const nameInput = document.getElementById('googleAuthName');
+            const emailInput = document.getElementById('googleAuthEmail');
+            if (nameInput) nameInput.value = name;
+            if (emailInput) emailInput.value = email;
+        }
+
+        // Step 1 -> Step 2: Validate Account & Transition to Aesthetic Selection
+        function submitGoogleAccountToAestheticStep(e) {
+            if (e) e.preventDefault();
+            const nameInput = document.getElementById('googleAuthName');
+            const emailInput = document.getElementById('googleAuthEmail');
+            const bdayInput = document.getElementById('googleAuthBirthday');
+
+            const name = (nameInput ? nameInput.value.trim() : '') || 'Google Stylist';
+            const email = (emailInput ? emailInput.value.trim() : '') || 'stylist@gmail.com';
+            const bday = bdayInput ? bdayInput.value : '';
+
+            pendingGoogleAccount.name = name;
+            pendingGoogleAccount.email = email;
+            pendingGoogleAccount.birthday = bday;
+
+            closeGoogleAuthModal();
+            openGoogleAestheticModal();
+        }
+
+        // Step 2: Open Aesthetic Chooser Modal
+        function openGoogleAestheticModal() {
+            const modal = document.getElementById('googleAestheticModal');
+            if (!modal) return;
+
+            const targetUserEl = document.getElementById('googleAestheticTargetUser');
+            if (targetUserEl) {
+                targetUserEl.innerText = `${pendingGoogleAccount.name} (${pendingGoogleAccount.email})`;
+            }
+
             const currentAesthetic = localStorage.getItem('muse_userAesthetic') || 'pink';
+            selectOnboardingAesthetic(currentAesthetic);
 
-            const defaultPrompt = (savedName && savedName !== 'Guest Stylist' && savedName !== 'Stylist') ? savedName : 'Google Stylist';
-            const googleAccountName = prompt(
-                mode === 'signup' 
-                    ? "Enter your Google Account Display Name (or click OK to continue with Google):"
-                    : "Confirm your Google Account login name:",
-                defaultPrompt
-            );
+            modal.classList.add('open');
+        }
 
-            if (googleAccountName === null) return; // User cancelled
+        function closeGoogleAestheticModal() {
+            const modal = document.getElementById('googleAestheticModal');
+            if (modal) modal.classList.remove('open');
+        }
 
-            const finalName = (googleAccountName.trim() || 'Google Stylist');
-            const sanitizedHandle = finalName.toLowerCase().replace(/[^a-z0-9]/g, '.');
-            const finalEmail = savedEmail && savedEmail.includes('@') ? savedEmail : `${sanitizedHandle}@gmail.com`;
+        function handleGoogleAestheticModalBackdropClick(e) {
+            if (e.target && e.target.id === 'googleAestheticModal') {
+                closeGoogleAestheticModal();
+            }
+        }
+
+        function backToGoogleAuthModal() {
+            closeGoogleAestheticModal();
+            openGoogleAuthModal(pendingGoogleAccount.mode || 'signup');
+        }
+
+        function selectOnboardingAesthetic(aestheticKey) {
+            pendingChosenAesthetic = aestheticKey || 'pink';
+            const options = document.querySelectorAll('.aesthetic-card-option');
+            options.forEach(opt => {
+                if (opt.getAttribute('data-aesthetic') === aestheticKey) {
+                    opt.classList.add('selected');
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
+        }
+
+        // Finalize Onboarding with Google Account & Chosen Aesthetic
+        function finalizeGoogleOnboarding() {
+            const finalName = pendingGoogleAccount.name || 'Google Stylist';
+            const finalEmail = pendingGoogleAccount.email || 'stylist@gmail.com';
+            const finalBday = pendingGoogleAccount.birthday || '2000-01-01';
+            const finalAesthetic = pendingChosenAesthetic || 'pink';
 
             const profile = {
                 name: finalName,
                 email: finalEmail,
-                birthday: localStorage.getItem('muse_userBirthday') || '2000-01-01',
-                aesthetic: currentAesthetic,
+                birthday: finalBday,
+                aesthetic: finalAesthetic,
                 authProvider: 'google'
             };
 
@@ -5037,13 +5452,24 @@
             localStorage.setItem('muse_user_profile', JSON.stringify(profile));
             localStorage.setItem('muse_userName', profile.name);
             localStorage.setItem('muse_userEmail', profile.email);
+            localStorage.setItem('muse_userBirthday', profile.birthday);
             localStorage.setItem('muse_userAesthetic', profile.aesthetic);
             localStorage.setItem('muse_auth_provider', 'google');
 
-            updateNavAuthStatus(profile.name);
-            applyTheme(profile.aesthetic);
+            const userNameEl = document.getElementById('userName');
+            const userEmailEl = document.getElementById('userEmail');
+            const userBirthdayEl = document.getElementById('userBirthday');
+            const userAestheticEl = document.getElementById('userAesthetic');
 
-            alert(`Authenticated successfully via Google as ${profile.name} (${profile.email}). End-to-end encryption active.`);
+            if (userNameEl) userNameEl.value = profile.name;
+            if (userEmailEl) userEmailEl.value = profile.email;
+            if (userBirthdayEl) userBirthdayEl.value = profile.birthday;
+            if (userAestheticEl) userAestheticEl.value = profile.aesthetic;
+
+            applyTheme(profile.aesthetic);
+            updateNavAuthStatus(profile.name);
+
+            closeGoogleAestheticModal();
 
             hideAllScreens();
             document.getElementById('homeScreen').classList.remove('hidden');
@@ -5323,7 +5749,10 @@
             if (nameInput) document.getElementById('userName').value = nameInput;
             if (emailInput) document.getElementById('userEmail').value = emailInput;
             if (bdayInput) document.getElementById('userBirthday').value = bdayInput;
-            if (aestheticInput) document.getElementById('userAesthetic').value = aestheticInput;
+            if (aestheticInput) {
+                document.getElementById('userAesthetic').value = aestheticInput;
+                applyTheme(aestheticInput);
+            }
 
             updateNavAuthStatus(nameInput || 'Stylist');
             updateHomeDashboardDisplay();
@@ -11853,6 +12282,7 @@
             if (savedBday) document.getElementById('userBirthday').value = savedBday;
             if (savedAesthetic) {
                 document.getElementById('userAesthetic').value = savedAesthetic;
+                applyTheme(savedAesthetic);
             }
 
             hideAllScreens();
