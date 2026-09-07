@@ -1410,6 +1410,102 @@
             flex-shrink: 0;
         }
 
+        /* Saved Outfits Collection Styles */
+        .saved-outfits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+        }
+
+        .saved-outfit-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .saved-outfit-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-subtle);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .saved-outfit-collage {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+            gap: 6px;
+            background: var(--surface-muted);
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .saved-outfit-piece-mini {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 4px;
+            text-align: center;
+        }
+
+        .saved-outfit-piece-mini img {
+            width: 100%;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .saved-outfit-piece-mini .piece-slot-badge {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
+            font-size: 8px;
+            font-weight: 800;
+            padding: 1px 4px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .saved-outfit-piece-mini .piece-name-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .outfit-builder-slot-box {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .outfit-builder-slot-box.filled {
+            border-color: var(--border-subtle);
+            background: #ffffff;
+        }
+
         /* Info Section Cards */
         .info-card {
             background: #ffffff;
@@ -2071,58 +2167,104 @@
                 </button>
             </div>
 
-            <!-- Wardrobe Catalog Header & Filter Tabs -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <div>
-                    <span style="font-weight: 800; font-size: 16px; letter-spacing: -0.2px;">Closet Catalog</span>
-                    <span id="wardrobeCount" style="font-size: 13px; color: var(--text-secondary); font-weight: 600; margin-left: 8px;">0 pieces</span>
-                </div>
-                <div style="display: flex; gap: 6px;">
-                    <button class="tab-chip" style="font-size: 11px; padding: 4px 10px;" onclick="resetDefaultWardrobe()" title="Reload starter pieces">
-                        Reset Defaults
+            <!-- Wardrobe View Switcher (Closet Pieces vs Saved Outfits) -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--border-light); padding-bottom: 14px;">
+                <div style="display: flex; gap: 6px; background: var(--surface-muted); padding: 4px; border-radius: var(--radius-pill); border: 1px solid var(--border-light);">
+                    <button id="viewTogglePieces" class="tab-chip active" onclick="switchWardrobeView('pieces')" style="font-size: 12px; padding: 6px 16px; font-weight: 800;">
+                        Closet Pieces (<span id="wardrobePiecesBadge">0</span>)
                     </button>
-                    <button class="tab-chip" style="font-size: 11px; padding: 4px 10px; color: var(--primary-red);" onclick="clearAllWardrobeItems()" title="Remove all pieces">
-                        Clear All
+                    <button id="viewToggleOutfits" class="tab-chip" onclick="switchWardrobeView('outfits')" style="font-size: 12px; padding: 6px 16px; font-weight: 800;">
+                        Saved Outfits (<span id="wardrobeOutfitsBadge">0</span>)
                     </button>
                 </div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="tab-chip" onclick="openBuildOutfitModal()" style="font-size: 11.5px; padding: 6px 14px; background: var(--text-primary); color: #ffffff; border: none; font-weight: 700; cursor: pointer;">
+                        + Build Custom Outfit
+                    </button>
+                </div>
             </div>
 
-            <!-- Quick Search / Filter Bar -->
-            <div style="position: relative; margin-bottom: 12px;">
-                <input type="text" id="wardrobeSearchInput" placeholder="Search closet by piece name, color, material, or style..." oninput="filterWardrobeSearch(this.value)" style="width: 100%; padding: 10px 16px; border-radius: var(--radius-pill); border: 1px solid var(--border-light); font-size: 13px; box-sizing: border-box; background: var(--surface-muted); outline: none;">
+            <!-- VIEW 1: CLOSET PIECES CATALOG -->
+            <div id="wardrobePiecesView">
+                <!-- Wardrobe Catalog Header & Filter Tabs -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <span style="font-weight: 800; font-size: 16px; letter-spacing: -0.2px;">Closet Catalog</span>
+                        <span id="wardrobeCount" style="font-size: 13px; color: var(--text-secondary); font-weight: 600; margin-left: 8px;">0 pieces</span>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button class="tab-chip" style="font-size: 11px; padding: 4px 10px;" onclick="resetDefaultWardrobe()" title="Reload starter pieces">
+                            Reset Defaults
+                        </button>
+                        <button class="tab-chip" style="font-size: 11px; padding: 4px 10px; color: var(--primary-red);" onclick="clearAllWardrobeItems()" title="Remove all pieces">
+                            Clear All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Search / Filter Bar -->
+                <div style="position: relative; margin-bottom: 12px;">
+                    <input type="text" id="wardrobeSearchInput" placeholder="Search closet by piece name, color, material, or style..." oninput="filterWardrobeSearch(this.value)" style="width: 100%; padding: 10px 16px; border-radius: var(--radius-pill); border: 1px solid var(--border-light); font-size: 13px; box-sizing: border-box; background: var(--surface-muted); outline: none;">
+                </div>
+
+                <div class="wardrobe-tabs" id="wardrobeTabs">
+                    <button class="tab-chip active" onclick="filterWardrobe('All', this)">All</button>
+                    <button class="tab-chip" onclick="filterWardrobe('Top', this)">Tops</button>
+                    <button class="tab-chip" onclick="filterWardrobe('Dress', this)">Dresses</button>
+                    <button class="tab-chip" onclick="filterWardrobe('Bottom', this)">Bottoms</button>
+                    <button class="tab-chip" onclick="filterWardrobe('Shoes', this)">Shoes</button>
+                    <button class="tab-chip" onclick="filterWardrobe('Jewelry', this)">Jewelry</button>
+                    <button class="tab-chip" onclick="filterWardrobe('Outerwear', this)">Outerwear</button>
+                </div>
+
+                <!-- Wardrobe Grid -->
+                <div id="wardrobeGrid" class="wardrobe-grid">
+                    <!-- Dynamically populated -->
+                </div>
+
+                <!-- Outfit Generator Section -->
+                <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-light);">
+                    <label for="wardrobeOccasion">Generate Look from Closet for:</label>
+                    <select id="wardrobeOccasion">
+                        <option value="Party">Party / Night Out</option>
+                        <option value="Diwali">Diwali / Traditional Festive</option>
+                        <option value="Date Night">Romantic Date Night</option>
+                        <option value="Birthday">Birthday Celebration</option>
+                        <option value="Casual Chic">Everyday Streetwear Chic</option>
+                    </select>
+
+                    <button class="action-button" style="margin-top: 14px;" onclick="generateOutfitFromWardrobe()">
+                        Style Outfit from My Closet
+                    </button>
+
+                    <div id="wardrobeOutputBox"></div>
+                </div>
             </div>
 
-            <div class="wardrobe-tabs" id="wardrobeTabs">
-                <button class="tab-chip active" onclick="filterWardrobe('All', this)">All</button>
-                <button class="tab-chip" onclick="filterWardrobe('Top', this)">Tops</button>
-                <button class="tab-chip" onclick="filterWardrobe('Dress', this)">Dresses</button>
-                <button class="tab-chip" onclick="filterWardrobe('Bottom', this)">Bottoms</button>
-                <button class="tab-chip" onclick="filterWardrobe('Shoes', this)">Shoes</button>
-                <button class="tab-chip" onclick="filterWardrobe('Jewelry', this)">Jewelry</button>
-                <button class="tab-chip" onclick="filterWardrobe('Outerwear', this)">Outerwear</button>
-            </div>
+            <!-- VIEW 2: SAVED OUTFITS COLLECTION -->
+            <div id="wardrobeSavedOutfitsView" class="hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <span style="font-weight: 800; font-size: 16px; letter-spacing: -0.2px;">Saved Outfits Collection</span>
+                        <div style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">
+                            Curated combinations of tops, bottoms, shoes, and accessories
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Wardrobe Grid -->
-            <div id="wardrobeGrid" class="wardrobe-grid">
-                <!-- Dynamically populated -->
-            </div>
+                <!-- Filter Chips for Saved Outfits -->
+                <div style="display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;" id="savedOutfitsFilters">
+                    <button type="button" class="tab-chip active" onclick="filterSavedOutfits('All', this)">All Outfits</button>
+                    <button type="button" class="tab-chip" onclick="filterSavedOutfits('Party', this)">Party / Night Out</button>
+                    <button type="button" class="tab-chip" onclick="filterSavedOutfits('Casual Chic', this)">Casual Chic</button>
+                    <button type="button" class="tab-chip" onclick="filterSavedOutfits('Date Night', this)">Date Night</button>
+                    <button type="button" class="tab-chip" onclick="filterSavedOutfits('Diwali', this)">Festive</button>
+                </div>
 
-            <!-- Outfit Generator Section -->
-            <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-light);">
-                <label for="wardrobeOccasion">Generate Look from Closet for:</label>
-                <select id="wardrobeOccasion">
-                    <option value="Party">Party / Night Out</option>
-                    <option value="Diwali">Diwali / Traditional Festive</option>
-                    <option value="Date Night">Romantic Date Night</option>
-                    <option value="Birthday">Birthday Celebration</option>
-                    <option value="Casual Chic">Everyday Streetwear Chic</option>
-                </select>
-
-                <button class="action-button" style="margin-top: 14px;" onclick="generateOutfitFromWardrobe()">
-                    Style Outfit from My Closet
-                </button>
-
-                <div id="wardrobeOutputBox"></div>
+                <!-- Saved Outfits Grid -->
+                <div id="savedOutfitsGrid" class="saved-outfits-grid">
+                    <!-- Populated dynamically by renderSavedOutfits() -->
+                </div>
             </div>
 
         </div>
@@ -2507,6 +2649,131 @@
                         Save Changes
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BUILD & SAVE CUSTOM OUTFIT MODAL -->
+    <div id="buildOutfitModal" class="modal-backdrop" onclick="handleBuildOutfitModalBackdropClick(event)">
+        <div class="modal-box" style="max-width: 580px;" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-title" id="buildOutfitModalTitle">Build & Save Custom Outfit</span>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                        Combine tops, bottoms, shoes, and accents from your closet
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeBuildOutfitModal()">×</button>
+            </div>
+
+            <input type="hidden" id="buildOutfitId">
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div>
+                    <label style="margin-top: 0;" for="buildOutfitTitle">Outfit Title:</label>
+                    <input type="text" id="buildOutfitTitle" placeholder="e.g. Silk Corset & Pleats Glam" style="margin-bottom: 0;">
+                </div>
+                <div>
+                    <label style="margin-top: 0;" for="buildOutfitOccasion">Occasion:</label>
+                    <select id="buildOutfitOccasion" style="margin-bottom: 0;">
+                        <option value="Party / Night Out">Party / Night Out</option>
+                        <option value="Casual Chic">Casual Chic</option>
+                        <option value="Date Night">Romantic Date Night</option>
+                        <option value="Diwali / Festive">Diwali / Festive</option>
+                        <option value="Birthday Celebration">Birthday Celebration</option>
+                        <option value="Work / Formal">Work / Formal</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div>
+                    <label style="margin-top: 0;" for="buildOutfitVibe">Aesthetic / Vibe:</label>
+                    <select id="buildOutfitVibe" style="margin-bottom: 0;">
+                        <option value="Romantic Coquette">Romantic Coquette</option>
+                        <option value="90s Minimalist">90s Minimalist</option>
+                        <option value="Chic Parisian">Chic Parisian</option>
+                        <option value="Y2K Retro">Y2K Retro</option>
+                        <option value="Goth Grunge">Goth Grunge</option>
+                        <option value="Classic Tailored">Classic Tailored</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="margin-top: 0;">Base Style:</label>
+                    <div style="display: flex; gap: 6px; margin-top: 2px;">
+                        <button type="button" id="buildTypeTopBottom" class="tab-chip active" onclick="setBuildOutfitType('separates')" style="font-size: 11px; padding: 6px 12px; flex: 1;">
+                            Top + Bottom
+                        </button>
+                        <button type="button" id="buildTypeDress" class="tab-chip" onclick="setBuildOutfitType('dress')" style="font-size: 11px; padding: 6px 12px; flex: 1;">
+                            Dress
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Piece Selectors Grid -->
+            <div style="background: var(--surface-muted); padding: 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light); margin-bottom: 14px;">
+                <div style="font-size: 11.5px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+                    Select Pieces from Your Wardrobe
+                </div>
+
+                <!-- Separates (Top + Bottom) -->
+                <div id="buildSeparatesGroup" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotTop">Top / Shirt / Blouse:</label>
+                        <select id="buildSlotTop" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotBottom">Bottom / Pants / Skirt:</label>
+                        <select id="buildSlotBottom" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                </div>
+
+                <!-- Dress -->
+                <div id="buildDressGroup" class="hidden" style="margin-bottom: 10px;">
+                    <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotDress">Dress / One-Piece:</label>
+                    <select id="buildSlotDress" onchange="updateBuildOutfitLivePreview()"></select>
+                </div>
+
+                <!-- Footwear, Outerwear, Accents -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotShoes">Shoes / Footwear:</label>
+                        <select id="buildSlotShoes" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotOuterwear">Outerwear (Opt):</label>
+                        <select id="buildSlotOuterwear" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotJewelry">Jewelry (Opt):</label>
+                        <select id="buildSlotJewelry" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Collage Preview -->
+            <div style="margin-bottom: 12px;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px;">
+                    Outfit Collage Preview
+                </div>
+                <div id="buildOutfitLivePreview" class="saved-outfit-collage" style="min-height: 80px;">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div>
+                <label style="margin-top: 0;" for="buildOutfitNotes">Styling Notes / Tips:</label>
+                <input type="text" id="buildOutfitNotes" placeholder="e.g. Style with red lipstick and mini handbag for evening events" style="margin-bottom: 0;">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; align-items: center;">
+                <button type="button" class="tab-chip" onclick="closeBuildOutfitModal()" style="padding: 10px 18px;">
+                    Cancel
+                </button>
+                <button type="button" class="action-button" onclick="saveCustomOutfitFromModal()" style="padding: 10px 24px; width: auto; margin-top: 0;">
+                    Save Outfit
+                </button>
             </div>
         </div>
     </div>
@@ -3141,6 +3408,67 @@
 
         function saveWardrobeItems(items) {
             localStorage.setItem('muse_wardrobe_items', JSON.stringify(items));
+        }
+
+        // Default Sample Saved Outfits Collection
+        const defaultSavedOutfits = [
+            {
+                id: 'outfit_1',
+                title: 'Silk Corset & Tennis Skirt Glam',
+                occasion: 'Party / Night Out',
+                vibe: 'Romantic Coquette',
+                notes: 'Soft powder pink corset paired with white tennis pleats, pearls, and kitten heels.',
+                pieces: [
+                    { slot: 'Top', id: 'w1', name: 'Silk Ribbon Corset Top', image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&auto=format&fit=crop&q=60', color: 'Powder Pink' },
+                    { slot: 'Bottom', id: 'w2', name: 'Pleated Mini Tennis Skirt', image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300&auto=format&fit=crop&q=60', color: 'Ivory White' },
+                    { slot: 'Shoes', id: 'w3', name: 'Mary Jane Kitten Heels', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60', color: 'Wine Red' },
+                    { slot: 'Jewelry', id: 'w4', name: 'Freshwater Pearl Drop Necklace', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=60', color: 'Gold / Pearl' }
+                ],
+                harmonyScore: 98,
+                createdAt: '2026-09-01'
+            },
+            {
+                id: 'outfit_2',
+                title: 'Linen Tailored Monochrome Chic',
+                occasion: 'Casual Chic',
+                vibe: '90s Minimalist',
+                notes: 'Airy crisp white linen with charcoal trousers for effortless gallery and coffee days.',
+                pieces: [
+                    { slot: 'Top', id: 'w7', name: 'Oversized Tailored Linen Shirt', image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&auto=format&fit=crop&q=60', color: 'Crisp White' },
+                    { slot: 'Bottom', id: 'w6', name: 'Wide-Leg Pleated Trousers', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&auto=format&fit=crop&q=60', color: 'Charcoal Black' },
+                    { slot: 'Shoes', id: 'w3', name: 'Mary Jane Kitten Heels', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60', color: 'Wine Red' }
+                ],
+                harmonyScore: 94,
+                createdAt: '2026-09-03'
+            },
+            {
+                id: 'outfit_3',
+                title: 'Champagne Slip Romantic Date Look',
+                occasion: 'Date Night',
+                vibe: 'Chic Parisian',
+                notes: 'Fluid champagne satin slip with gold pearl accents and wine kitten heels.',
+                pieces: [
+                    { slot: 'Dress', id: 'w5', name: 'Satin Slip Maxi Dress', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&auto=format&fit=crop&q=60', color: 'Champagne Ivory' },
+                    { slot: 'Jewelry', id: 'w4', name: 'Freshwater Pearl Drop Necklace', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=60', color: 'Gold / Pearl' },
+                    { slot: 'Shoes', id: 'w3', name: 'Mary Jane Kitten Heels', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60', color: 'Wine Red' }
+                ],
+                harmonyScore: 96,
+                createdAt: '2026-09-05'
+            }
+        ];
+
+        function getSavedWardrobeOutfits() {
+            try {
+                const stored = localStorage.getItem('muse_saved_wardrobe_outfits');
+                if (stored) return JSON.parse(stored);
+            } catch (e) {
+                console.error(e);
+            }
+            return defaultSavedOutfits;
+        }
+
+        function saveSavedWardrobeOutfits(outfits) {
+            localStorage.setItem('muse_saved_wardrobe_outfits', JSON.stringify(outfits));
         }
 
         // Switch between Sign Up & Log In tabs
@@ -6228,6 +6556,7 @@
             document.getElementById('navHeader').classList.remove('hidden');
 
             renderWardrobe(currentFilter);
+            renderSavedOutfits(currentSavedOutfitsFilter);
             checkBirthdayCelebration(profile.birthday, profile.name);
         }
 
@@ -6645,7 +6974,13 @@
         function renderWardrobe(filter = 'All') {
             const grid = document.getElementById('wardrobeGrid');
             const countEl = document.getElementById('wardrobeCount');
+            const piecesBadge = document.getElementById('wardrobePiecesBadge');
+            const outfitsBadge = document.getElementById('wardrobeOutfitsBadge');
             const items = getWardrobeItems();
+            const outfits = getSavedWardrobeOutfits();
+
+            if (piecesBadge) piecesBadge.innerText = items.length;
+            if (outfitsBadge) outfitsBadge.innerText = outfits.length;
 
             let filtered = filter === 'All'
                 ? items
@@ -6658,38 +6993,480 @@
                 });
             }
 
-            countEl.innerText = `${items.length} ${items.length === 1 ? 'piece' : 'pieces'}${wardrobeSearchQuery ? ` (${filtered.length} found)` : ''}`;
+            if (countEl) {
+                countEl.innerText = `${items.length} ${items.length === 1 ? 'piece' : 'pieces'}${wardrobeSearchQuery ? ` (${filtered.length} found)` : ''}`;
+            }
 
             if (filtered.length === 0) {
                 const emptyMsg = wardrobeSearchQuery
                     ? `No pieces matching "${wardrobeSearchQuery}". Try clearing search.`
                     : `No pieces in this category yet. Upload one above!`;
-                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 28px; color: var(--text-muted); font-size: 13.5px;">${emptyMsg}</div>`;
+                if (grid) grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 28px; color: var(--text-muted); font-size: 13.5px;">${emptyMsg}</div>`;
                 return;
             }
 
-            grid.innerHTML = filtered.map(item => `
-                <div class="wardrobe-card">
-                    <div class="card-action-bar">
-                        <button class="card-action-btn edit-btn" onclick="openEditWardrobeModal('${item.id}')" title="Edit piece details">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                        </button>
-                        <button class="card-action-btn delete-btn" onclick="deleteWardrobeItem('${item.id}')" title="Delete piece">×</button>
+            if (grid) {
+                grid.innerHTML = filtered.map(item => `
+                    <div class="wardrobe-card">
+                        <div class="card-action-bar">
+                            <button class="card-action-btn edit-btn" onclick="openEditWardrobeModal('${item.id}')" title="Edit piece details">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            </button>
+                            <button class="card-action-btn delete-btn" onclick="deleteWardrobeItem('${item.id}')" title="Delete piece">×</button>
+                        </div>
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'" onclick="openEditWardrobeModal('${item.id}')" style="cursor: pointer;">
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                            <span class="wardrobe-badge">${item.category}</span>
+                            <span class="wardrobe-badge" style="background: var(--text-primary); color: #ffffff; font-size: 10px;">${item.formality || 5}/10</span>
+                        </div>
+                        <span class="wardrobe-card-title" title="${item.name}" onclick="openEditWardrobeModal('${item.id}')" style="cursor: pointer;">${item.name}</span>
+                        <div style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.3;">
+                            ${item.color || 'Neutral'} • ${item.material || 'Fabric'}
+                        </div>
+                        <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 600;">
+                            ${item.pattern || 'Solid'} | ${item.style || 'Classic'}
+                        </div>
                     </div>
-                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'" onclick="openEditWardrobeModal('${item.id}')" style="cursor: pointer;">
-                    <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                        <span class="wardrobe-badge">${item.category}</span>
-                        <span class="wardrobe-badge" style="background: var(--text-primary); color: #ffffff; font-size: 10px;">${item.formality || 5}/10</span>
+                `).join('');
+            }
+        }
+
+        // ==========================================
+        // SAVED OUTFITS & OUTFIT BUILDER CONTROLLER
+        // ==========================================
+        let currentSavedOutfitsFilter = 'All';
+        let currentWardrobeView = 'pieces';
+        let currentBuildOutfitType = 'separates';
+
+        function switchWardrobeView(view) {
+            currentWardrobeView = view;
+            const togglePieces = document.getElementById('viewTogglePieces');
+            const toggleOutfits = document.getElementById('viewToggleOutfits');
+            const piecesView = document.getElementById('wardrobePiecesView');
+            const outfitsView = document.getElementById('wardrobeSavedOutfitsView');
+
+            if (view === 'outfits') {
+                if (toggleOutfits) toggleOutfits.classList.add('active');
+                if (togglePieces) togglePieces.classList.remove('active');
+                if (piecesView) piecesView.classList.add('hidden');
+                if (outfitsView) outfitsView.classList.remove('hidden');
+                renderSavedOutfits(currentSavedOutfitsFilter);
+            } else {
+                if (togglePieces) togglePieces.classList.add('active');
+                if (toggleOutfits) toggleOutfits.classList.remove('active');
+                if (piecesView) piecesView.classList.remove('hidden');
+                if (outfitsView) outfitsView.classList.add('hidden');
+                renderWardrobe(currentFilter);
+            }
+        }
+
+        function filterSavedOutfits(cat, btn) {
+            currentSavedOutfitsFilter = cat;
+            const container = document.getElementById('savedOutfitsFilters');
+            if (container) {
+                container.querySelectorAll('.tab-chip').forEach(c => c.classList.remove('active'));
+            }
+            if (btn) btn.classList.add('active');
+            renderSavedOutfits(cat);
+        }
+
+        function renderSavedOutfits(filter = 'All') {
+            const grid = document.getElementById('savedOutfitsGrid');
+            const outfitsBadge = document.getElementById('wardrobeOutfitsBadge');
+            const piecesBadge = document.getElementById('wardrobePiecesBadge');
+            const outfits = getSavedWardrobeOutfits();
+            const items = getWardrobeItems();
+
+            if (outfitsBadge) outfitsBadge.innerText = outfits.length;
+            if (piecesBadge) piecesBadge.innerText = items.length;
+            if (!grid) return;
+
+            let filtered = outfits;
+            if (filter && filter !== 'All') {
+                filtered = outfits.filter(o => (o.occasion || '').toLowerCase().includes(filter.toLowerCase()) || (o.vibe || '').toLowerCase().includes(filter.toLowerCase()));
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 36px 20px; background: var(--surface-muted); border-radius: var(--radius-card); border: 1.5px dashed var(--border-subtle);">
+                        <div style="font-weight: 800; font-size: 15px; color: var(--text-primary); margin-bottom: 6px;">
+                            ${filter === 'All' ? 'No saved outfits in your collection yet.' : `No saved outfits matching "${filter}".`}
+                        </div>
+                        <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 16px;">
+                            Combine tops, bottoms, shoes, and jewelry from your closet, or save recommended looks from the stylist.
+                        </div>
+                        <div style="display: flex; gap: 8px; justify-content: center;">
+                            <button type="button" class="action-button" onclick="openBuildOutfitModal()" style="width: auto; padding: 9px 20px; font-size: 12px; margin-top: 0;">
+                                + Build Custom Outfit
+                            </button>
+                            <button type="button" class="tab-chip" onclick="switchWardrobeView('pieces')" style="padding: 9px 16px; font-size: 12px;">
+                                Browse Closet Pieces
+                            </button>
+                        </div>
                     </div>
-                    <span class="wardrobe-card-title" title="${item.name}" onclick="openEditWardrobeModal('${item.id}')" style="cursor: pointer;">${item.name}</span>
-                    <div style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.3;">
-                        ${item.color || 'Neutral'} • ${item.material || 'Fabric'}
+                `;
+                return;
+            }
+
+            const fallbackImg = 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
+
+            grid.innerHTML = filtered.map(outfit => {
+                const pieces = outfit.pieces || [];
+                const score = outfit.harmonyScore || 95;
+
+                const collageHtml = pieces.map(p => `
+                    <div class="saved-outfit-piece-mini" title="${p.slot || 'Piece'}: ${p.name}">
+                        <span class="piece-slot-badge">${p.slot || 'Piece'}</span>
+                        <img src="${p.image || fallbackImg}" alt="${p.name}" onerror="this.src='${fallbackImg}'">
+                        <div class="piece-name-label">${p.name}</div>
                     </div>
-                    <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 600;">
-                        ${item.pattern || 'Solid'} | ${item.style || 'Classic'}
+                `).join('');
+
+                return `
+                    <div class="saved-outfit-card">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                                <div>
+                                    <div style="font-weight: 800; font-size: 15px; color: var(--text-primary); letter-spacing: -0.2px;">
+                                        ${outfit.title}
+                                    </div>
+                                    <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px;">
+                                        <span class="wardrobe-badge" style="background: var(--text-primary); color: #ffffff;">${outfit.occasion || 'Everyday'}</span>
+                                        <span class="wardrobe-badge">${outfit.vibe || 'Classic'}</span>
+                                        <span class="wardrobe-badge" style="background: #e8f5e9; color: #2e7d32; font-weight: 800;">${score}% Harmony</span>
+                                    </div>
+                                </div>
+                                <button class="card-action-btn delete-btn" onclick="deleteSavedOutfit('${outfit.id}')" title="Delete outfit" style="position: static; opacity: 1;">×</button>
+                            </div>
+
+                            <!-- Piece Collage Preview -->
+                            <div class="saved-outfit-collage" style="margin: 10px 0;">
+                                ${collageHtml}
+                            </div>
+
+                            ${outfit.notes ? `
+                                <div style="font-size: 11.5px; color: var(--text-secondary); background: var(--surface-muted); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-light); line-height: 1.4; margin-top: 6px;">
+                                    ${outfit.notes}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; padding-top: 10px; border-top: 1px solid var(--border-light); flex-wrap: wrap;">
+                            <span style="font-size: 10.5px; color: var(--text-muted); font-weight: 600;">
+                                ${pieces.length} Pieces • ${outfit.createdAt || 'Saved'}
+                            </span>
+                            <div style="display: flex; gap: 6px;">
+                                <button type="button" class="tab-chip" onclick="openBuildOutfitModal('${outfit.id}')" style="font-size: 11px; padding: 4px 10px;">
+                                    Edit
+                                </button>
+                                <button type="button" class="tab-chip" onclick="planSavedOutfitForCalendar('${outfit.id}')" style="font-size: 11px; padding: 4px 10px; background: var(--text-primary); color: #ffffff; border: none; font-weight: 700;">
+                                    Wear Look →
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                `;
+            }).join('');
+        }
+
+        function setBuildOutfitType(type) {
+            currentBuildOutfitType = type;
+            const btnSep = document.getElementById('buildTypeTopBottom');
+            const btnDress = document.getElementById('buildTypeDress');
+            const sepGroup = document.getElementById('buildSeparatesGroup');
+            const dressGroup = document.getElementById('buildDressGroup');
+
+            if (type === 'dress') {
+                if (btnDress) btnDress.classList.add('active');
+                if (btnSep) btnSep.classList.remove('active');
+                if (dressGroup) dressGroup.classList.remove('hidden');
+                if (sepGroup) sepGroup.classList.add('hidden');
+            } else {
+                if (btnSep) btnSep.classList.add('active');
+                if (btnDress) btnDress.classList.remove('active');
+                if (sepGroup) sepGroup.classList.remove('hidden');
+                if (dressGroup) dressGroup.classList.add('hidden');
+            }
+            updateBuildOutfitLivePreview();
+        }
+
+        function populateBuildOutfitSelect(selectId, category, isOptional = false, selectedId = null) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            const items = getWardrobeItems().filter(i => i.category === category);
+            
+            let optionsHtml = isOptional ? '<option value="">-- None Selected --</option>' : '';
+            if (items.length === 0) {
+                optionsHtml += `<option value="">No ${category} pieces in closet</option>`;
+            } else {
+                optionsHtml += items.map(item => `
+                    <option value="${item.id}" ${selectedId === item.id ? 'selected' : ''}>
+                        ${item.name} (${item.color || 'Neutral'})
+                    </option>
+                `).join('');
+            }
+            select.innerHTML = optionsHtml;
+        }
+
+        function openBuildOutfitModal(editOutfitId = null) {
+            const modal = document.getElementById('buildOutfitModal');
+            const modalTitle = document.getElementById('buildOutfitModalTitle');
+            const hiddenId = document.getElementById('buildOutfitId');
+            const titleInput = document.getElementById('buildOutfitTitle');
+            const occasionSelect = document.getElementById('buildOutfitOccasion');
+            const vibeSelect = document.getElementById('buildOutfitVibe');
+            const notesInput = document.getElementById('buildOutfitNotes');
+
+            let editingOutfit = null;
+            if (editOutfitId) {
+                const outfits = getSavedWardrobeOutfits();
+                editingOutfit = outfits.find(o => o.id === editOutfitId);
+            }
+
+            if (editingOutfit) {
+                if (modalTitle) modalTitle.innerText = "Edit Saved Outfit";
+                if (hiddenId) hiddenId.value = editingOutfit.id;
+                if (titleInput) titleInput.value = editingOutfit.title || '';
+                if (occasionSelect) occasionSelect.value = editingOutfit.occasion || 'Party / Night Out';
+                if (vibeSelect) vibeSelect.value = editingOutfit.vibe || 'Romantic Coquette';
+                if (notesInput) notesInput.value = editingOutfit.notes || '';
+
+                const hasDress = editingOutfit.pieces.some(p => p.slot === 'Dress');
+                setBuildOutfitType(hasDress ? 'dress' : 'separates');
+
+                const topP = editingOutfit.pieces.find(p => p.slot === 'Top');
+                const botP = editingOutfit.pieces.find(p => p.slot === 'Bottom');
+                const dressP = editingOutfit.pieces.find(p => p.slot === 'Dress');
+                const shoeP = editingOutfit.pieces.find(p => p.slot === 'Shoes');
+                const outerP = editingOutfit.pieces.find(p => p.slot === 'Outerwear');
+                const jewP = editingOutfit.pieces.find(p => p.slot === 'Jewelry');
+
+                populateBuildOutfitSelect('buildSlotTop', 'Top', false, topP ? topP.id : null);
+                populateBuildOutfitSelect('buildSlotBottom', 'Bottom', false, botP ? botP.id : null);
+                populateBuildOutfitSelect('buildSlotDress', 'Dress', false, dressP ? dressP.id : null);
+                populateBuildOutfitSelect('buildSlotShoes', 'Shoes', false, shoeP ? shoeP.id : null);
+                populateBuildOutfitSelect('buildSlotOuterwear', 'Outerwear', true, outerP ? outerP.id : null);
+                populateBuildOutfitSelect('buildSlotJewelry', 'Jewelry', true, jewP ? jewP.id : null);
+            } else {
+                if (modalTitle) modalTitle.innerText = "Build & Save Custom Outfit";
+                if (hiddenId) hiddenId.value = '';
+                if (titleInput) titleInput.value = '';
+                if (notesInput) notesInput.value = '';
+                setBuildOutfitType('separates');
+
+                populateBuildOutfitSelect('buildSlotTop', 'Top', false);
+                populateBuildOutfitSelect('buildSlotBottom', 'Bottom', false);
+                populateBuildOutfitSelect('buildSlotDress', 'Dress', false);
+                populateBuildOutfitSelect('buildSlotShoes', 'Shoes', false);
+                populateBuildOutfitSelect('buildSlotOuterwear', 'Outerwear', true);
+                populateBuildOutfitSelect('buildSlotJewelry', 'Jewelry', true);
+            }
+
+            updateBuildOutfitLivePreview();
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeBuildOutfitModal() {
+            const modal = document.getElementById('buildOutfitModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function handleBuildOutfitModalBackdropClick(e) {
+            if (e.target && e.target.id === 'buildOutfitModal') {
+                closeBuildOutfitModal();
+            }
+        }
+
+        function getSelectedPieceDetails(selectId, slotLabel) {
+            const select = document.getElementById(selectId);
+            if (!select || !select.value) return null;
+            const items = getWardrobeItems();
+            const found = items.find(i => i.id === select.value);
+            if (!found) return null;
+            return {
+                slot: slotLabel,
+                id: found.id,
+                name: found.name,
+                image: found.image,
+                color: found.color || 'Neutral',
+                category: found.category
+            };
+        }
+
+        function updateBuildOutfitLivePreview() {
+            const previewContainer = document.getElementById('buildOutfitLivePreview');
+            if (!previewContainer) return;
+
+            const selectedPieces = [];
+            if (currentBuildOutfitType === 'dress') {
+                const dress = getSelectedPieceDetails('buildSlotDress', 'Dress');
+                if (dress) selectedPieces.push(dress);
+            } else {
+                const top = getSelectedPieceDetails('buildSlotTop', 'Top');
+                const bottom = getSelectedPieceDetails('buildSlotBottom', 'Bottom');
+                if (top) selectedPieces.push(top);
+                if (bottom) selectedPieces.push(bottom);
+            }
+
+            const shoes = getSelectedPieceDetails('buildSlotShoes', 'Shoes');
+            const outer = getSelectedPieceDetails('buildSlotOuterwear', 'Outerwear');
+            const jewelry = getSelectedPieceDetails('buildSlotJewelry', 'Jewelry');
+
+            if (shoes) selectedPieces.push(shoes);
+            if (outer) selectedPieces.push(outer);
+            if (jewelry) selectedPieces.push(jewelry);
+
+            if (selectedPieces.length === 0) {
+                previewContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 11.5px; padding: 16px;">Select pieces above to preview your outfit combination</div>`;
+                return;
+            }
+
+            const fallbackImg = 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
+
+            previewContainer.innerHTML = selectedPieces.map(p => `
+                <div class="saved-outfit-piece-mini">
+                    <span class="piece-slot-badge">${p.slot}</span>
+                    <img src="${p.image || fallbackImg}" alt="${p.name}" onerror="this.src='${fallbackImg}'">
+                    <div class="piece-name-label">${p.name}</div>
                 </div>
             `).join('');
+        }
+
+        function saveCustomOutfitFromModal() {
+            const hiddenId = document.getElementById('buildOutfitId');
+            const titleInput = document.getElementById('buildOutfitTitle');
+            const occasionSelect = document.getElementById('buildOutfitOccasion');
+            const vibeSelect = document.getElementById('buildOutfitVibe');
+            const notesInput = document.getElementById('buildOutfitNotes');
+
+            const title = (titleInput && titleInput.value.trim()) || 'Custom Styled Outfit';
+            const occasion = occasionSelect ? occasionSelect.value : 'Casual Chic';
+            const vibe = vibeSelect ? vibeSelect.value : 'Romantic Coquette';
+            const notes = notesInput ? notesInput.value.trim() : '';
+
+            const selectedPieces = [];
+            if (currentBuildOutfitType === 'dress') {
+                const dress = getSelectedPieceDetails('buildSlotDress', 'Dress');
+                if (dress) selectedPieces.push(dress);
+            } else {
+                const top = getSelectedPieceDetails('buildSlotTop', 'Top');
+                const bottom = getSelectedPieceDetails('buildSlotBottom', 'Bottom');
+                if (top) selectedPieces.push(top);
+                if (bottom) selectedPieces.push(bottom);
+            }
+
+            const shoes = getSelectedPieceDetails('buildSlotShoes', 'Shoes');
+            const outer = getSelectedPieceDetails('buildSlotOuterwear', 'Outerwear');
+            const jewelry = getSelectedPieceDetails('buildSlotJewelry', 'Jewelry');
+
+            if (shoes) selectedPieces.push(shoes);
+            if (outer) selectedPieces.push(outer);
+            if (jewelry) selectedPieces.push(jewelry);
+
+            if (selectedPieces.length < 2) {
+                alert("Please select at least 2 pieces (e.g. Top + Bottom, or Dress + Shoes) to create an outfit combination.");
+                return;
+            }
+
+            let outfits = getSavedWardrobeOutfits();
+            const editId = hiddenId ? hiddenId.value : null;
+
+            if (editId) {
+                const idx = outfits.findIndex(o => o.id === editId);
+                if (idx !== -1) {
+                    outfits[idx] = {
+                        ...outfits[idx],
+                        title,
+                        occasion,
+                        vibe,
+                        notes,
+                        pieces: selectedPieces,
+                        harmonyScore: Math.floor(92 + Math.random() * 7)
+                    };
+                }
+            } else {
+                const newOutfit = {
+                    id: `outfit_${Date.now()}`,
+                    title,
+                    occasion,
+                    vibe,
+                    notes,
+                    pieces: selectedPieces,
+                    harmonyScore: Math.floor(92 + Math.random() * 7),
+                    createdAt: new Date().toISOString().split('T')[0]
+                };
+                outfits.unshift(newOutfit);
+            }
+
+            saveSavedWardrobeOutfits(outfits);
+            closeBuildOutfitModal();
+            switchWardrobeView('outfits');
+        }
+
+        function deleteSavedOutfit(outfitId) {
+            if (confirm("Delete this saved outfit from your collection?")) {
+                let outfits = getSavedWardrobeOutfits();
+                outfits = outfits.filter(o => o.id !== outfitId);
+                saveSavedWardrobeOutfits(outfits);
+                renderSavedOutfits(currentSavedOutfitsFilter);
+            }
+        }
+
+        function planSavedOutfitForCalendar(outfitId) {
+            const outfits = getSavedWardrobeOutfits();
+            const outfit = outfits.find(o => o.id === outfitId);
+            if (!outfit) return;
+
+            showInfoSection('home');
+            const plannerEl = document.querySelector('.home-calendar-card');
+            if (plannerEl) plannerEl.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function saveCurrentAiOutfitToWardrobe() {
+            if (!currentRecommendedOutfits || currentRecommendedOutfits.length === 0) return;
+            const look = currentRecommendedOutfits[activeLookIndex] || currentRecommendedOutfits[0];
+            if (!look) return;
+
+            const allPieces = [];
+            if (look.pieces.main) {
+                look.pieces.main.forEach(p => allPieces.push({ slot: p.category || 'Main', id: p.id, name: p.name, image: p.image, color: p.color }));
+            }
+            if (look.pieces.shoes) {
+                look.pieces.shoes.forEach(p => allPieces.push({ slot: 'Shoes', id: p.id, name: p.name, image: p.image, color: p.color }));
+            }
+            if (look.pieces.outerwear) {
+                look.pieces.outerwear.forEach(p => allPieces.push({ slot: 'Outerwear', id: p.id, name: p.name, image: p.image, color: p.color }));
+            }
+            if (look.pieces.jewelry) {
+                look.pieces.jewelry.forEach(p => allPieces.push({ slot: 'Jewelry', id: p.id, name: p.name, image: p.image, color: p.color }));
+            }
+
+            const newOutfit = {
+                id: `outfit_${Date.now()}`,
+                title: look.title || 'AI Stylist Recommended Look',
+                occasion: document.getElementById('wardrobeOccasion')?.value || 'Party / Night Out',
+                vibe: document.getElementById('userAesthetic')?.value || 'Romantic Coquette',
+                notes: look.stylingRationale || look.rationale || 'AI Curated Capsule Look',
+                pieces: allPieces,
+                harmonyScore: look.eventMatchScore || 96,
+                createdAt: new Date().toISOString().split('T')[0]
+            };
+
+            const outfits = getSavedWardrobeOutfits();
+            outfits.unshift(newOutfit);
+            saveSavedWardrobeOutfits(outfits);
+
+            const statusBox = document.getElementById('ratingStatusBox');
+            if (statusBox) {
+                statusBox.innerHTML = `
+                    <div style="background: #e8f5e9; border: 1px solid #2e7d32; padding: 12px 14px; border-radius: var(--radius-card); margin-top: 12px; color: #2e7d32; font-weight: 700; font-size: 13px;">
+                        Outfit Saved to Your Collection! View it anytime under 'Saved Outfits'.
+                    </div>
+                `;
+            }
+
+            const outfitsBadge = document.getElementById('wardrobeOutfitsBadge');
+            if (outfitsBadge) outfitsBadge.innerText = outfits.length;
         }
 
         // Global state for recommended outfits and ratings
@@ -6926,8 +7703,14 @@
                     Curated Closet Pieces
                 </div>
 
-                <div style="display: flex; flex-direction: column; margin-bottom: 14px;">
+                <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
                     ${allPiecesHtml}
+                </div>
+
+                <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 14px;">
+                    <button type="button" class="action-button" onclick="saveCurrentAiOutfitToWardrobe()" style="padding: 10px 22px; width: auto; font-size: 13px; margin-top: 0; background: var(--text-primary); color: #ffffff;">
+                        + Save This Outfit to My Collection
+                    </button>
                 </div>
 
                 <div style="margin-top: 14px; padding: 14px 16px; background: var(--surface-muted); border-radius: var(--radius-card); border-left: 4px solid var(--text-primary);">
