@@ -6873,6 +6873,7 @@
                 this.isPlaying = false;
                 this.currentVibeKey = null;
                 this.currentTrackTitle = '';
+                this.currentDayIndex = null;
                 this.stepTimer = null;
                 this.stepIndex = 0;
                 this.isMixtapeActive = false;
@@ -7073,7 +7074,7 @@
                 this.stepIndex++;
             }
 
-            playVibeSoundscape(vibeKey, trackTitle, onFinishCallback = null) {
+            playVibeSoundscape(vibeKey, trackTitle, onFinishCallback = null, dayIndex = null) {
                 this.init();
                 if (!this.ctx) return;
 
@@ -7082,6 +7083,7 @@
                 const vibeData = MUSE_AESTHETIC_SOUNDTRACKS[vibeKey] || MUSE_AESTHETIC_SOUNDTRACKS.clean_girl;
                 this.currentVibeKey = vibeKey;
                 this.currentTrackTitle = trackTitle || vibeData.trackTitle;
+                this.currentDayIndex = (dayIndex !== undefined ? dayIndex : null);
                 this.isPlaying = true;
                 this.stepIndex = 0;
                 this.hasListened = true;
@@ -7118,16 +7120,22 @@
                 this.isPlaying = false;
                 this.currentVibeKey = null;
                 this.currentTrackTitle = '';
+                this.currentDayIndex = null;
                 this.notifyUI();
             }
 
-            toggleTrack(vibeKey, trackTitle) {
-                if (this.isPlaying && this.currentVibeKey === vibeKey) {
+            toggleTrack(vibeKey, trackTitle, dayIndex = null) {
+                const isTargetActive = this.isPlaying && (
+                    (dayIndex !== null && this.currentDayIndex === dayIndex) ||
+                    (dayIndex === null && this.currentVibeKey === vibeKey)
+                );
+
+                if (isTargetActive) {
                     this.isMixtapeActive = false;
                     this.stopCurrent();
                 } else {
                     this.isMixtapeActive = false;
-                    this.playVibeSoundscape(vibeKey, trackTitle);
+                    this.playVibeSoundscape(vibeKey, trackTitle, null, dayIndex);
                 }
             }
 
@@ -7156,7 +7164,7 @@
                 this.playVibeSoundscape(currentItem.vibeKey, currentItem.trackTitle, () => {
                     this.mixtapeCurrentIndex++;
                     this.playNextMixtapeTrack();
-                });
+                }, currentItem.dayIndex);
             }
 
             stopMixtape() {
@@ -7495,9 +7503,32 @@
             renderWeeklyOutfits(true);
         }
 
-        function togglePlayDailySoundtrack(vibeKey, trackTitle, e) {
-            if (e) e.stopPropagation();
-            museAudio.toggleTrack(vibeKey, trackTitle);
+        function toggleDailyDaySoundtrack(dayIndex, e) {
+            if (e) {
+                if (e.stopPropagation) e.stopPropagation();
+                if (e.preventDefault) e.preventDefault();
+            }
+            const monday = getMondayOfWeek(currentWeeklyLogDate);
+            const weekKey = getWeekKey(monday);
+            const store = getWeeklyOutfitsStore();
+            const weekData = store[weekKey] || {};
+            const outfit = weekData[dayIndex];
+            if (!outfit) return;
+
+            const detectedVibe = detectOutfitVibe(outfit.title, outfit.occasion, outfit.notes, outfit.pieces || []);
+            const vibeKey = outfit.vibeKey || detectedVibe.key;
+            const vibeObj = MUSE_AESTHETIC_SOUNDTRACKS[vibeKey] || detectedVibe;
+            const trackTitle = (outfit.soundtrack && outfit.soundtrack.title) || vibeObj.trackTitle;
+
+            museAudio.toggleTrack(vibeKey, trackTitle, dayIndex);
+        }
+
+        function togglePlayDailySoundtrack(vibeKey, trackTitle, dayIndex = null, e = null) {
+            if (e) {
+                if (e.stopPropagation) e.stopPropagation();
+                if (e.preventDefault) e.preventDefault();
+            }
+            museAudio.toggleTrack(vibeKey, trackTitle, dayIndex);
         }
 
         function renderWeeklyOutfits(autoCenterToday = false) {
@@ -7583,7 +7614,10 @@
                 const trackArtist = (outfit.soundtrack && outfit.soundtrack.artist) || vibeObj.artist;
                 const trackLicense = (outfit.soundtrack && outfit.soundtrack.license) || vibeObj.license;
 
-                const isPlayingThisTrack = museAudio.isPlaying && museAudio.currentVibeKey === vibeKey;
+                const isPlayingThisTrack = museAudio.isPlaying && (
+                    museAudio.currentDayIndex === index ||
+                    (museAudio.currentDayIndex === null && museAudio.currentVibeKey === vibeKey)
+                );
 
                 // Check if outfit is saved in wardrobe
                 const isSavedInWardrobe = outfit.savedInWardrobe || savedWardrobeOutfits.some(o => o.title === outfit.title || o.id === outfit.id);
@@ -7631,7 +7665,7 @@
                                 </div>
                                 <div class="weekly-soundtrack-title" title="${trackTitle}">${trackTitle}</div>
                                 <div class="weekly-soundtrack-artist">${trackArtist}</div>
-                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThisTrack ? 'playing' : ''}" onclick="togglePlayDailySoundtrack('${vibeKey}', '${trackTitle.replace(/'/g, "\\'")}', event)" title="${isPlayingThisTrack ? 'Pause Soundtrack' : 'Listen to Soundtrack'}">
+                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThisTrack ? 'playing' : ''}" onclick="toggleDailyDaySoundtrack(${index}, event)" title="${isPlayingThisTrack ? 'Pause Soundtrack' : 'Listen to Soundtrack'}">
                                     ${isPlayingThisTrack ? `
                                         <svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                         <div class="sound-wave-bars">
@@ -8171,7 +8205,10 @@
                     tracklistEl.innerHTML = completedOutfits.map((item, idx) => {
                         const trackTitle = (item.outfit.soundtrack && item.outfit.soundtrack.title) || item.vibeObj.trackTitle;
                         const trackArtist = (item.outfit.soundtrack && item.outfit.soundtrack.artist) || item.vibeObj.artist;
-                        const isPlayingThis = museAudio.isPlaying && museAudio.currentVibeKey === item.vibeKey;
+                        const isPlayingThis = museAudio.isPlaying && (
+                            museAudio.currentDayIndex === item.dayIndex ||
+                            (museAudio.currentDayIndex === null && museAudio.currentVibeKey === item.vibeKey)
+                        );
 
                         return `
                             <div class="mixtape-track-item ${isPlayingThis ? 'playing' : ''}">
@@ -8186,7 +8223,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThis ? 'playing' : ''}" style="width: auto; padding: 4px 10px;" onclick="togglePlayDailySoundtrack('${item.vibeKey}', '${trackTitle.replace(/'/g, "\\'")}', event)" title="${isPlayingThis ? 'Pause Track' : 'Play Track'}">
+                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThis ? 'playing' : ''}" style="width: auto; padding: 4px 10px;" onclick="toggleDailyDaySoundtrack(${item.dayIndex}, event)" title="${isPlayingThis ? 'Pause Track' : 'Play Track'}">
                                     ${isPlayingThis ? `
                                         <svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                         <div class="sound-wave-bars">
@@ -8274,7 +8311,8 @@
                     const trackTitle = (outfit.soundtrack && outfit.soundtrack.title) || vibeObj.trackTitle;
                     queue.push({
                         vibeKey,
-                        trackTitle
+                        trackTitle,
+                        dayIndex: idx
                     });
                 }
             }
