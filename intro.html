@@ -1079,14 +1079,27 @@
             <!-- Upload / Input Controls -->
             <div style="background: var(--surface-muted); padding: 20px; border-radius: var(--radius-card); border: 1px dashed var(--border-subtle); margin-bottom: 20px;">
                 <label style="margin-top: 0;" for="makeupVibeSelect">Target Outfit Vibe / Aesthetic:</label>
-                <select id="makeupVibeSelect">
-                    <option value="Soft Coquette & Modern Romantic">Soft Coquette & Modern Romantic Glow</option>
-                    <option value="90s Minimalist & Clean-Girl Chic">90s Minimalist & Clean-Girl Chic</option>
-                    <option value="Goth Siren & Smoky Grunge">Goth Siren & Smoky Grunge</option>
-                    <option value="Y2K Indie Pop & Retro Playful Glam">Y2K Indie Pop & Retro Playful Glam</option>
-                    <option value="Chic Parisian & Warm Luxury">Chic Parisian & Warm Luxury</option>
-                    <option value="Festive Royal & Luminous Glam">Festive Royal & Luminous Glam</option>
+                <select id="makeupVibeSelect" onchange="toggleCustomMakeupVibe()">
+                    <option value="goth inspired">Goth Inspired</option>
+                    <option value="soft coquette">Soft Coquette</option>
+                    <option value="modern romantic glow">Modern Romantic Glow</option>
+                    <option value="90s minimalist">90s Minimalist</option>
+                    <option value="clean girl chic">Clean Girl Chic</option>
+                    <option value="rock siren">Rock Siren</option>
+                    <option value="smoky grunge">Smoky Grunge</option>
+                    <option value="y2k">Y2K</option>
+                    <option value="retro">Retro</option>
+                    <option value="chic parisian">Chic Parisian</option>
+                    <option value="warm luxury">Warm Luxury</option>
+                    <option value="festive">Festive</option>
+                    <option value="full glam">Full Glam</option>
+                    <option value="other">Other (Custom Vibe)</option>
                 </select>
+
+                <div id="customMakeupVibeContainer" class="hidden" style="margin-top: 10px;">
+                    <label for="customMakeupVibeInput">Custom Aesthetic Vibe:</label>
+                    <input type="text" id="customMakeupVibeInput" placeholder="e.g. Cyberpunk Fairy, Cottagecore Meadow, Dark Academia...">
+                </div>
 
                 <label for="makeupUndertoneSelect">Skin Undertone / Tone:</label>
                 <select id="makeupUndertoneSelect">
@@ -2111,10 +2124,26 @@
             }
         }
 
+        // Toggle Custom Makeup Vibe Text Input
+        function toggleCustomMakeupVibe() {
+            const select = document.getElementById('makeupVibeSelect');
+            const customContainer = document.getElementById('customMakeupVibeContainer');
+            if (select.value === 'other') {
+                customContainer.classList.remove('hidden');
+                document.getElementById('customMakeupVibeInput').focus();
+            } else {
+                customContainer.classList.add('hidden');
+            }
+        }
+
         // Makeup & Beauty Recommendation
         async function getMakeupRecommendation() {
             const outBox = document.getElementById('makeupOutputBox');
-            const vibe = document.getElementById('makeupVibeSelect').value;
+            let vibe = document.getElementById('makeupVibeSelect').value;
+            if (vibe === 'other') {
+                const customInput = document.getElementById('customMakeupVibeInput').value.trim();
+                vibe = customInput || 'Custom Artistic Vibe';
+            }
             const undertone = document.getElementById('makeupUndertoneSelect').value;
             const userQ = document.getElementById('makeupUserQ').value;
             const fileInput = document.getElementById('makeupOutfitFile');

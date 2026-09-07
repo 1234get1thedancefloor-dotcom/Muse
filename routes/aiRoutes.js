@@ -2089,244 +2089,190 @@ router.post(
             }
 
             // ----------------------------------------------------
-            // MAKEUP LIBRARY
+// MAKEUP LIBRARY (AESTHETIC VIBE GUIDES)
             // ----------------------------------------------------
 
             const makeupGuides = {
-
-                coquette: {
+                "goth inspired": {
+                    title: "Goth Inspired",
+                    difficulty: "Intermediate",
+                    skinBase: "Porcelain or soft-matte velvet finish with subtle cool-toned sculpting.",
+                    eyes: "Graphic black winged liner, smoked burgundy shadow, and defined fluttery lashes.",
+                    lips: "Deep black cherry, dark plum, or matte blackberry lip with defined liner.",
+                    hair: "Sleek raven straight hair, micro bangs, or textured dark waves.",
+                    proTip: "Balance deep dark tones with clean, luminous brow bone highlights to avoid a flat look."
+                },
+                "soft coquette": {
                     title: "Soft Coquette & Modern Romantic Glow",
-
-                    skinBase:
-                        "Lightweight base with soft blush and a fresh finish.",
-
-                    eyes:
-                        "Soft champagne, pink or neutral shimmer with subtle brown definition.",
-
-                    lips:
-                        "Pink, rose or berry tinted lip gloss.",
-
-                    hair:
-                        "Soft waves, half-up styling or a simple polished hairstyle.",
-
-                    proTip:
-                        "Keep the overall look soft and balanced.",
-
-                    difficulty:
-                        "Beginner-friendly"
+                    difficulty: "Beginner-friendly",
+                    skinBase: "Glazed porcelain glow with fluffy baby pink doll-blush on the apples of the cheeks.",
+                    eyes: "Frosted pearl shimmer, soft brown puppy liner, and wispy doll lashes.",
+                    lips: "High-shine strawberry glazed lip gloss with a blurred rose center.",
+                    hair: "Loose bouncy curls adorned with silk satin ribbons or lace bows.",
+                    proTip: "Dab liquid highlighter on the tip of the nose and inner eye corners for a dreamy doll effect."
                 },
-
-                minimalist: {
+                "modern romantic glow": {
+                    title: "Modern Romantic Glow",
+                    difficulty: "Beginner-friendly",
+                    skinBase: "Dewy glass skin, liquid peach-rose blush, and soft golden candlelight radiance.",
+                    eyes: "Champagne rose gold shimmer wash with feathered brown mascara.",
+                    lips: "Petal rose stain with a nourishing glassy balm overlay.",
+                    hair: "Effortless face-framing tendrils and romantic tumbled blowout.",
+                    proTip: "Mix liquid illuminator with your skin tint for an all-over lit-from-within aura."
+                },
+                "90s minimalist": {
                     title: "90s Minimalist & Clean Chic",
-
-                    skinBase:
-                        "Lightweight skin tint or concealer with a natural satin finish.",
-
-                    eyes:
-                        "Neutral taupe or brown shadow with softly defined lashes.",
-
-                    lips:
-                        "Neutral pink, brown-pink or comfortable nude shades.",
-
-                    hair:
-                        "Sleek ponytail, low bun or naturally polished styling.",
-
-                    proTip:
-                        "Keep the makeup simple so each product has a purpose.",
-
-                    difficulty:
-                        "Beginner-friendly"
+                    difficulty: "Beginner-friendly",
+                    skinBase: "Semi-matte velvety skin with natural warm taupe contour.",
+                    eyes: "Muted taupe and beige wash across the lid with soft brown tightlining.",
+                    lips: "Iconic 90s brown-nude or spiced chestnut liner with satin buff center.",
+                    hair: "Sleek middle-part blowout, flipped ends, or claw clip French twist.",
+                    proTip: "Keep all tones monochromatic brown and neutral for timeless Carolyn Bessette-Kennedy elegance."
                 },
-
-                goth: {
-                    title: "Goth & Dark Alternative",
-
-                    skinBase:
-                        "Natural or softly matte base.",
-
-                    eyes:
-                        "Smudged charcoal, brown or black eye definition.",
-
-                    lips:
-                        "Berry, burgundy, plum or deep red shades.",
-
-                    hair:
-                        "Straight, textured or intentionally undone styling.",
-
-                    proTip:
-                        "Choose one or two dramatic elements instead of making everything intense.",
-
-                    difficulty:
-                        "Intermediate"
+                "clean girl chic": {
+                    title: "Fresh Everyday Clean Girl Chic",
+                    difficulty: "Beginner-friendly",
+                    skinBase: "Featherlight hydrating skin tint, spot concealer, and luminous cream blush.",
+                    eyes: "Laminated fluffy brushed-up brows and curled natural lashes with clear or brown mascara.",
+                    lips: "Nourishing peptide lip treatment in honey nude or glazed clear.",
+                    hair: "Ultra-sleek glazed middle-part low bun with flyaway smoothing balm.",
+                    proTip: "Prioritize skin prep with hyaluronic serum and facial oil for effortless model-off-duty radiance."
                 },
-
-                indie: {
+                "rock siren": {
+                    title: "Rock Siren",
+                    difficulty: "Intermediate",
+                    skinBase: "Second-skin radiant matte finish with sharp high-cheekbone bronze.",
+                    eyes: "Kohl-rimmed smoky cat eye, lived-in espresso smudged shadow, and intense black mascara.",
+                    lips: "Muted 90s taupe-caramel nude or sharp bitten wine red.",
+                    hair: "Shaggy wolf cut, textured piecey layers, or tousled rockstar volume.",
+                    proTip: "Smudge your black kohl liner with your ring finger for an authentic lived-in edge."
+                },
+                "smoky grunge": {
+                    title: "Smoky Grunge",
+                    difficulty: "Intermediate",
+                    skinBase: "Matte velvet complexion with minimal contour and cool undertones.",
+                    eyes: "Heavy charcoal smoky eye, smudged lower lashline, and dramatic black tightlining.",
+                    lips: "Dark chocolate matte, sheer black gloss, or deep brick burgundy.",
+                    hair: "Messy undone textured waves with matte texturizing spray.",
+                    proTip: "Layer gunmetal metallic pigment over black cream base for depth and dimension."
+                },
+                "y2k": {
                     title: "Y2K Indie Pop",
-
-                    skinBase:
-                        "Fresh luminous base with subtle highlight.",
-
-                    eyes:
-                        "Playful liner, shimmer or a small pop of colour.",
-
-                    lips:
-                        "Glossy pink, berry or neutral tint.",
-
-                    hair:
-                        "Braids, clips, ponytail or playful retro styling.",
-
-                    proTip:
-                        "Choose one playful detail as the focal point.",
-
-                    difficulty:
-                        "Intermediate"
+                    difficulty: "Intermediate",
+                    skinBase: "Bronzed glow with frosted silver and baby pink shimmer highlights.",
+                    eyes: "Frosted ice blue or silver shimmer shadow, dark thin brows, and fluttery outer corner lashes.",
+                    lips: "Overlined dark nude lip with juicy, sticky chrome pink gloss.",
+                    hair: "Spiky buns, zig-zag partings, butterfly clips, and crimped tendrils.",
+                    proTip: "Body shimmer oil on collarbones completes the nostalgic Y2K look."
                 },
-
-                parisian: {
+                "retro": {
+                    title: "Retro Vintage",
+                    difficulty: "Intermediate",
+                    skinBase: "Flawless satin porcelain base with delicate vintage peach blush.",
+                    eyes: "Crisp retro winged cat-eye liner and voluminous mod lashes.",
+                    lips: "Bold classic cherry red, coral, or fiery matte vermilion.",
+                    hair: "Voluminous 60s/70s curtain bangs, roller set curls, or flipped bobs.",
+                    proTip: "Use a gel liner with a fine angled brush for sharp vintage wing precision."
+                },
+                "chic parisian": {
                     title: "Parisian Chic",
-
-                    skinBase:
-                        "Natural radiant base with subtle blush.",
-
-                    eyes:
-                        "Soft brown definition and naturally defined lashes.",
-
-                    lips:
-                        "Muted red, brick, rose or neutral lip.",
-
-                    hair:
-                        "Natural waves, simple ponytail or polished low styling.",
-
-                    proTip:
-                        "Keep the finish effortless rather than overly complicated.",
-
-                    difficulty:
-                        "Beginner-friendly"
+                    difficulty: "Beginner-friendly",
+                    skinBase: "Barely-there radiant skin letting natural freckles shine through.",
+                    eyes: "One coat of rich mascara and naturally groomed, soft brows.",
+                    lips: "Blotted classic French red stain applied with fingertips for that 'just-kissed' finish.",
+                    hair: "Nonchalant natural air-dried French girl waves with soft bottleneck bangs.",
+                    proTip: "Never look overly styled; imperfection is the essence of French allure."
                 },
-
-                festive: {
+                "warm luxury": {
+                    title: "Warm Luxury",
+                    difficulty: "Intermediate",
+                    skinBase: "Rich golden sun-kissed bronzer, cashmere matte finish, and amber glow.",
+                    eyes: "Warm caramel, antique gold foil shimmer, and chocolate gel liner.",
+                    lips: "Rich terracotta caramel, warm spiced cinnamon, or gilded nude.",
+                    hair: "Glossy old-money bouncy voluminous blowout with rich shine serum.",
+                    proTip: "Spritz setting spray infused with fine gold pearl for a luxurious finish."
+                },
+                "festive": {
                     title: "Festive Luminous Glam",
-
-                    skinBase:
-                        "Radiant base with warm blush and subtle highlight.",
-
-                    eyes:
-                        "Warm gold, bronze or brown eye definition.",
-
-                    lips:
-                        "Terracotta, berry, rose or deep red.",
-
-                    hair:
-                        "Braided, pinned or softly waved styling.",
-
-                    proTip:
-                        "Let one feature—eyes, lips or accessories—be the main statement.",
-
-                    difficulty:
-                        "Intermediate"
+                    difficulty: "Intermediate",
+                    skinBase: "Radiant golden glow with warm terracotta blush and luminous strobing.",
+                    eyes: "Intense kohl kajal waterline, antique copper/gold foil pigment, and dramatic winged liner.",
+                    lips: "Rich royal crimson, deep ruby wine, or warm berry red.",
+                    hair: "Ornate textured braid with floral accents, or cascading glamorous Hollywood waves.",
+                    proTip: "Highlight the inner tear ducts with champagne gold for a regal festive dazzle."
                 },
-
-                clean: {
-                    title: "Fresh Everyday Glow",
-
-                    skinBase:
-                        "Lightweight base or concealer with natural-looking blush.",
-
-                    eyes:
-                        "Soft brown definition with mascara.",
-
-                    lips:
-                        "Tinted balm, soft pink or neutral gloss.",
-
-                    hair:
-                        "Simple ponytail, braid, bun or natural styling.",
-
-                    proTip:
-                        "Focus on a comfortable routine that is easy to repeat.",
-
-                    difficulty:
-                        "Beginner-friendly"
-                },
-
-                glam: {
+                "full glam": {
                     title: "Full Glam Evening Look",
-
-                    skinBase:
-                        "Buildable base with blush and subtle highlight.",
-
-                    eyes:
-                        "Defined eyes with shimmer and carefully blended darker shades.",
-
-                    lips:
-                        "Rose, mauve, berry or classic red.",
-
-                    hair:
-                        "Polished waves, sleek styling or an elegant updo.",
-
-                    proTip:
-                        "Build intensity gradually instead of applying everything heavily at once.",
-
-                    difficulty:
-                        "Advanced"
+                    difficulty: "Advanced",
+                    skinBase: "Full-coverage airbrushed finish, baked under-eyes, and sculpted contour.",
+                    eyes: "Cut-crease eyeshadow with micro-glitter topper, dramatic 3D lashes, and crisp wing.",
+                    lips: "Sculpted ombre lip with deep liner, nude center, and mirror glass gloss.",
+                    hair: "Impeccable red carpet Hollywood waves with high-gloss mirror shine.",
+                    proTip: "Set your T-zone with translucent loose powder and bake under the contour for razor sharpness."
                 }
-
             };
 
+            // Convenient aliases for quick lookup
+            makeupGuides["goth"] = makeupGuides["goth inspired"];
+            makeupGuides["coquette"] = makeupGuides["soft coquette"];
+            makeupGuides["romantic"] = makeupGuides["modern romantic glow"];
+            makeupGuides["minimalist"] = makeupGuides["90s minimalist"];
+            makeupGuides["clean"] = makeupGuides["clean girl chic"];
+            makeupGuides["indie"] = makeupGuides["y2k"];
+            makeupGuides["parisian"] = makeupGuides["chic parisian"];
+            makeupGuides["glam"] = makeupGuides["full glam"];
 
             // ----------------------------------------------------
             // SELECT PRIMARY GUIDE
             // ----------------------------------------------------
 
-            const vibeText =
-                selectedVibes.join(" ").toLowerCase();
+            const vibeKey = (vibe || (selectedVibes && selectedVibes[0]) || "").toLowerCase().trim();
+            const vibeText = (selectedVibes && selectedVibes.length > 0 ? selectedVibes.join(" ") : vibeKey).toLowerCase();
 
-            let selectedGuide;
+            let selectedGuide = null;
 
-            if (
-                vibeText.includes("goth") ||
-                vibeText.includes("grunge") ||
-                vibeText.includes("rock")
-            ) {
-                selectedGuide = makeupGuides.goth;
-
-            } else if (
-                vibeText.includes("glam") ||
-                vibeText.includes("full glam")
-            ) {
-                selectedGuide = makeupGuides.glam;
-
-            } else if (
-                vibeText.includes("y2k") ||
-                vibeText.includes("indie") ||
-                vibeText.includes("retro")
-            ) {
-                selectedGuide = makeupGuides.indie;
-
-            } else if (
-                vibeText.includes("parisian") ||
-                vibeText.includes("luxury") ||
-                vibeText.includes("chic")
-            ) {
-                selectedGuide = makeupGuides.parisian;
-
-            } else if (
-                vibeText.includes("minimalist") ||
-                vibeText.includes("clean")
-            ) {
-                selectedGuide = makeupGuides.minimalist;
-
-            } else if (
-                vibeText.includes("festive") ||
-                vibeText.includes("diwali") ||
-                vibeText.includes("traditional") ||
-                vibeText.includes("desi")
-            ) {
-                selectedGuide = makeupGuides.festive;
-
+            // Direct key match
+            if (makeupGuides[vibeKey]) {
+                selectedGuide = makeupGuides[vibeKey];
             } else {
-                selectedGuide = makeupGuides.coquette;
+                // Keyword partial matching against library keys
+                for (const [key, guide] of Object.entries(makeupGuides)) {
+                    if (vibeKey.includes(key) || key.includes(vibeKey) || vibeText.includes(key)) {
+                        selectedGuide = guide;
+                        break;
+                    }
+                }
             }
 
+            // Fallback for custom / keyword matching
+            if (!selectedGuide) {
+                if (vibeText.includes("goth")) selectedGuide = makeupGuides["goth inspired"];
+                else if (vibeText.includes("coquette")) selectedGuide = makeupGuides["soft coquette"];
+                else if (vibeText.includes("romantic") || vibeText.includes("glow")) selectedGuide = makeupGuides["modern romantic glow"];
+                else if (vibeText.includes("minimalist")) selectedGuide = makeupGuides["90s minimalist"];
+                else if (vibeText.includes("clean")) selectedGuide = makeupGuides["clean girl chic"];
+                else if (vibeText.includes("siren") || vibeText.includes("rock")) selectedGuide = makeupGuides["rock siren"];
+                else if (vibeText.includes("grunge") || vibeText.includes("grunch") || vibeText.includes("smoky")) selectedGuide = makeupGuides["smoky grunge"];
+                else if (vibeText.includes("y2k") || vibeText.includes("indie")) selectedGuide = makeupGuides["y2k"];
+                else if (vibeText.includes("retro")) selectedGuide = makeupGuides["retro"];
+                else if (vibeText.includes("parisian") || vibeText.includes("french")) selectedGuide = makeupGuides["chic parisian"];
+                else if (vibeText.includes("luxury")) selectedGuide = makeupGuides["warm luxury"];
+                else if (vibeText.includes("festive") || vibeText.includes("desi") || vibeText.includes("royal") || vibeText.includes("traditional") || vibeText.includes("diwali")) selectedGuide = makeupGuides["festive"];
+                else if (vibeText.includes("glam")) selectedGuide = makeupGuides["full glam"];
+                else {
+                    // Custom vibe dynamically crafted
+                    const displayVibe = (vibe && vibe.trim()) || "Bespoke Editorial Beauty";
+                    selectedGuide = {
+                        title: `${displayVibe} Look`,
+                        difficulty: "Custom / Versatile",
+                        skinBase: `Luminous customized complexion tailored to harmonize with ${displayVibe} styling.`,
+                        eyes: `Artfully defined eye palette complementary to the ${displayVibe} aesthetic tone.`,
+                        lips: `Signature lip formulation matching the mood and undertone of ${displayVibe}.`,
+                        hair: `Complementary hair direction sculpted to anchor your ${displayVibe} silhouette.`,
+                        proTip: `Keep the key statement feature balanced with delicate accents for ${displayVibe}.`
+                    };
+                }
+            }
 
             // ----------------------------------------------------
             // UNDERTONE PERSONALIZATION
@@ -2348,18 +2294,28 @@ router.post(
 
             } else if (
                 undertoneText.includes("cool") ||
-                undertoneText.includes("pink")
+                undertoneText.includes("pink") ||
+                undertoneText.includes("rose") ||
+                undertoneText.includes("fair")
             ) {
                 undertoneAdvice =
                     "Cool pink, rose, berry and mauve colour families can be a useful starting point for your makeup choices.";
 
             } else if (
-                undertoneText.includes("neutral")
+                undertoneText.includes("neutral") ||
+                undertoneText.includes("balanced")
             ) {
                 undertoneAdvice =
                     "You can experiment across both warm and cool colour families and choose whichever you prefer.";
-            }
 
+            } else if (
+                undertoneText.includes("deep") ||
+                undertoneText.includes("espresso") ||
+                undertoneText.includes("rich")
+            ) {
+                undertoneAdvice =
+                    "Deep rich, bronze, bold berry and glazed wine shades complement deeper complexions gorgeously.";
+            }
 
             // ----------------------------------------------------
             // EXPERIENCE PERSONALIZATION
@@ -2375,19 +2331,16 @@ router.post(
                 experienceText.includes("never") ||
                 experienceText.includes("no makeup")
             ) {
-
                 experienceAdvice =
                     "Start with a simple routine: skin base, blush, mascara, lip product and one easy eye product. Add more steps as you become comfortable.";
 
             } else if (
                 experienceText.includes("intermediate")
             ) {
-
                 experienceAdvice =
                     "You can build on the basic routine with more defined eyes, layering and additional colour.";
 
             } else {
-
                 experienceAdvice =
                     "You can experiment with more detailed eye looks, layering and stronger colour combinations.";
             }

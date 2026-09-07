@@ -1,25 +1,17 @@
 {
   "name": "muse",
   "version": "1.0.0",
-  "description": "Your wardrobe becomes a game. Pick a vibe, upload your clothes, and AI builds your perfect look for festivals, parties or everyday life. Plan ahead, sync with friends, recreate inspo, discover affordable products, get beauty tips &amp; playlists—all in one private, encrypted space.",
-  "main": "index.js",
+  "description": "Muse — AI-Powered Personal Stylist & Digital Wardrobe Assistant",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "intro": "start http://localhost:5000/intro.html && node server.js",
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/1234get1thedancefloor-dotcom/Muse.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/1234get1thedancefloor-dotcom/Muse/issues"
-  },
-  "homepage": "https://github.com/1234get1thedancefloor-dotcom/Muse#readme",
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
