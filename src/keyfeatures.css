@@ -1,0 +1,148 @@
+.keyfeatures-page {
+  min-height: 100vh;
+  background: #2b0000;
+  color: white;
+  padding: 80px;
+}
+
+.hero {
+  text-align: center;
+  max-width: 900px;
+  margin: auto;
+}
+
+.hero h1 {
+  font-size: 72px;
+  margin: 20px 0;
+}
+
+.hero p {
+  color: #c8bdbd;
+  line-height: 1.8;
+}
+
+.subheading {
+  color: #d4af37;
+}
+
+.cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 60px;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 220px;
+  height: 320px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, .08);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  transition: .3s;
+  color: #000;
+}
+
+.card h2,
+.card p {
+  color: #000;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+/* Shared background-image card treatment */
+.card-cutesy,
+.card-goth,
+.card-chic,
+.card-indie,
+.card-minimalist {
+  position: relative;       /* anchors the absolutely-positioned overlay */
+  background-size: cover;
+  background-position: center;
+  padding: 0;
+  overflow: hidden;
+  display: block;           /* overlay is now absolutely positioned, no longer flex-aligned */
+}
+
+/* Badge tag, top-left of each image card */
+.card-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 12px;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.card-badge-recommended {
+  background: rgba(212, 175, 55, 0.85);
+  color: #1e0909;
+}
+
+/* Bottom translucent dark overlay box for title + description */
+.card-cutesy .card-overlay,
+.card-goth .card-overlay,
+.card-chic .card-overlay,
+.card-indie .card-overlay,
+.card-minimalist .card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 90px;              /* fixed height — identical across every card */
+  box-sizing: border-box;
+  padding: 16px 18px;        /* uniform padding */
+  background: rgba(0, 0, 0, 0.55); /* matching semi-transparent background */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+}
+
+.card-cutesy .card-overlay h2,
+.card-cutesy .card-overlay p,
+.card-goth .card-overlay h2,
+.card-goth .card-overlay p,
+.card-chic .card-overlay h2,
+.card-chic .card-overlay p,
+.card-indie .card-overlay h2,
+.card-indie .card-overlay p,
+.card-minimalist .card-overlay h2,
+.card-minimalist .card-overlay p {
+  color: #fff;
+  margin: 0;
+}
+
+.card-cutesy .card-overlay h2,
+.card-goth .card-overlay h2,
+.card-chic .card-overlay h2,
+.card-indie .card-overlay h2,
+.card-minimalist .card-overlay h2 {
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.card-cutesy .card-overlay p,
+.card-goth .card-overlay p,
+.card-chic .card-overlay p,
+.card-indie .card-overlay p,
+.card-minimalist .card-overlay p {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;    /* keeps varying description lengths from breaking the fixed height */
+  -webkit-box-orient: vertical;
+}

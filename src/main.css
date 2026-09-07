@@ -1,0 +1,139 @@
+:root {
+  --bg-maroon: #1e0909;
+  --text-offwhite: #f5f2eb;
+  --accent-gold: #d4af37;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --navbar-height: 84px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-maroon);
+  color: var(--text-offwhite);
+  font-family: var(--font-serif);
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  background-color: var(--bg-maroon);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 1000;
+}
+
+.site-logo {
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+}
+
+.site-nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.site-nav-links a {
+  color: var(--text-offwhite);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.site-nav-links a:hover,
+.site-nav-links a.active {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.site-auth {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.site-auth a {
+  color: var(--text-offwhite);
+  text-decoration: none;
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+}
+
+.btn-outline-small {
+  border: 1px solid var(--text-offwhite);
+  padding: 8px 20px;
+  border-radius: 50px;
+}
+
+.page-container {
+  padding-top: var(--navbar-height);
+  min-height: 100vh;
+}
+
+/* ===== HOME / HERO SECTION ===== */
+.muse-hero {
+  position: relative;
+  height: calc(100vh - var(--navbar-height));
+  overflow: hidden;
+}
+
+.muse-background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.muse-hero-content {
+  position: absolute;
+  top: 75%;
+  left: 60px;
+  transform: translateY(-50%);
+  z-index: 2;
+  max-width: 480px;
+}
+
+.muse-logo-text {
+  font-size: 5rem;
+  letter-spacing: 4px;
+  margin-bottom: 24px;
+}
+
+.muse-auth-inline {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.muse-auth-inline a {
+  color: var(--text-offwhite);
+  text-decoration: none;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.muse-tagline {
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  text-align: left;
+  margin:0;
+  text-indent: 5rem;
+}

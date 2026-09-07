@@ -4,26 +4,6 @@ import './about.css';
 const About = ({ setCurrentPage }) => {
   return (
     <div className="about-page">
-      {/* Navigation Bar */}
-      <nav className="navbar">
-        <div className="logo">MUSE</div>
-        <ul className="nav-links">
-          <li>
-            <a href="#home" onClick={(e) => { e.preventDefault(); setCurrentPage("home"); }}>
-              HOME
-            </a>
-          </li>
-          <li><a href="#about" className="active">ABOUT</a></li>
-          <li><a href="#features">KEY FEATURES</a></li>
-          <li><a href="#faq">FAQ</a></li>
-        </ul>
-        <div className="auth-buttons">
-          <a href="/login" className="login">LOG IN</a>
-          <a href="/signup" className="btn-outline">SIGN UP</a>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
           <p className="overline">☆ THE VISION BEHIND MUSE ☆</p>
@@ -37,7 +17,6 @@ const About = ({ setCurrentPage }) => {
         </div>
       </section>
 
-      {/* Three Column Features */}
       <section className="features">
         <div className="feature-card">
           <div className="card-header">
@@ -67,13 +46,14 @@ const About = ({ setCurrentPage }) => {
         </div>
       </section>
 
-      {/* Bottom CTA Section */}
       <section className="cta">
         <p className="overline">☆ THE OUTRO ☆</p>
         <h2>
           Your closet. Your vibe. Your rules. <span className="gold-text">Let MUSE<br />style the possibilities.</span>
         </h2>
-        <button className="btn-solid">GET STARTED WITH MUSE</button>
+        <button className="btn-solid" onClick={() => setCurrentPage("keyfeatures")}>
+          GET STARTED WITH MUSE
+        </button>
       </section>
     </div>
   );
