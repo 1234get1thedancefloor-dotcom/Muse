@@ -51,7 +51,7 @@
         body {
             background-color: var(--bg-canvas);
             color: var(--text-primary);
-            max-width: 720px;
+            max-width: 900px;
             margin: 16px auto 48px;
             padding: 16px;
             font-size: 14px;
@@ -65,18 +65,20 @@
             align-items: center;
             background: #ffffff;
             border: 1px solid var(--border-light);
-            padding: 10px 16px;
+            padding: 8px 16px;
             border-radius: var(--radius-pill);
             margin-bottom: 20px;
             gap: 12px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             box-shadow: var(--shadow-subtle);
+            width: 100%;
         }
 
         .nav-brand-group {
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-shrink: 0;
         }
 
         .nav-logo-badge {
@@ -91,29 +93,31 @@
             font-weight: 800;
             font-size: 16px;
             user-select: none;
+            flex-shrink: 0;
         }
 
         .nav-links-left {
             display: flex;
             align-items: center;
-            gap: 4px;
-            flex-wrap: wrap;
+            gap: 2px;
+            flex-wrap: nowrap;
         }
 
         .nav-link-btn {
             background: transparent;
             border: none;
-            padding: 8px 14px;
+            padding: 7px 12px;
             border-radius: var(--radius-pill);
             color: var(--text-primary);
             cursor: pointer;
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 4px;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
+            white-space: nowrap;
         }
 
         .nav-link-btn:hover {
@@ -129,18 +133,21 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-shrink: 0;
+            white-space: nowrap;
         }
 
         .user-status-pill {
             background: var(--surface-muted);
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: var(--radius-pill);
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             color: var(--text-primary);
+            white-space: nowrap;
         }
 
         /* Main Card Container */
@@ -868,6 +875,82 @@
             color: var(--text-primary);
         }
 
+        /* Co-Styling Lounge & Outfit Collaboration Styles */
+        .collab-banner {
+            background: linear-gradient(135deg, #ffffff 0%, var(--surface-muted) 100%);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 18px 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .collab-room-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 16px 18px;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.25s ease;
+        }
+
+        .collab-room-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-subtle);
+        }
+
+        .collab-avatar-stack {
+            display: flex;
+            align-items: center;
+        }
+
+        .collab-avatar-bubble {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--surface-muted);
+            border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--primary-red);
+            margin-left: -8px;
+        }
+
+        .collab-avatar-bubble:first-child {
+            margin-left: 0;
+        }
+
+        .collab-harmony-badge {
+            font-size: 11px;
+            font-weight: 800;
+            background: #111111;
+            color: #ffffff;
+            padding: 2px 10px;
+            border-radius: var(--radius-pill);
+        }
+
+        .collab-outfits-preview {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 6px 0;
+            margin: 8px 0;
+        }
+
+        .collab-fit-thumb {
+            width: 80px;
+            height: 90px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid var(--border-light);
+            background: var(--surface-muted);
+            flex-shrink: 0;
+        }
+
         /* Info Section Cards */
         .info-card {
             background: #ffffff;
@@ -1538,7 +1621,7 @@
         <!-- SCREEN 6: COMMUNITY HUB & LOOKBOOK SCREEN -->
         <div id="communityScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
             <h2>Muse Community Hub</h2>
-            <div class="subtitle">Live Google fashion trends, creator lookbooks, AI styling challenges & style advice</div>
+            <div class="subtitle">Live Google fashion trends, creator lookbooks, co-styling sessions & styling challenges</div>
 
             <!-- TOP SECTION: REAL-TIME GOOGLE FASHION TRENDS -->
             <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light);">
@@ -1558,6 +1641,45 @@
 
                 <!-- Trending Cards Dynamic Container -->
                 <div id="trendingCardsContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Dynamically rendered -->
+                </div>
+            </div>
+
+            <!-- CO-STYLING LOUNGE: INVITE & COLLABORATE OUTFITS WITH FRIENDS -->
+            <div class="collab-banner">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                    <div>
+                        <div style="font-size: 11px; font-weight: 800; color: var(--primary-red); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 2px;">
+                            Social Styling & Group Coordination
+                        </div>
+                        <div style="font-size: 16px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px;">
+                            Co-Styling Lounge: Collaborate with Friends
+                        </div>
+                        <div style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px; line-height: 1.4;">
+                            Invite friend stylists, curate shared moodboards, coordinate event color palettes, and vote on outfit combinations together.
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="action-button secondary-btn" style="width: auto; padding: 7px 14px; font-size: 12px; margin-top: 0;" onclick="openInviteFriendsModal()">
+                            Invite Friends
+                        </button>
+                        <button class="action-button" style="width: auto; padding: 7px 16px; font-size: 12px; margin-top: 0;" onclick="openCreateRoomModal()">
+                            + New Co-Styling Room
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Join with Code Bar -->
+                <div style="display: flex; gap: 8px; margin-bottom: 14px; align-items: center;">
+                    <input type="text" id="collabRoomCodeInput" placeholder="Enter 4-digit Room Code (e.g. MUSE-7492)" style="padding: 8px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-light); font-size: 12px; background: #ffffff; flex-grow: 1; outline: none;">
+                    <button class="tab-chip" style="font-size: 12px; padding: 8px 16px; background: var(--text-primary); color: #ffffff; border: none; cursor: pointer;" onclick="joinRoomByCode()">
+                        Join Room
+                    </button>
+                </div>
+
+                <!-- Active Co-Styling Rooms Container -->
+                <div id="collabRoomsContainer" style="display: flex; flex-direction: column; gap: 10px;">
                     <!-- Dynamically rendered -->
                 </div>
             </div>
@@ -1583,8 +1705,7 @@
                     <button class="tab-chip active" onclick="filterCommunityCategory('All', this)">All</button>
                     <button class="tab-chip" onclick="filterCommunityCategory('Outfit Post', this)">Outfit Posts</button>
                     <button class="tab-chip" onclick="filterCommunityCategory('Makeup Look', this)">Makeup Looks</button>
-                    <button class="tab-chip" onclick="filterCommunityCategory('AI Challenge', this)">AI Challenges</button>
-                    <button class="tab-chip" onclick="filterCommunityCategory('Community Challenge', this)">Community Challenges</button>
+                    <button class="tab-chip" onclick="filterCommunityCategory('Challenge', this)">Challenges</button>
                     <button class="tab-chip" onclick="filterCommunityCategory('Style Tip', this)">Style Tips</button>
                 </div>
 
@@ -1868,8 +1989,7 @@
             <select id="newPostCategory">
                 <option value="Outfit Post">Outfit Post (OOTD / Closet Combination)</option>
                 <option value="Makeup Look">Makeup Look (Beauty & Undertone Match)</option>
-                <option value="AI Challenge">AI-Generated Outfit Challenge</option>
-                <option value="Community Challenge">Community Styling Challenge</option>
+                <option value="Challenge">Styling Challenge</option>
                 <option value="Style Tip">Style Tip & Capsule Formula</option>
             </select>
 
@@ -1907,6 +2027,162 @@
                 </button>
                 <button type="button" class="action-button" onclick="saveNewCommunityPost()" style="padding: 10px 22px; width: auto; margin-top: 0;">
                     Publish Post
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INVITE FRIENDS TO COLLABORATE MODAL -->
+    <div id="inviteFriendsModal" class="modal-backdrop" onclick="handleInviteModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">Invite Friends to Collaborate</span>
+                <button class="modal-close-btn" onclick="closeInviteFriendsModal()">×</button>
+            </div>
+
+            <p style="margin: 0 0 14px 0; color: var(--text-secondary); font-size: 13px; line-height: 1.45;">
+                Invite friends to share their digital closets, co-style outfits, and give feedback on looks.
+            </p>
+
+            <!-- Shareable Personal Invite Link -->
+            <label style="margin-top: 0;">Your Shareable Stylist Invite Link:</label>
+            <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                <input type="text" id="shareableInviteLink" value="https://muse.style/invite?ref=MUSE-8821" readonly style="font-size: 12px; font-weight: 600; background: var(--surface-muted);">
+                <button type="button" class="tab-chip" id="copyInviteLinkBtn" onclick="copyPersonalInviteLink()" style="padding: 0 16px; background: var(--text-primary); color: #ffffff; border: none; font-size: 12px; white-space: nowrap; cursor: pointer;">
+                    Copy Link
+                </button>
+            </div>
+
+            <!-- Direct Email / Username Invite -->
+            <label for="inviteFriendInput">Invite by Email or Username:</label>
+            <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                <input type="text" id="inviteFriendInput" placeholder="e.g. maya@style.com or @mayastyle">
+                <button type="button" class="action-button" onclick="sendFriendInvite()" style="width: auto; padding: 0 18px; margin-top: 0; font-size: 12px; white-space: nowrap;">
+                    Send Invite
+                </button>
+            </div>
+
+            <!-- Connected Friend Stylists -->
+            <div style="border-top: 1px solid var(--border-light); padding-top: 14px; margin-top: 10px;">
+                <div style="font-weight: 800; font-size: 13px; color: var(--text-primary); margin-bottom: 8px;">
+                    Connected Friend Stylists
+                </div>
+                <div id="connectedFriendsList" style="display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
+                <button type="button" class="tab-chip" onclick="closeInviteFriendsModal()" style="padding: 10px 18px;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATE CO-STYLING ROOM MODAL -->
+    <div id="createCoStylingModal" class="modal-backdrop" onclick="handleCreateRoomModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">New Co-Styling Room</span>
+                <button class="modal-close-btn" onclick="closeCreateRoomModal()">×</button>
+            </div>
+
+            <label for="newRoomTitle" style="margin-top: 0;">Room Title / Session Name:</label>
+            <input type="text" id="newRoomTitle" placeholder="e.g. Birthday Dinner Looks or Friday Concert Coordination">
+
+            <label for="newRoomOccasion">Event / Occasion:</label>
+            <select id="newRoomOccasion">
+                <option value="Dinner Date / Night Out">Dinner Date / Night Out</option>
+                <option value="Music Festival / Concert">Music Festival / Concert</option>
+                <option value="Wedding Guest & Reception">Wedding Guest & Reception</option>
+                <option value="Weekend Trip Capsule">Weekend Trip Capsule</option>
+                <option value="Casual Weekend Hangout">Casual Weekend Hangout</option>
+                <option value="Party & Celebration">Party & Celebration</option>
+            </select>
+
+            <label for="newRoomTheme">Target Palette / Aesthetic Theme:</label>
+            <input type="text" id="newRoomTheme" placeholder="e.g. Soft Pink & Ivory Velvet, Charcoal Edge, Emerald & Gold">
+
+            <label>Invite Friends to this Room:</label>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px; background: var(--surface-muted); padding: 12px; border-radius: var(--radius-card);">
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 0; cursor: pointer;">
+                    <input type="checkbox" id="inviteFriendAria" checked> Aria Vance (@ariavance)
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 0; cursor: pointer;">
+                    <input type="checkbox" id="inviteFriendElena" checked> Elena Rostova (@elena_glam)
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 0; cursor: pointer;">
+                    <input type="checkbox" id="inviteFriendKai"> Kai Thorne (@kaistyle)
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 0; cursor: pointer;">
+                    <input type="checkbox" id="inviteFriendMaya"> Maya Lin (@mayalin)
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                <button type="button" class="tab-chip" onclick="closeCreateRoomModal()" style="padding: 10px 18px;">
+                    Cancel
+                </button>
+                <button type="button" class="action-button" onclick="saveNewCoStylingRoom()" style="padding: 10px 22px; width: auto; margin-top: 0;">
+                    Launch Room
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW & INTERACT CO-STYLING ROOM MODAL -->
+    <div id="viewCoStylingModal" class="modal-backdrop" onclick="handleViewRoomModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 580px;">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-title" id="viewRoomModalTitle">Co-Styling Room</span>
+                    <div id="viewRoomModalSubtitle" style="font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-top: 2px;"></div>
+                </div>
+                <button class="modal-close-btn" onclick="closeViewRoomModal()">×</button>
+            </div>
+
+            <!-- Group Palette Harmony Score -->
+            <div style="background: var(--surface-muted); padding: 12px 16px; border-radius: var(--radius-card); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <div>
+                    <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Group Palette Harmony</div>
+                    <div id="viewRoomHarmonyScore" style="font-size: 14px; font-weight: 800; color: var(--primary-red);">95% Cohesive Match</div>
+                </div>
+                <div id="viewRoomPaletteSwatches" style="display: flex; gap: 6px;"></div>
+            </div>
+
+            <!-- Outfits in Room -->
+            <div style="margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 800; font-size: 14px; color: var(--text-primary);">Shared Outfits (<span id="viewRoomFitCount">0</span>)</span>
+                    <button class="action-button" style="width: auto; padding: 6px 12px; font-size: 11.5px; margin-top: 0;" onclick="addLookToRoomFromWardrobe()">
+                        + Add My Closet Fit
+                    </button>
+                </div>
+                <div id="viewRoomOutfitsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- Discussion & Stylist Notes -->
+            <div style="border-top: 1px solid var(--border-light); padding-top: 14px;">
+                <div style="font-weight: 800; font-size: 13.5px; color: var(--text-primary); margin-bottom: 8px;">
+                    Stylist Notes & Feedback
+                </div>
+                <div id="viewRoomNotesList" style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto; margin-bottom: 10px; padding: 6px; background: var(--surface-muted); border-radius: 10px;">
+                    <!-- Notes rendered here -->
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="viewRoomNewNoteInput" placeholder="Leave a feedback note (e.g. Try the pearl necklace!)..." style="font-size: 12px; padding: 8px 12px; border-radius: var(--radius-pill); border: 1px solid var(--border-light); flex-grow: 1; outline: none;">
+                    <button class="tab-chip" style="font-size: 12px; padding: 0 16px; background: var(--text-primary); color: #ffffff; border: none; cursor: pointer;" onclick="addNoteToRoom()">
+                        Post Note
+                    </button>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
+                <button type="button" class="tab-chip" onclick="closeViewRoomModal()" style="padding: 10px 18px;">
+                    Done
                 </button>
             </div>
         </div>
@@ -2295,6 +2571,7 @@
                 navHeader.classList.remove('hidden');
                 loadTrendingAesthetics();
                 loadCommunityPosts();
+                loadCollabRooms();
             } else if (section === 'faq') {
                 document.getElementById('faqScreen').classList.remove('hidden');
                 document.getElementById('navFaqBtn').classList.add('active');
@@ -2354,12 +2631,12 @@
                 id: 'cp3',
                 author: 'Kai Thorne',
                 handle: '@kaistyle',
-                category: 'AI Challenge',
-                title: 'AI Challenge: Streetwear Cargo Recreated from Closet',
+                category: 'Challenge',
+                title: 'Styling Challenge: Streetwear Cargo Recreated from Closet',
                 aesthetic: 'Streetwear',
-                desc: 'Prompted Muse AI for an edgy urban silhouette and recreated the entire fit using 3 pieces already in my digital wardrobe (charcoal bomber + wide-leg parachute pants + platform sneakers). Match Score: 94%!',
+                desc: 'Challenge entry: Recreated an edgy urban silhouette using 3 pieces already in my digital wardrobe (charcoal bomber + wide-leg parachute pants + platform sneakers). Match Score: 94%!',
                 image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80',
-                tags: ['AIChallenge', 'ClosetMatch', 'Streetwear', 'UrbanVibe'],
+                tags: ['Challenge', 'ClosetMatch', 'Streetwear', 'UrbanVibe'],
                 likes: 91,
                 liked: false,
                 saves: 44,
@@ -2370,12 +2647,12 @@
                 id: 'cp4',
                 author: 'Muse Editorial',
                 handle: '@muse_official',
-                category: 'Community Challenge',
+                category: 'Challenge',
                 title: 'Weekly Styling Challenge: 3-Piece Monochrome Capsule',
                 aesthetic: 'Quiet Luxury',
                 desc: 'Challenge rules: Build a cohesive, high-fashion statement look using only 3 items in a single neutral tone (oatmeal, cream, or espresso). Publish your post with #MonochromeCapsule to be featured on the Muse community banner.',
                 image: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&auto=format&fit=crop&q=80',
-                tags: ['CommunityChallenge', 'MonochromeCapsule', 'Minimalist'],
+                tags: ['Challenge', 'MonochromeCapsule', 'Minimalist'],
                 likes: 128,
                 liked: false,
                 saves: 83,
@@ -2466,8 +2743,7 @@
 
             container.innerHTML = posts.map(p => {
                 let badgeClass = 'community-cat-badge';
-                if (p.category === 'AI Challenge') badgeClass += ' badge-ai';
-                else if (p.category === 'Community Challenge') badgeClass += ' badge-challenge';
+                if (p.category === 'Challenge') badgeClass += ' badge-challenge';
 
                 const initials = (p.author || 'User').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
@@ -2665,6 +2941,478 @@
             saveCommunityPosts(posts);
             closeCreateCommunityModal();
             loadCommunityPosts();
+        }
+
+        // =====================================================
+        // CO-STYLING LOUNGE & OUTFIT COLLABORATION ENGINE
+        // =====================================================
+
+        const defaultCollabRooms = [
+            {
+                id: 'room_1',
+                title: 'BFF Weekend Dinner: Modern Romantic & Silk',
+                occasion: 'Dinner Date / Night Out',
+                code: 'MUSE-7492',
+                theme: 'Soft Pink, Silk Ivory & Warm Terracotta',
+                host: 'Aria Vance',
+                members: ['Aria Vance', 'Elena Rostova', 'Maya Lin', 'You (Stylist)'],
+                status: 'Live Co-Styling',
+                harmonyScore: 96,
+                palette: ['#F4C2C2', '#FFFFF0', '#36454F', '#C19A6B'],
+                outfits: [
+                    {
+                        id: 'co1',
+                        author: 'Aria Vance',
+                        title: 'Ivory Corset & Pleated Skirt',
+                        image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&auto=format&fit=crop&q=80',
+                        votes: 8
+                    },
+                    {
+                        id: 'co2',
+                        author: 'Elena Rostova',
+                        title: 'Blush Slip Dress & Kitten Heels',
+                        image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=300&auto=format&fit=crop&q=80',
+                        votes: 6
+                    }
+                ],
+                notes: [
+                    { author: 'Maya Lin', text: 'Love the contrast! Let\'s all wear gold dainty jewelry.' },
+                    { author: 'Aria Vance', text: 'Matches the restaurant aesthetic so well!' }
+                ]
+            },
+            {
+                id: 'room_2',
+                title: 'Music Festival Group Coordination: Streetwear Edge',
+                occasion: 'Music Festival / Concert',
+                code: 'MUSE-3184',
+                theme: 'Edgy Charcoal, Parachute Layers & Red Pop',
+                host: 'Kai Thorne',
+                members: ['Kai Thorne', 'Elena Rostova', 'Jordan K.'],
+                status: 'Active Voting',
+                harmonyScore: 92,
+                palette: ['#111111', '#A9A9A9', '#E60023', '#4A69BD'],
+                outfits: [
+                    {
+                        id: 'co3',
+                        author: 'Kai Thorne',
+                        title: 'Bomber Jacket & Cargo Parachute Fit',
+                        image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&auto=format&fit=crop&q=80',
+                        votes: 11
+                    }
+                ],
+                notes: [
+                    { author: 'Kai Thorne', text: 'Make sure your sneakers are comfortable for standing!' }
+                ]
+            }
+        ];
+
+        let defaultFriendsList = [
+            { name: 'Aria Vance', handle: '@ariavance', aesthetic: 'Soft Coquette' },
+            { name: 'Elena Rostova', handle: '@elena_glam', aesthetic: 'Clean Girl' },
+            { name: 'Kai Thorne', handle: '@kaistyle', aesthetic: 'Streetwear' },
+            { name: 'Maya Lin', handle: '@mayalin', aesthetic: 'Chic Warm' }
+        ];
+
+        let activeViewingRoomId = null;
+
+        function getCollabRooms() {
+            try {
+                const stored = localStorage.getItem('muse_collab_rooms');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            return defaultCollabRooms;
+        }
+
+        function saveCollabRooms(rooms) {
+            localStorage.setItem('muse_collab_rooms', JSON.stringify(rooms));
+        }
+
+        function loadCollabRooms() {
+            const rooms = getCollabRooms();
+            renderCollabRooms(rooms);
+        }
+
+        function renderCollabRooms(rooms) {
+            const container = document.getElementById('collabRoomsContainer');
+            if (!container) return;
+
+            if (rooms.length === 0) {
+                container.innerHTML = `
+                    <div style="background: #ffffff; padding: 20px; border-radius: var(--radius-card); text-align: center; border: 1px dashed var(--border-subtle); color: var(--text-secondary); font-size: 13px;">
+                        No active co-styling sessions. Start a room or invite friends to begin collaborating!
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = rooms.map(r => {
+                const memberInitials = (r.members || []).map(m => {
+                    const init = m.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                    return `<div class="collab-avatar-bubble" title="${m}">${init}</div>`;
+                }).join('');
+
+                const paletteSwatches = (r.palette || []).map(c => `
+                    <span class="trend-color-dot" style="background: ${c}; width: 12px; height: 12px;" title="${c}"></span>
+                `).join('');
+
+                const outfitPreviews = (r.outfits || []).map(o => `
+                    <img class="collab-fit-thumb" src="${o.image}" alt="${o.title}" title="${o.author}: ${o.title}">
+                `).join('');
+
+                return `
+                    <div class="collab-room-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 14.5px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px;">${r.title}</span>
+                                    <span style="font-size: 11px; font-weight: 700; color: var(--primary-red); background: var(--primary-red-light); padding: 2px 8px; border-radius: var(--radius-pill);">${r.occasion}</span>
+                                </div>
+                                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px; font-weight: 500;">
+                                    Host: <strong>${r.host}</strong> • Room Code: <strong style="color: var(--text-primary); font-family: monospace;">${r.code}</strong>
+                                </div>
+                            </div>
+                            <div class="collab-harmony-badge">
+                                ${r.harmonyScore}% Palette Harmony
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Palette:</span>
+                                <div style="display: flex; gap: 4px;">${paletteSwatches}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">Stylists:</span>
+                                <div class="collab-avatar-stack">${memberInitials}</div>
+                            </div>
+                        </div>
+
+                        ${outfitPreviews ? `<div class="collab-outfits-preview">${outfitPreviews}</div>` : ''}
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 8px;">
+                            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">
+                                ${(r.outfits || []).length} Shared Fits • ${(r.notes || []).length} Stylist Notes
+                            </span>
+                            <button class="action-button" style="width: auto; padding: 6px 16px; font-size: 12px; margin-top: 0;" onclick="openViewRoomModal('${r.id}')">
+                                Enter Co-Styling Room →
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Invite Friends Modal Handlers
+        function openInviteFriendsModal() {
+            const modal = document.getElementById('inviteFriendsModal');
+            if (modal) {
+                renderConnectedFriends();
+                modal.classList.add('open');
+            }
+        }
+
+        function closeInviteFriendsModal() {
+            const modal = document.getElementById('inviteFriendsModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function handleInviteModalBackdropClick(e) {
+            if (e.target && e.target.id === 'inviteFriendsModal') {
+                closeInviteFriendsModal();
+            }
+        }
+
+        function copyPersonalInviteLink() {
+            const linkInput = document.getElementById('shareableInviteLink');
+            if (linkInput) {
+                navigator.clipboard.writeText(linkInput.value).then(() => {
+                    const btn = document.getElementById('copyInviteLinkBtn');
+                    if (btn) {
+                        btn.innerText = 'Copied!';
+                        setTimeout(() => { btn.innerText = 'Copy Link'; }, 2000);
+                    }
+                }).catch(() => {
+                    alert('Invite link copied: ' + linkInput.value);
+                });
+            }
+        }
+
+        function sendFriendInvite() {
+            const input = document.getElementById('inviteFriendInput');
+            const val = input ? input.value.trim() : '';
+            if (!val) {
+                alert('Please enter a friend email or username to send an invitation.');
+                return;
+            }
+
+            const cleanName = val.includes('@') ? val.split('@')[0] : val.replace('@', '');
+            const formatted = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+
+            defaultFriendsList.push({
+                name: formatted,
+                handle: '@' + cleanName.toLowerCase(),
+                aesthetic: 'Custom Vibe'
+            });
+
+            if (input) input.value = '';
+            renderConnectedFriends();
+            alert(`Stylist invitation successfully sent to ${val}! They have been added to your connected network.`);
+        }
+
+        function renderConnectedFriends() {
+            const container = document.getElementById('connectedFriendsList');
+            if (!container) return;
+
+            container.innerHTML = defaultFriendsList.map(f => {
+                const init = f.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-muted); padding: 8px 12px; border-radius: var(--radius-pill);">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div class="collab-avatar-bubble" style="margin-left: 0; width: 24px; height: 24px; font-size: 10px;">${init}</div>
+                            <span style="font-size: 12.5px; font-weight: 700; color: var(--text-primary);">${f.name}</span>
+                            <span style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">${f.handle}</span>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 700; color: #2e7d32; background: #e8f5e9; padding: 2px 8px; border-radius: var(--radius-pill);">Connected</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Create Room Modal Handlers
+        function openCreateRoomModal() {
+            const modal = document.getElementById('createCoStylingModal');
+            if (modal) {
+                document.getElementById('newRoomTitle').value = '';
+                document.getElementById('newRoomTheme').value = '';
+                modal.classList.add('open');
+            }
+        }
+
+        function closeCreateRoomModal() {
+            const modal = document.getElementById('createCoStylingModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function handleCreateRoomModalBackdropClick(e) {
+            if (e.target && e.target.id === 'createCoStylingModal') {
+                closeCreateRoomModal();
+            }
+        }
+
+        function saveNewCoStylingRoom() {
+            const title = document.getElementById('newRoomTitle').value.trim();
+            const occasion = document.getElementById('newRoomOccasion').value;
+            const theme = document.getElementById('newRoomTheme').value.trim() || 'Coordinated Fashion Palette';
+
+            if (!title) {
+                alert('Please provide a title for your co-styling room session.');
+                return;
+            }
+
+            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+            const selectedMembers = [`${currentUserName} (Host)`];
+            if (document.getElementById('inviteFriendAria')?.checked) selectedMembers.push('Aria Vance');
+            if (document.getElementById('inviteFriendElena')?.checked) selectedMembers.push('Elena Rostova');
+            if (document.getElementById('inviteFriendKai')?.checked) selectedMembers.push('Kai Thorne');
+            if (document.getElementById('inviteFriendMaya')?.checked) selectedMembers.push('Maya Lin');
+
+            const randomCode = 'MUSE-' + Math.floor(1000 + Math.random() * 9000);
+
+            const newRoom = {
+                id: 'room_' + Date.now(),
+                title: title,
+                occasion: occasion,
+                code: randomCode,
+                theme: theme,
+                host: currentUserName,
+                members: selectedMembers,
+                status: 'Live Co-Styling',
+                harmonyScore: Math.floor(90 + Math.random() * 9),
+                palette: ['#F4C2C2', '#111111', '#FFFFF0', '#C19A6B'],
+                outfits: [],
+                notes: [
+                    { author: currentUserName, text: `Welcome to ${title}! Share your outfit pieces to coordinate palettes.` }
+                ]
+            };
+
+            const rooms = getCollabRooms();
+            rooms.unshift(newRoom);
+            saveCollabRooms(rooms);
+            closeCreateRoomModal();
+            loadCollabRooms();
+            openViewRoomModal(newRoom.id);
+        }
+
+        function joinRoomByCode() {
+            const input = document.getElementById('collabRoomCodeInput');
+            const code = input ? input.value.trim().toUpperCase() : '';
+            if (!code) {
+                alert('Please enter a valid room code (e.g. MUSE-7492).');
+                return;
+            }
+
+            const rooms = getCollabRooms();
+            const found = rooms.find(r => r.code.toUpperCase() === code);
+            if (found) {
+                const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+                if (!found.members.includes(currentUserName) && !found.members.includes(`${currentUserName} (Host)`)) {
+                    found.members.push(currentUserName);
+                    saveCollabRooms(rooms);
+                }
+                if (input) input.value = '';
+                loadCollabRooms();
+                openViewRoomModal(found.id);
+            } else {
+                alert(`No co-styling room found with code "${code}". Verify code with the host.`);
+            }
+        }
+
+        // View Co-Styling Room Modal Handlers
+        function openViewRoomModal(roomId) {
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === roomId);
+            if (!room) return;
+
+            activeViewingRoomId = roomId;
+            const modal = document.getElementById('viewCoStylingModal');
+            if (modal) {
+                renderActiveRoomDetails(room);
+                modal.classList.add('open');
+            }
+        }
+
+        function closeViewRoomModal() {
+            const modal = document.getElementById('viewCoStylingModal');
+            if (modal) modal.classList.remove('open');
+            activeViewingRoomId = null;
+            loadCollabRooms();
+        }
+
+        function handleViewRoomModalBackdropClick(e) {
+            if (e.target && e.target.id === 'viewCoStylingModal') {
+                closeViewRoomModal();
+            }
+        }
+
+        function renderActiveRoomDetails(room) {
+            document.getElementById('viewRoomModalTitle').innerText = room.title;
+            document.getElementById('viewRoomModalSubtitle').innerText = `${room.occasion} • Code: ${room.code} • Theme: ${room.theme}`;
+            document.getElementById('viewRoomHarmonyScore').innerText = `${room.harmonyScore}% Palette Harmony`;
+            document.getElementById('viewRoomFitCount').innerText = (room.outfits || []).length;
+
+            // Palette Swatches
+            const swatchesEl = document.getElementById('viewRoomPaletteSwatches');
+            if (swatchesEl) {
+                swatchesEl.innerHTML = (room.palette || []).map(c => `
+                    <span class="trend-color-dot" style="background: ${c}; width: 14px; height: 14px;" title="${c}"></span>
+                `).join('');
+            }
+
+            // Outfits Grid
+            const outfitsEl = document.getElementById('viewRoomOutfitsGrid');
+            if (outfitsEl) {
+                if (!room.outfits || room.outfits.length === 0) {
+                    outfitsEl.innerHTML = `
+                        <div style="grid-column: 1 / -1; background: var(--surface-muted); padding: 18px; border-radius: var(--radius-card); text-align: center; color: var(--text-secondary); font-size: 12.5px;">
+                            No fits shared in this room yet. Click '+ Add My Closet Fit' to post a piece!
+                        </div>
+                    `;
+                } else {
+                    outfitsEl.innerHTML = room.outfits.map(o => `
+                        <div style="background: var(--surface-muted); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 10px; display: flex; flex-direction: column; gap: 6px;">
+                            <img src="${o.image}" alt="${o.title}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px;">
+                            <div style="font-weight: 700; font-size: 12.5px; color: var(--text-primary);">${o.title}</div>
+                            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">Styled by ${o.author}</div>
+                            <button class="tab-chip" style="font-size: 11px; padding: 4px 8px; width: 100%; text-align: center; justify-content: center;" onclick="voteOutfitInRoom('${room.id}', '${o.id}')">
+                                ♥ Upvote Fit (${o.votes || 0})
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // Notes List
+            const notesEl = document.getElementById('viewRoomNotesList');
+            if (notesEl) {
+                if (!room.notes || room.notes.length === 0) {
+                    notesEl.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); padding: 4px;">No stylist notes yet.</div>`;
+                } else {
+                    notesEl.innerHTML = room.notes.map(n => `
+                        <div style="font-size: 12px; line-height: 1.4; padding: 4px 6px; border-bottom: 1px solid var(--border-light);">
+                            <strong style="color: var(--text-primary);">${n.author}:</strong>
+                            <span style="color: var(--text-secondary); margin-left: 4px;">${n.text}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function addLookToRoomFromWardrobe() {
+            if (!activeViewingRoomId) return;
+            const wardrobeItems = getWardrobeItems();
+            if (wardrobeItems.length === 0) {
+                alert('Your digital wardrobe is empty. Add items in the Wardrobe tab first!');
+                return;
+            }
+
+            // Pick a piece from digital wardrobe
+            const randomItem = wardrobeItems[Math.floor(Math.random() * wardrobeItems.length)];
+            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === activeViewingRoomId);
+            if (room) {
+                if (!room.outfits) room.outfits = [];
+                room.outfits.push({
+                    id: 'fit_' + Date.now(),
+                    author: currentUserName,
+                    title: randomItem.name,
+                    image: randomItem.image || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&auto=format&fit=crop&q=80',
+                    votes: 1
+                });
+                room.harmonyScore = Math.min(99, room.harmonyScore + 2);
+                saveCollabRooms(rooms);
+                renderActiveRoomDetails(room);
+            }
+        }
+
+        function voteOutfitInRoom(roomId, fitId) {
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === roomId);
+            if (room && room.outfits) {
+                const fit = room.outfits.find(f => f.id === fitId);
+                if (fit) {
+                    fit.votes = (fit.votes || 0) + 1;
+                    saveCollabRooms(rooms);
+                    renderActiveRoomDetails(room);
+                }
+            }
+        }
+
+        function addNoteToRoom() {
+            if (!activeViewingRoomId) return;
+            const input = document.getElementById('viewRoomNewNoteInput');
+            const text = input ? input.value.trim() : '';
+            if (!text) return;
+
+            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === activeViewingRoomId);
+            if (room) {
+                if (!room.notes) room.notes = [];
+                room.notes.push({
+                    author: currentUserName,
+                    text: text
+                });
+                saveCollabRooms(rooms);
+                if (input) input.value = '';
+                renderActiveRoomDetails(room);
+            }
         }
 
         // Check if today matches the user's birthday (MM-DD)
