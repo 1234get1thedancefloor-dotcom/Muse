@@ -3,7 +3,7 @@ Your wardrobe becomes a game. Pick a vibe, upload your clothes, and AI builds yo
 
 Project Concept: Personal Stylist & Beauty Assistant
 
-An end-to-end encrypted, gamified fashion and beauty platform that transforms the everyday struggle of getting ready into a fun, personalized experience. The platform combines AI-powered styling, makeup guidance, wardrobe management, social coordination, and shopping recommendations based on the user's wardrobe, vibe, occasion, and region.
+A gamified fashion and beauty platform that transforms the everyday struggle of getting ready into a fun, personalized experience. The platform combines AI-powered styling, makeup guidance, wardrobe management, social coordination, and shopping recommendations based on the user's wardrobe, vibe, occasion, and region.
 
 Key Features
 
