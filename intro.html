@@ -951,15 +951,60 @@
             flex-shrink: 0;
         }
 
+        /* Home Friends Section Styles */
+        .home-friends-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 16px 18px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .home-friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .home-friend-item {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .home-friend-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-subtle);
+        }
+
+        .friend-avatar-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
         /* Outfit Selection Modal Styles */
         .outfit-picker-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 10px;
-            max-height: 280px;
+            max-height: 260px;
             overflow-y: auto;
             padding: 4px;
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         .outfit-picker-card {
@@ -1002,6 +1047,156 @@
             font-weight: 800;
             padding: 2px 6px;
             border-radius: var(--radius-pill);
+        }
+
+        /* Complete Look Assembly & Slots */
+        .look-slots-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .look-slots-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .look-slot-card {
+            background: #ffffff;
+            border: 1.5px dashed var(--border-subtle);
+            border-radius: var(--radius-card);
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 105px;
+            position: relative;
+        }
+
+        .look-slot-card:hover {
+            border-color: var(--text-secondary);
+        }
+
+        .look-slot-card.active {
+            border: 2px solid var(--primary-red);
+            background: var(--primary-red-light);
+            box-shadow: 0 2px 8px rgba(230, 0, 35, 0.12);
+        }
+
+        .look-slot-card.filled {
+            border: 1.5px solid var(--border-light);
+            background: #ffffff;
+        }
+
+        .look-slot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .look-slot-tag {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .look-slot-remove {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 2px;
+            display: none;
+        }
+
+        .look-slot-card.filled .look-slot-remove {
+            display: block;
+        }
+
+        .look-slot-remove:hover {
+            color: var(--primary-red);
+        }
+
+        .look-slot-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .look-slot-placeholder {
+            font-size: 10.5px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .look-slot-img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            background: var(--surface-muted);
+        }
+
+        .look-slot-name {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .look-slot-color {
+            font-size: 9.5px;
+            color: var(--text-secondary);
+        }
+
+        .collab-complete-look-card {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .collab-pieces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 6px;
+        }
+
+        .collab-piece-pill {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 4px 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .collab-piece-thumb {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
         }
 
         /* Info Section Cards */
@@ -1354,6 +1549,32 @@
                             Edit Profile
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Friends & Connected Stylists Section -->
+            <div class="home-friends-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <div style="font-size: 11px; font-weight: 800; color: var(--primary-red); text-transform: uppercase; letter-spacing: 0.8px;">
+                            Connected Stylists Circle
+                        </div>
+                        <div style="font-size: 15px; font-weight: 800; color: var(--text-primary); margin-top: 1px;">
+                            Friends & Collaborators
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" class="tab-chip" onclick="openAddFriendModal()" style="font-size: 11px; padding: 4px 12px; background: var(--surface-muted); font-weight: 700;">
+                            + Add Friend
+                        </button>
+                        <button type="button" class="tab-chip" onclick="goToCoStylingLounge()" style="font-size: 11px; padding: 4px 12px; background: var(--primary-red-light); color: var(--primary-red); border-color: var(--primary-red); font-weight: 700;">
+                            Co-Style in Community →
+                        </button>
+                    </div>
+                </div>
+
+                <div id="homeFriendsGrid" class="home-friends-grid">
+                    <!-- Populated dynamically by renderHomeFriendsList() -->
                 </div>
             </div>
 
@@ -2268,12 +2489,12 @@
         </div>
     </div>
 
-    <!-- SELECT OUTFIT FOR CO-STYLING ROOM MODAL -->
+    <!-- ASSEMBLE COMPLETE OUTFIT LOOK FOR CO-STYLING ROOM MODAL -->
     <div id="selectOutfitForRoomModal" class="modal-backdrop" onclick="handleSelectOutfitModalBackdropClick(event)">
-        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 560px;">
+        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 640px;">
             <div class="modal-header">
                 <div>
-                    <span class="modal-title">Select Outfit from Your Closet</span>
+                    <span class="modal-title">Assemble Complete Outfit Look</span>
                     <div id="selectOutfitTargetAesthetic" style="font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-top: 2px;">
                         Target Theme: Soft Pink & Silk Ivory
                     </div>
@@ -2281,14 +2502,81 @@
                 <button class="modal-close-btn" onclick="closeSelectOutfitModal()">×</button>
             </div>
 
-            <!-- Category Filter Tabs -->
-            <div class="wardrobe-tabs" id="outfitPickerTabs" style="margin-bottom: 10px;">
-                <button class="tab-chip active" onclick="filterOutfitPickerCategory('All', this)">All Pieces</button>
-                <button class="tab-chip" onclick="filterOutfitPickerCategory('Top', this)">Tops</button>
-                <button class="tab-chip" onclick="filterOutfitPickerCategory('Dress', this)">Dresses</button>
-                <button class="tab-chip" onclick="filterOutfitPickerCategory('Bottom', this)">Bottoms</button>
-                <button class="tab-chip" onclick="filterOutfitPickerCategory('Shoes', this)">Shoes</button>
-                <button class="tab-chip" onclick="filterOutfitPickerCategory('Jewelry', this)">Jewelry</button>
+            <!-- Live Look Assembly Composite Preview Strip -->
+            <div style="background: var(--surface-muted); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 12px; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 11px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px;">
+                        Complete Outfit Look Assembly
+                    </span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span id="lookHarmonyScoreBadge" style="font-size: 11px; font-weight: 800; background: var(--text-primary); color: #ffffff; padding: 2px 8px; border-radius: var(--radius-pill);">
+                            85% Look Synergy
+                        </span>
+                        <button type="button" class="tab-chip" onclick="resetSelectedCompleteLook()" style="font-size: 10.5px; padding: 2px 8px;">
+                            Clear Look
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Look Title Input -->
+                <input type="text" id="completeLookTitleInput" placeholder="Name this outfit look (e.g. Silk Ivory & Rose Ensemble)..." style="font-size: 12px; padding: 7px 12px; border-radius: var(--radius-pill); border: 1px solid var(--border-light); width: 100%; box-sizing: border-box; margin-bottom: 10px; outline: none; background: #ffffff;">
+
+                <!-- 4 Interactive Slot Cards -->
+                <div class="look-slots-container" id="lookSlotsContainer">
+                    <!-- Slot 1: Top or Dress -->
+                    <div class="look-slot-card active" id="slotCard-top" onclick="switchActiveLookSlot('top')">
+                        <div class="look-slot-header">
+                            <span class="look-slot-tag" id="slotTag-top">TOP / DRESS</span>
+                            <button type="button" class="look-slot-remove" onclick="event.stopPropagation(); removeLookPiece('top')">×</button>
+                        </div>
+                        <div class="look-slot-body" id="slotBody-top">
+                            <span class="look-slot-placeholder">+ Select Top</span>
+                        </div>
+                    </div>
+
+                    <!-- Slot 2: Bottom / Pants / Skirt -->
+                    <div class="look-slot-card" id="slotCard-bottom" onclick="switchActiveLookSlot('bottom')">
+                        <div class="look-slot-header">
+                            <span class="look-slot-tag" id="slotTag-bottom">BOTTOM / PANTS</span>
+                            <button type="button" class="look-slot-remove" onclick="event.stopPropagation(); removeLookPiece('bottom')">×</button>
+                        </div>
+                        <div class="look-slot-body" id="slotBody-bottom">
+                            <span class="look-slot-placeholder">+ Select Bottom</span>
+                        </div>
+                    </div>
+
+                    <!-- Slot 3: Shoes -->
+                    <div class="look-slot-card" id="slotCard-shoes" onclick="switchActiveLookSlot('shoes')">
+                        <div class="look-slot-header">
+                            <span class="look-slot-tag">SHOES</span>
+                            <button type="button" class="look-slot-remove" onclick="event.stopPropagation(); removeLookPiece('shoes')">×</button>
+                        </div>
+                        <div class="look-slot-body" id="slotBody-shoes">
+                            <span class="look-slot-placeholder">+ Select Shoes</span>
+                        </div>
+                    </div>
+
+                    <!-- Slot 4: Jewelry / Bag / Accessories -->
+                    <div class="look-slot-card" id="slotCard-jewelry" onclick="switchActiveLookSlot('jewelry')">
+                        <div class="look-slot-header">
+                            <span class="look-slot-tag">JEWELRY / BAG</span>
+                            <button type="button" class="look-slot-remove" onclick="event.stopPropagation(); removeLookPiece('jewelry')">×</button>
+                        </div>
+                        <div class="look-slot-body" id="slotBody-jewelry">
+                            <span class="look-slot-placeholder">+ Select Jewelry</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Filter Tabs for Closet Browsing -->
+            <div class="wardrobe-tabs" id="outfitPickerTabs" style="margin-bottom: 8px;">
+                <button class="tab-chip active" id="pickerTab-Top" onclick="filterOutfitPickerCategory('Top', this)">Tops</button>
+                <button class="tab-chip" id="pickerTab-Dress" onclick="filterOutfitPickerCategory('Dress', this)">Dresses</button>
+                <button class="tab-chip" id="pickerTab-Bottom" onclick="filterOutfitPickerCategory('Bottom', this)">Bottoms / Pants</button>
+                <button class="tab-chip" id="pickerTab-Shoes" onclick="filterOutfitPickerCategory('Shoes', this)">Shoes</button>
+                <button class="tab-chip" id="pickerTab-Jewelry" onclick="filterOutfitPickerCategory('Jewelry', this)">Jewelry & Bags</button>
+                <button class="tab-chip" id="pickerTab-All" onclick="filterOutfitPickerCategory('All', this)">All Pieces</button>
             </div>
 
             <!-- Closet Piece Selection Grid -->
@@ -2296,27 +2584,54 @@
                 <!-- Dynamically populated from user's wardrobe -->
             </div>
 
-            <!-- Selected Piece Info & Match Banner -->
-            <div id="outfitPickerSelectionDetails" style="background: var(--surface-muted); padding: 10px 14px; border-radius: var(--radius-card); margin-bottom: 12px; font-size: 12.5px; min-height: 42px; display: flex; align-items: center; justify-content: space-between;">
-                <span id="selectedPieceText" style="color: var(--text-secondary); font-weight: 500;">
-                    Click a wardrobe piece above to select it.
-                </span>
-                <span id="selectedPieceScoreBadge" style="display: none; font-size: 11px; font-weight: 800; background: var(--text-primary); color: #ffffff; padding: 2px 8px; border-radius: var(--radius-pill);"></span>
-            </div>
-
             <!-- Bottom Action Controls with Recommend Option -->
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border-light);">
-                <button type="button" class="trend-action-btn" style="width: auto; padding: 8px 16px; margin: 0; font-size: 12px; background: var(--primary-red-light); color: var(--primary-red); border-color: var(--primary-red);" onclick="recommendBestClosetMatchForRoom()">
-                    Recommend Best Match
+                <button type="button" class="trend-action-btn" style="width: auto; padding: 8px 16px; margin: 0; font-size: 12px; background: var(--primary-red-light); color: var(--primary-red); border-color: var(--primary-red); font-weight: 700;" onclick="recommendCompleteOutfitLookForRoom()">
+                    Recommend Complete Outfit Look
                 </button>
 
                 <div style="display: flex; gap: 8px;">
                     <button type="button" class="tab-chip" onclick="closeSelectOutfitModal()" style="padding: 8px 16px;">
                         Cancel
                     </button>
-                    <button type="button" id="confirmAddPieceBtn" class="action-button" onclick="confirmAddSelectedOutfitToRoom()" style="padding: 8px 20px; width: auto; margin-top: 0; font-size: 12px;" disabled>
-                        Add Fit to Room
+                    <button type="button" id="confirmAddPieceBtn" class="action-button" onclick="confirmAddSelectedOutfitToRoom()" style="padding: 8px 20px; width: auto; margin-top: 0; font-size: 12px;">
+                        Add Complete Outfit to Room
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD FRIEND MODAL -->
+    <div id="addFriendModal" class="modal-backdrop" onclick="handleAddFriendModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 460px;">
+            <div class="modal-header">
+                <span class="modal-title">Add Stylist Friend to Circle</span>
+                <button class="modal-close-btn" onclick="closeAddFriendModal()">×</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div>
+                    <label style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Friend's Name</label>
+                    <input type="text" id="addFriendNameInput" placeholder="e.g. Chloe Bennett" style="font-size: 12.5px; padding: 10px 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light); width: 100%; box-sizing: border-box; margin-top: 4px; outline: none;">
+                </div>
+                <div>
+                    <label style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Username or Handle</label>
+                    <input type="text" id="addFriendHandleInput" placeholder="e.g. @chloe.style" style="font-size: 12.5px; padding: 10px 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light); width: 100%; box-sizing: border-box; margin-top: 4px; outline: none;">
+                </div>
+                <div>
+                    <label style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Aesthetic Signature</label>
+                    <select id="addFriendAestheticInput" style="font-size: 12.5px; padding: 10px 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light); width: 100%; box-sizing: border-box; margin-top: 4px; outline: none; background: #ffffff;">
+                        <option value="Coquette / Balletcore">Coquette / Balletcore</option>
+                        <option value="Quiet Luxury / Warm Neutral">Quiet Luxury / Warm Neutral</option>
+                        <option value="Y2K Cyber / Streetwear">Y2K Cyber / Streetwear</option>
+                        <option value="Minimalist / Architectural">Minimalist / Architectural</option>
+                        <option value="Eclectic / Indie Teal">Eclectic / Indie Teal</option>
+                        <option value="Dark Grunge / Gothic Chic">Dark Grunge / Gothic Chic</option>
+                    </select>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;">
+                    <button type="button" class="tab-chip" onclick="closeAddFriendModal()" style="padding: 8px 16px;">Cancel</button>
+                    <button type="button" class="action-button" onclick="handleAddFriendSubmit()" style="width: auto; padding: 8px 20px; font-size: 12px; margin-top: 0;">Add to Circle</button>
                 </div>
             </div>
         </div>
@@ -2325,12 +2640,15 @@
     <script>
         let currentFilter = 'All';
 
-        // Sample starter wardrobe items
+        // Sample starter wardrobe items with complete capsule categories
         const defaultWardrobe = [
             { id: 'w1', name: 'Silk Ribbon Corset Top', category: 'Top', color: 'Powder Pink', image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&auto=format&fit=crop&q=60' },
             { id: 'w2', name: 'Pleated Mini Tennis Skirt', category: 'Bottom', color: 'Ivory White', image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300&auto=format&fit=crop&q=60' },
             { id: 'w3', name: 'Mary Jane Kitten Heels', category: 'Shoes', color: 'Wine Red', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60' },
-            { id: 'w4', name: 'Freshwater Pearl Drop Necklace', category: 'Jewelry', color: 'Gold / Pearl', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=60' }
+            { id: 'w4', name: 'Freshwater Pearl Drop Necklace', category: 'Jewelry', color: 'Gold / Pearl', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=60' },
+            { id: 'w5', name: 'Satin Slip Maxi Dress', category: 'Dress', color: 'Champagne Ivory', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&auto=format&fit=crop&q=60' },
+            { id: 'w6', name: 'Wide-Leg Pleated Trousers', category: 'Bottom', color: 'Charcoal Black', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&auto=format&fit=crop&q=60' },
+            { id: 'w7', name: 'Oversized Tailored Linen Shirt', category: 'Top', color: 'Crisp White', image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&auto=format&fit=crop&q=60' }
         ];
 
         function getWardrobeItems() {
@@ -2388,6 +2706,7 @@
             alert(`Welcome back, ${formattedName}! You are signed in.`);
             switchAuthTab('signup');
             document.getElementById('userName').value = formattedName;
+            document.getElementById('userEmail').value = email;
 
             hideAllScreens();
             document.getElementById('homeScreen').classList.remove('hidden');
@@ -2398,8 +2717,31 @@
 
         // Complete Initial Onboarding
         function completeOnboarding() {
-            const profile = saveUserProfile();
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const birthday = document.getElementById('userBirthday').value;
+            const aesthetic = document.getElementById('userAesthetic').value;
+
+            if (!name) {
+                alert("Please enter your Name or Stylist Handle!");
+                return;
+            }
+
+            const profile = {
+                name: name,
+                email: email || 'stylist@muse.style',
+                birthday: birthday || '2000-01-01',
+                aesthetic: aesthetic
+            };
+
             localStorage.setItem('muse_has_onboarded', 'true');
+            localStorage.setItem('muse_user_profile', JSON.stringify(profile));
+            localStorage.setItem('muse_userName', profile.name);
+            localStorage.setItem('muse_userAesthetic', profile.aesthetic);
+
+            updateNavAuthStatus(profile.name);
+            applyTheme(profile.aesthetic);
+
             hideAllScreens();
             document.getElementById('homeScreen').classList.remove('hidden');
             document.getElementById('navHomeBtn').classList.add('active');
@@ -2438,6 +2780,9 @@
                 };
                 homeAesthetic.innerText = fullNames[savedAesthetic] || 'Custom Vibe';
             }
+
+            // Render Friends & Connected Stylists Circle
+            renderHomeFriendsList();
 
             // Load or refresh real-time Google Fashion Trends
             loadTrendingAesthetics();
@@ -2915,11 +3260,10 @@
                         <div class="community-footer">
                             <div class="community-interact-group">
                                 <button class="community-interact-btn ${p.liked ? 'liked' : ''}" onclick="toggleLikeCommunityPost('${p.id}')">
-                                    <span>${p.liked ? '♥' : '♡'}</span>
+                                    <span>Like</span>
                                     <span>${p.likes || 0}</span>
                                 </button>
                                 <button class="community-interact-btn ${p.saved ? 'saved' : ''}" onclick="toggleSaveCommunityPost('${p.id}')">
-                                    <span>${p.saved ? '★' : '☆'}</span>
                                     <span>${p.saved ? 'Saved' : 'Save'}</span>
                                 </button>
                             </div>
@@ -3100,19 +3444,28 @@
                     {
                         id: 'co1',
                         author: 'Aria Vance',
-                        title: 'Silk Ribbon Corset Top',
-                        category: 'Top',
-                        color: 'Powder Pink',
+                        title: 'Powder Silk & Rose Petal Fit',
+                        harmonyScore: 98,
+                        pieces: [
+                            { slot: 'Top', name: 'Silk Ribbon Corset Top', category: 'Top', color: 'Powder Pink', image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&auto=format&fit=crop&q=60' },
+                            { slot: 'Bottom', name: 'Pleated Mini Tennis Skirt', category: 'Bottom', color: 'Ivory White', image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300&auto=format&fit=crop&q=60' },
+                            { slot: 'Shoes', name: 'Mary Jane Kitten Heels', category: 'Shoes', color: 'Wine Red', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60' },
+                            { slot: 'Jewelry', name: 'Freshwater Pearl Drop Necklace', category: 'Jewelry', color: 'Gold / Pearl', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=60' }
+                        ],
                         image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&auto=format&fit=crop&q=60',
                         votes: 8
                     },
                     {
                         id: 'co2',
                         author: 'Elena Rostova',
-                        title: 'Pleated Mini Tennis Skirt',
-                        category: 'Bottom',
-                        color: 'Ivory White',
-                        image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300&auto=format&fit=crop&q=60',
+                        title: 'Satin Slip & Minimalist Elegance',
+                        harmonyScore: 95,
+                        pieces: [
+                            { slot: 'Dress', name: 'Satin Slip Maxi Dress', category: 'Dress', color: 'Champagne Ivory', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&auto=format&fit=crop&q=60' },
+                            { slot: 'Shoes', name: 'Mary Jane Kitten Heels', category: 'Shoes', color: 'Wine Red', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60' },
+                            { slot: 'Jewelry', name: 'Freshwater Pearl Drop Necklace', category: 'Jewelry', color: 'Gold / Pearl', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=60' }
+                        ],
+                        image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&auto=format&fit=crop&q=60',
                         votes: 6
                     }
                 ],
@@ -3139,10 +3492,14 @@
                     {
                         id: 'co3',
                         author: 'Kai Thorne',
-                        title: 'Mary Jane Kitten Heels',
-                        category: 'Shoes',
-                        color: 'Wine Red',
-                        image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60',
+                        title: 'Monochrome Street Fit with Red Accents',
+                        harmonyScore: 93,
+                        pieces: [
+                            { slot: 'Top', name: 'Oversized Tailored Linen Shirt', category: 'Top', color: 'Crisp White', image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&auto=format&fit=crop&q=60' },
+                            { slot: 'Bottom', name: 'Wide-Leg Pleated Trousers', category: 'Bottom', color: 'Charcoal Black', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&auto=format&fit=crop&q=60' },
+                            { slot: 'Shoes', name: 'Mary Jane Kitten Heels', category: 'Shoes', color: 'Wine Red', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=60' }
+                        ],
+                        image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&auto=format&fit=crop&q=60',
                         votes: 11
                     }
                 ],
@@ -3152,16 +3509,198 @@
             }
         ];
 
-        let defaultFriendsList = [
-            { name: 'Aria Vance', handle: '@ariavance', aesthetic: 'Soft Coquette' },
-            { name: 'Elena Rostova', handle: '@elena_glam', aesthetic: 'Clean Girl' },
-            { name: 'Kai Thorne', handle: '@kaistyle', aesthetic: 'Streetwear' },
-            { name: 'Maya Lin', handle: '@mayalin', aesthetic: 'Chic Warm' }
+        const defaultFriendsList = [
+            { id: 'f1', name: 'Aria Vance', handle: '@ariavance', aesthetic: 'Coquette / Balletcore', initials: 'AV', avatarBg: '#ffe4e6', avatarColor: '#e11d48', status: 'Online', look: 'Silk Ribbon Corset & Pleated Skirt' },
+            { id: 'f2', name: 'Elena Rostova', handle: '@elena_glam', aesthetic: 'Quiet Luxury / Warm Neutral', initials: 'ER', avatarBg: '#fef3c7', avatarColor: '#d97706', status: 'Styling now', look: 'Slip Dress & Minimalist Heels' },
+            { id: 'f3', name: 'Kai Thorne', handle: '@kaistyle', aesthetic: 'Y2K Cyber / Streetwear', initials: 'KT', avatarBg: '#e0f2fe', avatarColor: '#0284c7', status: 'Online', look: 'Oversized Linen Shirt & Trousers' },
+            { id: 'f4', name: 'Maya Lin', handle: '@mayalin', aesthetic: 'Minimalist / Architectural', initials: 'ML', avatarBg: '#f3e8ff', avatarColor: '#7e22ce', status: 'Active today', look: 'Cashmere Knit & Pearl Drop' }
         ];
 
         let activeViewingRoomId = null;
-        let selectedWardrobePieceForRoom = null;
-        let currentOutfitPickerFilter = 'All';
+        let currentOutfitPickerFilter = 'Top';
+        let activePickerSlot = 'top';
+
+        let selectedCompleteLook = {
+            title: '',
+            top: null,
+            dress: null,
+            bottom: null,
+            shoes: null,
+            jewelry: null
+        };
+
+        function getFriendsList() {
+            try {
+                const stored = localStorage.getItem('muse_friends_list');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            return defaultFriendsList;
+        }
+
+        function saveFriendsList(friends) {
+            localStorage.setItem('muse_friends_list', JSON.stringify(friends));
+        }
+
+        function renderHomeFriendsList() {
+            const grid = document.getElementById('homeFriendsGrid');
+            if (!grid) return;
+
+            const friends = getFriendsList();
+            if (friends.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; background: var(--surface-muted); padding: 14px; border-radius: var(--radius-card); text-align: center; color: var(--text-secondary); font-size: 12px;">
+                        No friends added yet. Click '+ Add Friend' to connect with stylists!
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = friends.map(f => {
+                const initials = f.initials || f.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                const bg = f.avatarBg || '#ffe4e6';
+                const color = f.avatarColor || '#e11d48';
+
+                return `
+                    <div class="home-friend-item">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="friend-avatar-badge" style="background: ${bg}; color: ${color};">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <div style="font-weight: 800; font-size: 13px; color: var(--text-primary); line-height: 1.2;">
+                                        ${f.name}
+                                    </div>
+                                    <div style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">
+                                        ${f.handle}
+                                    </div>
+                                </div>
+                            </div>
+                            <span style="font-size: 9.5px; font-weight: 700; color: #2e7d32; background: #e8f5e9; padding: 2px 6px; border-radius: var(--radius-pill);">
+                                ${f.status || 'Connected'}
+                            </span>
+                        </div>
+
+                        <div style="font-size: 10.5px; font-weight: 700; color: var(--text-primary); background: #ffffff; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${f.aesthetic}
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+                            <span style="font-size: 10px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;">
+                                ${f.look ? f.look : 'Curating capsule'}
+                            </span>
+                            <button class="tab-chip" style="font-size: 10.5px; padding: 3px 8px; background: var(--text-primary); color: #ffffff; border: none; cursor: pointer;" onclick="startCoStylingWithFriend('${f.id}')">
+                                Co-Style
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAddFriendModal() {
+            const modal = document.getElementById('addFriendModal');
+            if (modal) {
+                document.getElementById('addFriendNameInput').value = '';
+                document.getElementById('addFriendHandleInput').value = '';
+                modal.classList.add('open');
+            }
+        }
+
+        function closeAddFriendModal() {
+            const modal = document.getElementById('addFriendModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function handleAddFriendModalBackdropClick(e) {
+            if (e.target && e.target.id === 'addFriendModal') {
+                closeAddFriendModal();
+            }
+        }
+
+        function handleAddFriendSubmit() {
+            const nameInput = document.getElementById('addFriendNameInput');
+            const handleInput = document.getElementById('addFriendHandleInput');
+            const aestheticInput = document.getElementById('addFriendAestheticInput');
+
+            const name = nameInput ? nameInput.value.trim() : '';
+            let handle = handleInput ? handleInput.value.trim() : '';
+            const aesthetic = aestheticInput ? aestheticInput.value : 'Custom Vibe';
+
+            if (!name) {
+                alert('Please enter your friend\'s name!');
+                return;
+            }
+
+            if (!handle) {
+                handle = '@' + name.toLowerCase().replace(/\s+/g, '.');
+            } else if (!handle.startsWith('@')) {
+                handle = '@' + handle;
+            }
+
+            const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'ST';
+            const paletteOptions = [
+                { bg: '#ffe4e6', color: '#e11d48' },
+                { bg: '#fef3c7', color: '#d97706' },
+                { bg: '#e0f2fe', color: '#0284c7' },
+                { bg: '#f3e8ff', color: '#7e22ce' },
+                { bg: '#e0f7fa', color: '#00838f' }
+            ];
+            const pickedPal = paletteOptions[Math.floor(Math.random() * paletteOptions.length)];
+
+            const newFriend = {
+                id: 'friend_' + Date.now(),
+                name: name,
+                handle: handle,
+                aesthetic: aesthetic,
+                initials: initials,
+                avatarBg: pickedPal.bg,
+                avatarColor: pickedPal.color,
+                status: 'Online',
+                look: 'Curated Ensemble'
+            };
+
+            const friends = getFriendsList();
+            friends.unshift(newFriend);
+            saveFriendsList(friends);
+            closeAddFriendModal();
+            renderHomeFriendsList();
+            renderConnectedFriends();
+            alert(`${name} (${handle}) added to your Connected Stylists Circle!`);
+        }
+
+        function startCoStylingWithFriend(friendId) {
+            const friends = getFriendsList();
+            const friend = friends.find(f => f.id === friendId);
+            const friendName = friend ? friend.name : 'Stylist Friend';
+
+            goToCoStylingLounge(friendName);
+        }
+
+        function goToCoStylingLounge(friendName = null) {
+            showInfoSection('community');
+            const tabs = document.querySelectorAll('.community-filter-btn');
+            tabs.forEach(t => {
+                if (t.innerText.includes('Co-Styling Lounge')) {
+                    filterCommunityFeed('Costyling', t);
+                }
+            });
+
+            if (friendName) {
+                setTimeout(() => {
+                    openCreateRoomModal();
+                    const titleInput = document.getElementById('newRoomTitle');
+                    if (titleInput) titleInput.value = `Styling Session with ${friendName}`;
+                    const themeInput = document.getElementById('newRoomTheme');
+                    if (themeInput) themeInput.value = 'Coordinated Capsule & Palette Matching';
+                }, 150);
+            }
+        }
 
         function getCollabRooms() {
             try {
@@ -3208,9 +3747,10 @@
                     <span class="trend-color-dot" style="background: ${c}; width: 12px; height: 12px;" title="${c}"></span>
                 `).join('');
 
-                const outfitPreviews = (r.outfits || []).map(o => `
-                    <img class="collab-fit-thumb" src="${o.image}" alt="${o.title}" title="${o.author}: ${o.title}">
-                `).join('');
+                const outfitPreviews = (r.outfits || []).map(o => {
+                    const thumbImg = (o.pieces && o.pieces.length > 0) ? o.pieces[0].image : (o.image || '');
+                    return `<img class="collab-fit-thumb" src="${thumbImg}" alt="${o.title}" title="${o.author}: ${o.title}">`;
+                }).join('');
 
                 return `
                     <div class="collab-room-card">
@@ -3219,7 +3759,7 @@
                                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                     <span style="font-size: 14.5px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px;">${r.title}</span>
                                     <span style="font-size: 11px; font-weight: 700; color: var(--primary-red); background: var(--primary-red-light); padding: 2px 8px; border-radius: var(--radius-pill);">${r.occasion}</span>
-                                    <span style="font-size: 10.5px; font-weight: 700; color: var(--text-secondary); background: var(--surface-muted); padding: 2px 8px; border-radius: var(--radius-pill);">${r.isPrivate ? '🔒 Private' : '🌐 Public'}</span>
+                                    <span style="font-size: 10.5px; font-weight: 700; color: var(--text-secondary); background: var(--surface-muted); padding: 2px 8px; border-radius: var(--radius-pill);">${r.isPrivate ? 'Private Room' : 'Public Room'}</span>
                                 </div>
                                 <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px; font-weight: 500;">
                                     Host: <strong>${r.host}</strong> • Code: <strong style="color: var(--text-primary); font-family: monospace;">${r.code}</strong>
@@ -3245,7 +3785,7 @@
 
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 8px;">
                             <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">
-                                ${(r.outfits || []).length} Shared Fits • ${(r.notes || []).length} Notes
+                                ${(r.outfits || []).length} Complete Outfits • ${(r.notes || []).length} Notes
                             </span>
                             <button class="action-button" style="width: auto; padding: 6px 16px; font-size: 12px; margin-top: 0;" onclick="openViewRoomModal('${r.id}')">
                                 Enter Co-Styling Room →
@@ -3302,14 +3842,23 @@
             const cleanName = val.includes('@') ? val.split('@')[0] : val.replace('@', '');
             const formatted = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
 
-            defaultFriendsList.push({
+            const friends = getFriendsList();
+            friends.push({
+                id: 'friend_' + Date.now(),
                 name: formatted,
                 handle: '@' + cleanName.toLowerCase(),
-                aesthetic: 'Custom Vibe'
+                aesthetic: 'Custom Vibe',
+                initials: formatted.slice(0, 2).toUpperCase(),
+                avatarBg: '#ffe4e6',
+                avatarColor: '#e11d48',
+                status: 'Connected',
+                look: 'Curated Look'
             });
+            saveFriendsList(friends);
 
             if (input) input.value = '';
             renderConnectedFriends();
+            renderHomeFriendsList();
             alert(`Stylist invitation successfully sent to ${val}! They have been added to your connected network.`);
         }
 
@@ -3317,8 +3866,9 @@
             const container = document.getElementById('connectedFriendsList');
             if (!container) return;
 
-            container.innerHTML = defaultFriendsList.map(f => {
-                const init = f.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            const friends = getFriendsList();
+            container.innerHTML = friends.map(f => {
+                const init = f.initials || f.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
                 return `
                     <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-muted); padding: 8px 12px; border-radius: var(--radius-pill);">
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -3403,7 +3953,7 @@
                 palette: ['#F4C2C2', '#111111', '#FFFFF0', '#C19A6B'],
                 outfits: [],
                 notes: [
-                    { author: currentUserName, text: `Welcome to ${title}! Share your outfit pieces to coordinate palettes.` }
+                    { author: currentUserName, text: `Welcome to ${title}! Share your complete outfit looks to coordinate palettes.` }
                 ]
             };
 
@@ -3443,231 +3993,8 @@
             }
         }
 
-        // View Co-Styling Room Modal Handlers
-        function openViewRoomModal(roomId) {
-            const rooms = getCollabRooms();
-            const room = rooms.find(r => r.id === roomId);
-            if (!room) return;
-
-            activeViewingRoomId = roomId;
-            const modal = document.getElementById('viewCoStylingModal');
-            if (modal) {
-                renderActiveRoomDetails(room);
-                modal.classList.add('open');
-            }
-        }
-
-        function closeViewRoomModal() {
-            const modal = document.getElementById('viewCoStylingModal');
-            if (modal) modal.classList.remove('open');
-            activeViewingRoomId = null;
-            loadCollabRooms();
-        }
-
-        function handleViewRoomModalBackdropClick(e) {
-            if (e.target && e.target.id === 'viewCoStylingModal') {
-                closeViewRoomModal();
-            }
-        }
-
-        function renderActiveRoomDetails(room) {
-            document.getElementById('viewRoomModalTitle').innerText = room.title;
-            document.getElementById('viewRoomModalSubtitle').innerText = `${room.occasion} • Code: ${room.code} • Theme: ${room.theme}`;
-            document.getElementById('viewRoomHarmonyScore').innerText = `${room.harmonyScore}% Palette Harmony`;
-            document.getElementById('viewRoomFitCount').innerText = (room.outfits || []).length;
-
-            const privacyBadge = document.getElementById('viewRoomPrivacyBadge');
-            if (privacyBadge) {
-                privacyBadge.innerText = room.isPrivate ? '🔒 Private Room' : '🌐 Public Room';
-                privacyBadge.style.background = room.isPrivate ? 'var(--primary-red-light)' : 'var(--surface-muted)';
-                privacyBadge.style.color = room.isPrivate ? 'var(--primary-red)' : 'var(--text-primary)';
-            }
-
-            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
-            const isHost = room.host === currentUserName || (room.members && room.members.includes(`${currentUserName} (Host)`));
-            const isApproved = !room.isPrivate || isHost || (room.approvedContributors && room.approvedContributors.some(c => c.toLowerCase() === currentUserName.toLowerCase() || c === 'Guest Stylist' || c === 'Stylist'));
-            const hasRequested = room.pendingRequests && room.pendingRequests.includes(currentUserName);
-
-            // Access Status Banner
-            const accessBanner = document.getElementById('roomAccessBanner');
-            if (accessBanner) {
-                if (room.isPrivate) {
-                    if (isApproved) {
-                        accessBanner.style.background = '#e8f5e9';
-                        accessBanner.style.border = '1px solid #c8e6c9';
-                        accessBanner.innerHTML = `
-                            <div style="font-size: 12.5px; color: #2e7d32; font-weight: 600;">
-                                ✓ Contributor Access Granted • You have permission to share outfits in this private room.
-                            </div>
-                            ${isHost ? '<span style="font-size: 11px; font-weight: 800; background: #2e7d32; color: #ffffff; padding: 2px 8px; border-radius: var(--radius-pill);">You are Host</span>' : ''}
-                        `;
-                    } else {
-                        accessBanner.style.background = '#fff3e0';
-                        accessBanner.style.border = '1px solid #ffe0b2';
-                        accessBanner.innerHTML = `
-                            <div style="font-size: 12.5px; color: #e65100; font-weight: 600;">
-                                🔒 Private Room • Permission from host (${room.host}) is required to add outfits.
-                            </div>
-                            <div>
-                                ${hasRequested ? `
-                                    <button class="tab-chip" style="font-size: 11.5px; opacity: 0.7; cursor: default;" disabled>Request Sent</button>
-                                ` : `
-                                    <button class="action-button" style="width: auto; padding: 6px 14px; font-size: 11.5px; margin: 0;" onclick="requestRoomAccess('${room.id}')">
-                                        Request Host Access
-                                    </button>
-                                `}
-                            </div>
-                        `;
-                    }
-                } else {
-                    accessBanner.style.background = 'var(--surface-muted)';
-                    accessBanner.style.border = '1px solid var(--border-light)';
-                    accessBanner.innerHTML = `
-                        <div style="font-size: 12.5px; color: var(--text-secondary); font-weight: 600;">
-                            🌐 Public Room • Open collaboration session for all community stylists.
-                        </div>
-                    `;
-                }
-            }
-
-            // Host Permissions Panel
-            const hostBox = document.getElementById('hostPermissionsBox');
-            const hostList = document.getElementById('hostContributorsList');
-            if (hostBox && hostList) {
-                if (isHost && room.isPrivate) {
-                    hostBox.classList.remove('hidden');
-                    const pendingHtml = (room.pendingRequests || []).map(req => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 6px 10px; border-radius: var(--radius-card);">
-                            <span style="font-size: 12px; font-weight: 700; color: var(--text-primary);">${req} <span style="font-size: 10.5px; color: var(--primary-red); font-weight: 600;">(Pending)</span></span>
-                            <button class="action-button" style="width: auto; padding: 4px 10px; font-size: 11px; margin: 0;" onclick="approveContributor('${room.id}', '${req}')">
-                                Approve Access
-                            </button>
-                        </div>
-                    `).join('');
-
-                    const approvedHtml = (room.approvedContributors || []).filter(c => c !== currentUserName).map(app => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 6px 10px; border-radius: var(--radius-card);">
-                            <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);">${app}</span>
-                            <button class="tab-chip" style="font-size: 10.5px; padding: 2px 8px; color: var(--primary-red);" onclick="revokeContributor('${room.id}', '${app}')">
-                                Revoke
-                            </button>
-                        </div>
-                    `).join('');
-
-                    hostList.innerHTML = pendingHtml + (approvedHtml || '<div style="font-size: 11.5px; color: var(--text-secondary);">No other approved contributors yet.</div>');
-                } else {
-                    hostBox.classList.add('hidden');
-                }
-            }
-
-            // Add Fit Button Container
-            const addFitContainer = document.getElementById('roomAddFitBtnContainer');
-            if (addFitContainer) {
-                if (isApproved) {
-                    addFitContainer.innerHTML = `
-                        <button class="action-button" style="width: auto; padding: 6px 14px; font-size: 11.5px; margin-top: 0;" onclick="openSelectOutfitModal()">
-                            + Add My Closet Fit
-                        </button>
-                    `;
-                } else {
-                    addFitContainer.innerHTML = `
-                        <span style="font-size: 11.5px; color: var(--text-secondary); font-weight: 600;">🔒 Host access required to add fits</span>
-                    `;
-                }
-            }
-
-            // Palette Swatches
-            const swatchesEl = document.getElementById('viewRoomPaletteSwatches');
-            if (swatchesEl) {
-                swatchesEl.innerHTML = (room.palette || []).map(c => `
-                    <span class="trend-color-dot" style="background: ${c}; width: 14px; height: 14px;" title="${c}"></span>
-                `).join('');
-            }
-
-            // Outfits Grid
-            const outfitsEl = document.getElementById('viewRoomOutfitsGrid');
-            if (outfitsEl) {
-                if (!room.outfits || room.outfits.length === 0) {
-                    outfitsEl.innerHTML = `
-                        <div style="grid-column: 1 / -1; background: var(--surface-muted); padding: 18px; border-radius: var(--radius-card); text-align: center; color: var(--text-secondary); font-size: 12.5px;">
-                            No fits shared in this room yet. Click '+ Add My Closet Fit' to pick a piece!
-                        </div>
-                    `;
-                } else {
-                    outfitsEl.innerHTML = room.outfits.map(o => `
-                        <div style="background: var(--surface-muted); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 10px; display: flex; flex-direction: column; gap: 6px;">
-                            <img src="${o.image}" alt="${o.title}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px;">
-                            <div style="font-weight: 700; font-size: 12.5px; color: var(--text-primary);">${o.title}</div>
-                            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 500;">Styled by ${o.author}</div>
-                            <button class="tab-chip" style="font-size: 11px; padding: 4px 8px; width: 100%; text-align: center; justify-content: center;" onclick="voteOutfitInRoom('${room.id}', '${o.id}')">
-                                ♥ Upvote Fit (${o.votes || 0})
-                            </button>
-                        </div>
-                    `).join('');
-                }
-            }
-
-            // Notes List
-            const notesEl = document.getElementById('viewRoomNotesList');
-            if (notesEl) {
-                if (!room.notes || room.notes.length === 0) {
-                    notesEl.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); padding: 4px;">No stylist notes yet.</div>`;
-                } else {
-                    notesEl.innerHTML = room.notes.map(n => `
-                        <div style="font-size: 12px; line-height: 1.4; padding: 4px 6px; border-bottom: 1px solid var(--border-light);">
-                            <strong style="color: var(--text-primary);">${n.author}:</strong>
-                            <span style="color: var(--text-secondary); margin-left: 4px;">${n.text}</span>
-                        </div>
-                    `).join('');
-                }
-            }
-        }
-
-        function requestRoomAccess(roomId) {
-            const rooms = getCollabRooms();
-            const room = rooms.find(r => r.id === roomId);
-            if (!room) return;
-
-            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
-            if (!room.pendingRequests) room.pendingRequests = [];
-            if (!room.pendingRequests.includes(currentUserName)) {
-                room.pendingRequests.push(currentUserName);
-                saveCollabRooms(rooms);
-                renderActiveRoomDetails(room);
-                alert(`Access request submitted to host (${room.host})! You will be granted contributor rights once approved.`);
-            }
-        }
-
-        function approveContributor(roomId, userName) {
-            const rooms = getCollabRooms();
-            const room = rooms.find(r => r.id === roomId);
-            if (!room) return;
-
-            if (!room.approvedContributors) room.approvedContributors = [];
-            if (!room.approvedContributors.includes(userName)) {
-                room.approvedContributors.push(userName);
-            }
-            if (room.pendingRequests) {
-                room.pendingRequests = room.pendingRequests.filter(u => u !== userName);
-            }
-            saveCollabRooms(rooms);
-            renderActiveRoomDetails(room);
-        }
-
-        function revokeContributor(roomId, userName) {
-            const rooms = getCollabRooms();
-            const room = rooms.find(r => r.id === roomId);
-            if (!room) return;
-
-            if (room.approvedContributors) {
-                room.approvedContributors = room.approvedContributors.filter(u => u !== userName);
-            }
-            saveCollabRooms(rooms);
-            renderActiveRoomDetails(room);
-        }
-
         // =====================================================
-        // OUTFIT SELECTION & AI RECOMMENDATION CONTROLLER
+        // COMPLETE OUTFIT LOOK SELECTION & AI ENGINE
         // =====================================================
 
         function openSelectOutfitModal() {
@@ -3681,27 +4008,8 @@
                 targetAestheticEl.innerText = `Target Theme: ${room.theme} (${room.occasion})`;
             }
 
-            selectedWardrobePieceForRoom = null;
-            currentOutfitPickerFilter = 'All';
-
-            const confirmBtn = document.getElementById('confirmAddPieceBtn');
-            if (confirmBtn) confirmBtn.disabled = true;
-
-            const detailsText = document.getElementById('selectedPieceText');
-            if (detailsText) detailsText.innerText = 'Click a wardrobe piece above to select it.';
-
-            const scoreBadge = document.getElementById('selectedPieceScoreBadge');
-            if (scoreBadge) scoreBadge.style.display = 'none';
-
-            // Reset tab chips
-            const tabs = document.getElementById('outfitPickerTabs');
-            if (tabs) {
-                tabs.querySelectorAll('.tab-chip').forEach((t, idx) => {
-                    t.classList.toggle('active', idx === 0);
-                });
-            }
-
-            renderOutfitPickerGrid();
+            resetSelectedCompleteLook();
+            switchActiveLookSlot('top');
 
             const modal = document.getElementById('selectOutfitForRoomModal');
             if (modal) modal.classList.add('open');
@@ -3710,13 +4018,47 @@
         function closeSelectOutfitModal() {
             const modal = document.getElementById('selectOutfitForRoomModal');
             if (modal) modal.classList.remove('open');
-            selectedWardrobePieceForRoom = null;
         }
 
         function handleSelectOutfitModalBackdropClick(e) {
             if (e.target && e.target.id === 'selectOutfitForRoomModal') {
                 closeSelectOutfitModal();
             }
+        }
+
+        function resetSelectedCompleteLook() {
+            selectedCompleteLook = {
+                title: '',
+                top: null,
+                dress: null,
+                bottom: null,
+                shoes: null,
+                jewelry: null
+            };
+            const titleInput = document.getElementById('completeLookTitleInput');
+            if (titleInput) titleInput.value = '';
+            updateLookSlotsDisplay();
+            renderOutfitPickerGrid();
+        }
+
+        function switchActiveLookSlot(slot) {
+            activePickerSlot = slot.toLowerCase();
+            
+            ['top', 'bottom', 'shoes', 'jewelry'].forEach(s => {
+                const card = document.getElementById(`slotCard-${s}`);
+                if (card) {
+                    card.classList.toggle('active', s === activePickerSlot);
+                }
+            });
+
+            let cat = 'Top';
+            if (activePickerSlot === 'top') cat = selectedCompleteLook.dress ? 'Dress' : 'Top';
+            else if (activePickerSlot === 'bottom') cat = 'Bottom';
+            else if (activePickerSlot === 'shoes') cat = 'Shoes';
+            else if (activePickerSlot === 'jewelry') cat = 'Jewelry';
+
+            const tab = document.getElementById(`pickerTab-${cat}`) || document.getElementById('pickerTab-All');
+            filterOutfitPickerCategory(cat, tab);
         }
 
         function filterOutfitPickerCategory(cat, btn) {
@@ -3727,6 +4069,150 @@
             }
             if (btn) btn.classList.add('active');
             renderOutfitPickerGrid();
+        }
+
+        function removeLookPiece(slot) {
+            if (slot === 'top') {
+                selectedCompleteLook.top = null;
+                selectedCompleteLook.dress = null;
+            } else if (slot === 'bottom') {
+                selectedCompleteLook.bottom = null;
+            } else if (slot === 'shoes') {
+                selectedCompleteLook.shoes = null;
+            } else if (slot === 'jewelry') {
+                selectedCompleteLook.jewelry = null;
+            }
+            updateLookSlotsDisplay();
+            renderOutfitPickerGrid();
+        }
+
+        function selectOutfitPieceForLook(itemId) {
+            const items = getWardrobeItems();
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+
+            if (item.category === 'Dress') {
+                selectedCompleteLook.dress = item;
+                selectedCompleteLook.top = null;
+                selectedCompleteLook.bottom = null;
+            } else if (item.category === 'Top') {
+                selectedCompleteLook.top = item;
+                selectedCompleteLook.dress = null;
+            } else if (item.category === 'Bottom') {
+                selectedCompleteLook.bottom = item;
+                selectedCompleteLook.dress = null;
+            } else if (item.category === 'Shoes') {
+                selectedCompleteLook.shoes = item;
+            } else if (item.category === 'Jewelry') {
+                selectedCompleteLook.jewelry = item;
+            } else {
+                if (activePickerSlot === 'top') selectedCompleteLook.top = item;
+                else if (activePickerSlot === 'bottom') selectedCompleteLook.bottom = item;
+                else if (activePickerSlot === 'shoes') selectedCompleteLook.shoes = item;
+                else if (activePickerSlot === 'jewelry') selectedCompleteLook.jewelry = item;
+            }
+
+            updateLookSlotsDisplay();
+            renderOutfitPickerGrid();
+        }
+
+        function updateLookSlotsDisplay() {
+            // Slot Top / Dress
+            const topCard = document.getElementById('slotCard-top');
+            const topBody = document.getElementById('slotBody-top');
+            const topTag = document.getElementById('slotTag-top');
+
+            if (topCard && topBody) {
+                if (selectedCompleteLook.dress) {
+                    topCard.classList.add('filled');
+                    if (topTag) topTag.innerText = 'DRESS (FULL)';
+                    topBody.innerHTML = `
+                        <img class="look-slot-img" src="${selectedCompleteLook.dress.image}" alt="${selectedCompleteLook.dress.name}">
+                        <div class="look-slot-name">${selectedCompleteLook.dress.name}</div>
+                        <div class="look-slot-color">${selectedCompleteLook.dress.color || 'Dress'}</div>
+                    `;
+                } else if (selectedCompleteLook.top) {
+                    topCard.classList.add('filled');
+                    if (topTag) topTag.innerText = 'TOP / BLOUSE';
+                    topBody.innerHTML = `
+                        <img class="look-slot-img" src="${selectedCompleteLook.top.image}" alt="${selectedCompleteLook.top.name}">
+                        <div class="look-slot-name">${selectedCompleteLook.top.name}</div>
+                        <div class="look-slot-color">${selectedCompleteLook.top.color || 'Top'}</div>
+                    `;
+                } else {
+                    topCard.classList.remove('filled');
+                    if (topTag) topTag.innerText = 'TOP / DRESS';
+                    topBody.innerHTML = `<span class="look-slot-placeholder">+ Select Top / Dress</span>`;
+                }
+            }
+
+            // Slot Bottom
+            const bottomCard = document.getElementById('slotCard-bottom');
+            const bottomBody = document.getElementById('slotBody-bottom');
+            const bottomTag = document.getElementById('slotTag-bottom');
+
+            if (bottomCard && bottomBody) {
+                if (selectedCompleteLook.dress) {
+                    bottomCard.classList.add('filled');
+                    if (bottomTag) bottomTag.innerText = 'BOTTOM (DRESS SET)';
+                    bottomBody.innerHTML = `
+                        <span style="font-size: 10px; color: var(--text-secondary); font-weight: 700;">Included with Dress</span>
+                    `;
+                } else if (selectedCompleteLook.bottom) {
+                    bottomCard.classList.add('filled');
+                    if (bottomTag) bottomTag.innerText = 'BOTTOM / PANTS';
+                    bottomBody.innerHTML = `
+                        <img class="look-slot-img" src="${selectedCompleteLook.bottom.image}" alt="${selectedCompleteLook.bottom.name}">
+                        <div class="look-slot-name">${selectedCompleteLook.bottom.name}</div>
+                        <div class="look-slot-color">${selectedCompleteLook.bottom.color || 'Bottom'}</div>
+                    `;
+                } else {
+                    bottomCard.classList.remove('filled');
+                    if (bottomTag) bottomTag.innerText = 'BOTTOM / PANTS';
+                    bottomBody.innerHTML = `<span class="look-slot-placeholder">+ Select Bottom / Pants</span>`;
+                }
+            }
+
+            // Slot Shoes
+            const shoesCard = document.getElementById('slotCard-shoes');
+            const shoesBody = document.getElementById('slotBody-shoes');
+            if (shoesCard && shoesBody) {
+                if (selectedCompleteLook.shoes) {
+                    shoesCard.classList.add('filled');
+                    shoesBody.innerHTML = `
+                        <img class="look-slot-img" src="${selectedCompleteLook.shoes.image}" alt="${selectedCompleteLook.shoes.name}">
+                        <div class="look-slot-name">${selectedCompleteLook.shoes.name}</div>
+                        <div class="look-slot-color">${selectedCompleteLook.shoes.color || 'Shoes'}</div>
+                    `;
+                } else {
+                    shoesCard.classList.remove('filled');
+                    shoesBody.innerHTML = `<span class="look-slot-placeholder">+ Select Shoes</span>`;
+                }
+            }
+
+            // Slot Jewelry
+            const jewelryCard = document.getElementById('slotCard-jewelry');
+            const jewelryBody = document.getElementById('slotBody-jewelry');
+            if (jewelryCard && jewelryBody) {
+                if (selectedCompleteLook.jewelry) {
+                    jewelryCard.classList.add('filled');
+                    jewelryBody.innerHTML = `
+                        <img class="look-slot-img" src="${selectedCompleteLook.jewelry.image}" alt="${selectedCompleteLook.jewelry.name}">
+                        <div class="look-slot-name">${selectedCompleteLook.jewelry.name}</div>
+                        <div class="look-slot-color">${selectedCompleteLook.jewelry.color || 'Jewelry'}</div>
+                    `;
+                } else {
+                    jewelryCard.classList.remove('filled');
+                    jewelryBody.innerHTML = `<span class="look-slot-placeholder">+ Select Jewelry</span>`;
+                }
+            }
+
+            // Harmony Score
+            const harmonyBadge = document.getElementById('lookHarmonyScoreBadge');
+            const harmony = calculateCompleteLookHarmony();
+            if (harmonyBadge) {
+                harmonyBadge.innerText = `${harmony}% Look Synergy`;
+            }
         }
 
         function calculatePieceThemeMatchScore(item, roomTheme) {
@@ -3744,6 +4230,27 @@
             });
 
             return Math.min(99, Math.max(75, score));
+        }
+
+        function calculateCompleteLookHarmony() {
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === activeViewingRoomId);
+            const theme = room ? room.theme : '';
+
+            const pieces = [
+                selectedCompleteLook.dress || selectedCompleteLook.top,
+                selectedCompleteLook.bottom,
+                selectedCompleteLook.shoes,
+                selectedCompleteLook.jewelry
+            ].filter(Boolean);
+
+            if (pieces.length === 0) return 85;
+
+            let total = 0;
+            pieces.forEach(p => {
+                total += calculatePieceThemeMatchScore(p, theme);
+            });
+            return Math.min(99, Math.round(total / pieces.length));
         }
 
         function renderOutfitPickerGrid() {
@@ -3769,12 +4276,20 @@
                 return;
             }
 
+            const selectedIds = [
+                selectedCompleteLook.top?.id,
+                selectedCompleteLook.dress?.id,
+                selectedCompleteLook.bottom?.id,
+                selectedCompleteLook.shoes?.id,
+                selectedCompleteLook.jewelry?.id
+            ].filter(Boolean);
+
             grid.innerHTML = filtered.map(item => {
                 const matchScore = calculatePieceThemeMatchScore(item, theme);
-                const isSelected = selectedWardrobePieceForRoom && selectedWardrobePieceForRoom.id === item.id;
+                const isSelected = selectedIds.includes(item.id);
 
                 return `
-                    <div class="outfit-picker-card ${isSelected ? 'selected' : ''}" id="picker-item-${item.id}" onclick="selectOutfitPiece('${item.id}')">
+                    <div class="outfit-picker-card ${isSelected ? 'selected' : ''}" id="picker-item-${item.id}" onclick="selectOutfitPieceForLook('${item.id}')">
                         <span class="outfit-picker-match-badge">${matchScore}% Match</span>
                         <img class="outfit-picker-thumb" src="${item.image}" alt="${item.name}">
                         <div style="font-weight: 700; font-size: 12px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -3788,38 +4303,7 @@
             }).join('');
         }
 
-        function selectOutfitPiece(itemId) {
-            const items = getWardrobeItems();
-            const item = items.find(i => i.id === itemId);
-            if (!item) return;
-
-            selectedWardrobePieceForRoom = item;
-
-            // Highlight in DOM
-            document.querySelectorAll('.outfit-picker-card').forEach(card => card.classList.remove('selected'));
-            const selectedCard = document.getElementById(`picker-item-${itemId}`);
-            if (selectedCard) selectedCard.classList.add('selected');
-
-            const rooms = getCollabRooms();
-            const room = rooms.find(r => r.id === activeViewingRoomId);
-            const matchScore = calculatePieceThemeMatchScore(item, room ? room.theme : '');
-
-            const detailsText = document.getElementById('selectedPieceText');
-            if (detailsText) {
-                detailsText.innerHTML = `Selected: <strong>${item.name}</strong> (${item.color || 'Classic'}, ${item.category})`;
-            }
-
-            const scoreBadge = document.getElementById('selectedPieceScoreBadge');
-            if (scoreBadge) {
-                scoreBadge.style.display = 'inline-block';
-                scoreBadge.innerText = `${matchScore}% Aesthetic Match`;
-            }
-
-            const confirmBtn = document.getElementById('confirmAddPieceBtn');
-            if (confirmBtn) confirmBtn.disabled = false;
-        }
-
-        function recommendBestClosetMatchForRoom() {
+        function recommendCompleteOutfitLookForRoom() {
             const items = getWardrobeItems();
             if (items.length === 0) {
                 alert('Your wardrobe is empty. Add clothes in the Wardrobe tab first!');
@@ -3830,41 +4314,87 @@
             const room = rooms.find(r => r.id === activeViewingRoomId);
             const theme = room ? room.theme : '';
 
-            // Find item with highest score
-            let bestItem = items[0];
-            let highestScore = -1;
+            const findBestInCategory = (cat) => {
+                const catItems = items.filter(i => i.category === cat);
+                if (catItems.length === 0) return null;
+                let best = catItems[0];
+                let maxScore = -1;
+                catItems.forEach(i => {
+                    const sc = calculatePieceThemeMatchScore(i, theme);
+                    if (sc > maxScore) {
+                        maxScore = sc;
+                        best = i;
+                    }
+                });
+                return best;
+            };
 
-            items.forEach(item => {
-                const score = calculatePieceThemeMatchScore(item, theme);
-                if (score > highestScore) {
-                    highestScore = score;
-                    bestItem = item;
-                }
-            });
+            const bestTop = findBestInCategory('Top');
+            const bestBottom = findBestInCategory('Bottom');
+            const bestDress = findBestInCategory('Dress');
+            const bestShoes = findBestInCategory('Shoes');
+            const bestJewelry = findBestInCategory('Jewelry');
 
-            // Switch to All category filter to display it
-            filterOutfitPickerCategory('All', document.querySelector('#outfitPickerTabs .tab-chip'));
-            selectOutfitPiece(bestItem.id);
-
-            // Scroll selected card into view
-            const selectedCard = document.getElementById(`picker-item-${bestItem.id}`);
-            if (selectedCard) {
-                selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if (bestTop && bestBottom) {
+                selectedCompleteLook.top = bestTop;
+                selectedCompleteLook.bottom = bestBottom;
+                selectedCompleteLook.dress = null;
+            } else if (bestDress) {
+                selectedCompleteLook.dress = bestDress;
+                selectedCompleteLook.top = null;
+                selectedCompleteLook.bottom = null;
+            } else if (bestTop) {
+                selectedCompleteLook.top = bestTop;
             }
 
-            const detailsText = document.getElementById('selectedPieceText');
-            if (detailsText) {
-                detailsText.innerHTML = `✨ AI Recommendation: <strong>${bestItem.name}</strong> (Best match for ${theme || 'Theme'})`;
+            if (bestShoes) selectedCompleteLook.shoes = bestShoes;
+            if (bestJewelry) selectedCompleteLook.jewelry = bestJewelry;
+
+            const titleInput = document.getElementById('completeLookTitleInput');
+            if (titleInput) {
+                const mainPiece = selectedCompleteLook.dress || selectedCompleteLook.top || bestShoes || { name: 'Curated Look' };
+                titleInput.value = `${mainPiece.name} Ensemble`;
             }
+
+            updateLookSlotsDisplay();
+            renderOutfitPickerGrid();
         }
 
         function confirmAddSelectedOutfitToRoom() {
-            if (!activeViewingRoomId || !selectedWardrobePieceForRoom) {
-                alert('Please select an outfit piece from your closet first!');
+            if (!activeViewingRoomId) {
+                alert('Please open a co-styling room first!');
+                return;
+            }
+
+            const pieces = [];
+            if (selectedCompleteLook.dress) {
+                pieces.push({ slot: 'Dress', name: selectedCompleteLook.dress.name, category: 'Dress', color: selectedCompleteLook.dress.color, image: selectedCompleteLook.dress.image });
+            } else if (selectedCompleteLook.top) {
+                pieces.push({ slot: 'Top', name: selectedCompleteLook.top.name, category: 'Top', color: selectedCompleteLook.top.color, image: selectedCompleteLook.top.image });
+            }
+
+            if (!selectedCompleteLook.dress && selectedCompleteLook.bottom) {
+                pieces.push({ slot: 'Bottom', name: selectedCompleteLook.bottom.name, category: 'Bottom', color: selectedCompleteLook.bottom.color, image: selectedCompleteLook.bottom.image });
+            }
+
+            if (selectedCompleteLook.shoes) {
+                pieces.push({ slot: 'Shoes', name: selectedCompleteLook.shoes.name, category: 'Shoes', color: selectedCompleteLook.shoes.color, image: selectedCompleteLook.shoes.image });
+            }
+
+            if (selectedCompleteLook.jewelry) {
+                pieces.push({ slot: 'Jewelry', name: selectedCompleteLook.jewelry.name, category: 'Jewelry', color: selectedCompleteLook.jewelry.color, image: selectedCompleteLook.jewelry.image });
+            }
+
+            if (pieces.length === 0) {
+                alert('Please select at least one outfit piece (Top/Dress, Bottom, Shoes, or Jewelry) to add to the room!');
                 return;
             }
 
             const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+            const titleInput = document.getElementById('completeLookTitleInput');
+            const lookTitle = (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : `${currentUserName}'s Coordinated Look`;
+            const harmony = calculateCompleteLookHarmony();
+
             const rooms = getCollabRooms();
             const room = rooms.find(r => r.id === activeViewingRoomId);
 
@@ -3873,13 +4403,13 @@
                 room.outfits.push({
                     id: 'fit_' + Date.now(),
                     author: currentUserName,
-                    title: selectedWardrobePieceForRoom.name,
-                    category: selectedWardrobePieceForRoom.category,
-                    color: selectedWardrobePieceForRoom.color,
-                    image: selectedWardrobePieceForRoom.image || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&auto=format&fit=crop&q=80',
+                    title: lookTitle,
+                    harmonyScore: harmony,
+                    pieces: pieces,
+                    image: pieces[0].image,
                     votes: 1
                 });
-                room.harmonyScore = Math.min(99, room.harmonyScore + 2);
+                room.harmonyScore = Math.min(99, Math.max(room.harmonyScore, harmony));
                 saveCollabRooms(rooms);
                 closeSelectOutfitModal();
                 renderActiveRoomDetails(room);
