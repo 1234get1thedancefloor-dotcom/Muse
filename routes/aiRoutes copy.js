@@ -2011,539 +2011,239 @@ router.post(
 // MAKEUP RECOMMENDATION
 // ============================================================
 
-
-// ============================================================
-// MAKEUP RECOMMENDATION
-// ============================================================
-
 router.post(
     '/makeup-recommendation',
     upload.single('outfitImage'),
 
     async (req, res) => {
+
         let tempFilePath = null;
+
 
         try {
 
-            // ----------------------------------------------------
-            // USER PREFERENCES
-            // ----------------------------------------------------
-
             const {
-                vibe = "Soft Coquette & Modern Romantic",
-                vibes,
-                undertone = "Not Sure",
-                experience = "Beginner",
-                matchOutfit = false,
-                outfit,
-                ownedProducts,
+
+                vibe =
+                "Soft Coquette & Modern Romantic",
+
+                undertone =
+                "Warm Golden / Olive",
+
                 userQuestion
+
             } = req.body;
 
+
             if (req.file) {
-                tempFilePath = req.file.path;
+
+                tempFilePath =
+                    req.file.path;
+
             }
+
 
             // ----------------------------------------------------
-            // NORMALIZE USER INPUT
-            // ----------------------------------------------------
-
-            let selectedVibes = [];
-
-            if (vibes) {
-                if (Array.isArray(vibes)) {
-                    selectedVibes = vibes;
-                } else {
-                    try {
-                        selectedVibes = JSON.parse(vibes);
-
-                        if (!Array.isArray(selectedVibes)) {
-                            selectedVibes = [vibes];
-                        }
-                    } catch (error) {
-                        selectedVibes = [vibes];
-                    }
-                }
-            }
-
-            if (selectedVibes.length === 0 && vibe) {
-                selectedVibes = [vibe];
-            }
-
-            let productsOwned = [];
-
-            if (ownedProducts) {
-                if (Array.isArray(ownedProducts)) {
-                    productsOwned = ownedProducts;
-                } else {
-                    try {
-                        productsOwned = JSON.parse(ownedProducts);
-
-                        if (!Array.isArray(productsOwned)) {
-                            productsOwned = [ownedProducts];
-                        }
-                    } catch (error) {
-                        productsOwned = [ownedProducts];
-                    }
-                }
-            }
-
-            // ----------------------------------------------------
-            // MAKEUP LIBRARY
+            // MAKEUP GUIDES
             // ----------------------------------------------------
 
             const makeupGuides = {
 
                 coquette: {
-                    title: "Soft Coquette & Modern Romantic Glow",
+
+                    title:
+                        "Soft Coquette & Modern Romantic Glow",
 
                     skinBase:
-                        "Lightweight base with soft blush and a fresh finish.",
+                        "Lightweight hydrating base with soft pink blush.",
 
                     eyes:
-                        "Soft champagne, pink or neutral shimmer with subtle brown definition.",
+                        "Soft champagne or neutral shimmer with subtle brown definition.",
 
                     lips:
-                        "Pink, rose or berry tinted lip gloss.",
+                        "Pink or berry tinted gloss.",
 
                     hair:
-                        "Soft waves, half-up styling or a simple polished hairstyle.",
+                        "Soft waves, a simple updo, or a neat half-up style.",
 
                     proTip:
-                        "Keep the overall look soft and balanced.",
-
-                    difficulty:
-                        "Beginner-friendly"
+                        "Keep the overall look soft and balanced."
                 },
+
 
                 minimalist: {
-                    title: "90s Minimalist & Clean Chic",
+
+                    title:
+                        "90s Minimalist & Clean Chic",
 
                     skinBase:
-                        "Lightweight skin tint or concealer with a natural satin finish.",
+                        "Lightweight skin tint with a natural satin finish.",
 
                     eyes:
-                        "Neutral taupe or brown shadow with softly defined lashes.",
+                        "Neutral taupe shadow and softly defined lashes.",
 
                     lips:
-                        "Neutral pink, brown-pink or comfortable nude shades.",
+                        "Neutral pink, brown-pink, or soft nude lip.",
 
                     hair:
-                        "Sleek ponytail, low bun or naturally polished styling.",
+                        "Sleek ponytail, low bun, or natural polished style.",
 
                     proTip:
-                        "Keep the makeup simple so each product has a purpose.",
-
-                    difficulty:
-                        "Beginner-friendly"
+                        "Let the outfit silhouette remain the main statement."
                 },
 
+
                 goth: {
-                    title: "Goth & Dark Alternative",
+
+                    title:
+                        "Goth & Dark Alternative",
 
                     skinBase:
                         "Natural or softly matte base.",
 
                     eyes:
-                        "Smudged charcoal, brown or black eye definition.",
+                        "Smudged charcoal, brown, or black eye definition.",
 
                     lips:
-                        "Berry, burgundy, plum or deep red shades.",
+                        "Berry, burgundy, or deep red lip.",
 
                     hair:
-                        "Straight, textured or intentionally undone styling.",
+                        "Straight, textured, or intentionally undone styling.",
 
                     proTip:
-                        "Choose one or two dramatic elements instead of making everything intense.",
-
-                    difficulty:
-                        "Intermediate"
+                        "Use contrast thoughtfully rather than making every feature dramatic."
                 },
+
 
                 indie: {
-                    title: "Y2K Indie Pop",
+
+                    title:
+                        "Y2K Indie Pop",
 
                     skinBase:
-                        "Fresh luminous base with subtle highlight.",
+                        "Fresh luminous base with a subtle highlight.",
 
                     eyes:
-                        "Playful liner, shimmer or a small pop of colour.",
+                        "Playful liner or a small pop of color.",
 
                     lips:
-                        "Glossy pink, berry or neutral tint.",
+                        "Glossy pink or berry tint.",
 
                     hair:
-                        "Braids, clips, ponytail or playful retro styling.",
+                        "Braids, clips, ponytail, or playful retro styling.",
 
                     proTip:
-                        "Choose one playful detail as the focal point.",
-
-                    difficulty:
-                        "Intermediate"
+                        "Choose one playful detail as the focal point."
                 },
 
+
                 parisian: {
-                    title: "Parisian Chic",
+
+                    title:
+                        "Parisian Chic",
 
                     skinBase:
                         "Natural radiant base with subtle blush.",
 
                     eyes:
-                        "Soft brown definition and naturally defined lashes.",
+                        "Soft brown definition and natural lashes.",
 
                     lips:
-                        "Muted red, brick, rose or neutral lip.",
+                        "Muted red, brick, rose, or neutral lip.",
 
                     hair:
-                        "Natural waves, simple ponytail or polished low styling.",
+                        "Natural waves, simple ponytail, or polished low style.",
 
                     proTip:
-                        "Keep the finish effortless rather than overly complicated.",
-
-                    difficulty:
-                        "Beginner-friendly"
+                        "Keep the overall finish effortless rather than overly complicated."
                 },
 
+
                 festive: {
-                    title: "Festive Luminous Glam",
+
+                    title:
+                        "Festive Luminous Glam",
 
                     skinBase:
                         "Radiant base with warm blush and subtle highlight.",
 
                     eyes:
-                        "Warm gold, bronze or brown eye definition.",
+                        "Warm gold, bronze, or brown eye definition.",
 
                     lips:
-                        "Terracotta, berry, rose or deep red.",
+                        "Terracotta, berry, rose, or deep red.",
 
                     hair:
-                        "Braided, pinned or softly waved styling.",
+                        "Braided, pinned, or softly waved styling.",
 
                     proTip:
-                        "Let one feature—eyes, lips or accessories—be the main statement.",
-
-                    difficulty:
-                        "Intermediate"
-                },
-
-                clean: {
-                    title: "Fresh Everyday Glow",
-
-                    skinBase:
-                        "Lightweight base or concealer with natural-looking blush.",
-
-                    eyes:
-                        "Soft brown definition with mascara.",
-
-                    lips:
-                        "Tinted balm, soft pink or neutral gloss.",
-
-                    hair:
-                        "Simple ponytail, braid, bun or natural styling.",
-
-                    proTip:
-                        "Focus on a comfortable routine that is easy to repeat.",
-
-                    difficulty:
-                        "Beginner-friendly"
-                },
-
-                glam: {
-                    title: "Full Glam Evening Look",
-
-                    skinBase:
-                        "Buildable base with blush and subtle highlight.",
-
-                    eyes:
-                        "Defined eyes with shimmer and carefully blended darker shades.",
-
-                    lips:
-                        "Rose, mauve, berry or classic red.",
-
-                    hair:
-                        "Polished waves, sleek styling or an elegant updo.",
-
-                    proTip:
-                        "Build intensity gradually instead of applying everything heavily at once.",
-
-                    difficulty:
-                        "Advanced"
+                        "Let one feature—eyes, lips, or accessories—be the main statement."
                 }
 
             };
 
 
             // ----------------------------------------------------
-            // SELECT PRIMARY GUIDE
+            // SELECT GUIDE
             // ----------------------------------------------------
 
-            const vibeText =
-                selectedVibes.join(" ").toLowerCase();
+            const vibeKey =
+                vibe.toLowerCase();
+
 
             let selectedGuide;
 
-            if (
-                vibeText.includes("goth") ||
-                vibeText.includes("grunge") ||
-                vibeText.includes("rock")
-            ) {
-                selectedGuide = makeupGuides.goth;
-
-            } else if (
-                vibeText.includes("glam") ||
-                vibeText.includes("full glam")
-            ) {
-                selectedGuide = makeupGuides.glam;
-
-            } else if (
-                vibeText.includes("y2k") ||
-                vibeText.includes("indie") ||
-                vibeText.includes("retro")
-            ) {
-                selectedGuide = makeupGuides.indie;
-
-            } else if (
-                vibeText.includes("parisian") ||
-                vibeText.includes("luxury") ||
-                vibeText.includes("chic")
-            ) {
-                selectedGuide = makeupGuides.parisian;
-
-            } else if (
-                vibeText.includes("minimalist") ||
-                vibeText.includes("clean")
-            ) {
-                selectedGuide = makeupGuides.minimalist;
-
-            } else if (
-                vibeText.includes("festive") ||
-                vibeText.includes("diwali") ||
-                vibeText.includes("traditional") ||
-                vibeText.includes("desi")
-            ) {
-                selectedGuide = makeupGuides.festive;
-
-            } else {
-                selectedGuide = makeupGuides.coquette;
-            }
-
-
-            // ----------------------------------------------------
-            // UNDERTONE PERSONALIZATION
-            // ----------------------------------------------------
-
-            let undertoneAdvice =
-                "Since you selected 'Not Sure', start with neutral shades and test products on your skin before choosing a final colour.";
-
-            const undertoneText =
-                String(undertone).toLowerCase();
 
             if (
-                undertoneText.includes("warm") ||
-                undertoneText.includes("golden") ||
-                undertoneText.includes("olive")
+                vibeKey.includes("goth") ||
+                vibeKey.includes("grunge")
             ) {
-                undertoneAdvice =
-                    "Warm, golden, olive and earthy colour families can be a useful starting point for your makeup choices.";
+
+                selectedGuide =
+                    makeupGuides.goth;
 
             } else if (
-                undertoneText.includes("cool") ||
-                undertoneText.includes("pink")
+                vibeKey.includes("chic") ||
+                vibeKey.includes("parisian") ||
+                vibeKey.includes("luxury")
             ) {
-                undertoneAdvice =
-                    "Cool pink, rose, berry and mauve colour families can be a useful starting point for your makeup choices.";
+
+                selectedGuide =
+                    makeupGuides.parisian;
 
             } else if (
-                undertoneText.includes("neutral")
-            ) {
-                undertoneAdvice =
-                    "You can experiment across both warm and cool colour families and choose whichever you prefer.";
-            }
-
-
-            // ----------------------------------------------------
-            // EXPERIENCE PERSONALIZATION
-            // ----------------------------------------------------
-
-            let experienceAdvice;
-
-            const experienceText =
-                String(experience).toLowerCase();
-
-            if (
-                experienceText.includes("beginner") ||
-                experienceText.includes("never") ||
-                experienceText.includes("no makeup")
+                vibeKey.includes("minimalist") ||
+                vibeKey.includes("clean")
             ) {
 
-                experienceAdvice =
-                    "Start with a simple routine: skin base, blush, mascara, lip product and one easy eye product. Add more steps as you become comfortable.";
+                selectedGuide =
+                    makeupGuides.minimalist;
 
             } else if (
-                experienceText.includes("intermediate")
+                vibeKey.includes("indie") ||
+                vibeKey.includes("y2k") ||
+                vibeKey.includes("retro")
             ) {
 
-                experienceAdvice =
-                    "You can build on the basic routine with more defined eyes, layering and additional colour.";
+                selectedGuide =
+                    makeupGuides.indie;
+
+            } else if (
+                vibeKey.includes("festive") ||
+                vibeKey.includes("diwali") ||
+                vibeKey.includes("traditional") ||
+                vibeKey.includes("desi")
+            ) {
+
+                selectedGuide =
+                    makeupGuides.festive;
 
             } else {
 
-                experienceAdvice =
-                    "You can experiment with more detailed eye looks, layering and stronger colour combinations.";
+                selectedGuide =
+                    makeupGuides.coquette;
+
             }
-
-
-            // ----------------------------------------------------
-            // OUTFIT MATCHING
-            // ----------------------------------------------------
-
-            let outfitAdvice =
-                "Your makeup can be adjusted to complement the outfit's colours, mood and occasion.";
-
-            if (
-                matchOutfit === true ||
-                matchOutfit === "true"
-            ) {
-
-                if (outfit) {
-
-                    let outfitText = "";
-
-                    if (typeof outfit === "string") {
-                        outfitText = outfit.toLowerCase();
-                    } else {
-                        outfitText =
-                            JSON.stringify(outfit).toLowerCase();
-                    }
-
-                    if (
-                        outfitText.includes("black") ||
-                        outfitText.includes("dark")
-                    ) {
-                        outfitAdvice =
-                            "The outfit has a darker direction, so you can coordinate with defined eyes, berry tones or a subtle statement lip.";
-
-                    } else if (
-                        outfitText.includes("white") ||
-                        outfitText.includes("cream") ||
-                        outfitText.includes("beige")
-                    ) {
-                        outfitAdvice =
-                            "The outfit has a neutral direction, so you can keep the makeup natural or add one intentional colour accent.";
-
-                    } else if (
-                        outfitText.includes("pink") ||
-                        outfitText.includes("rose")
-                    ) {
-                        outfitAdvice =
-                            "The outfit has pink/rose elements, so soft rose, berry or neutral makeup can create a coordinated look.";
-
-                    } else if (
-                        outfitText.includes("red")
-                    ) {
-                        outfitAdvice =
-                            "The outfit already has a strong colour, so consider keeping the eyes balanced and choosing either a complementary or softer lip.";
-
-                    } else {
-                        outfitAdvice =
-                            `The makeup is being coordinated with the ${selectedVibes.join(", ")} direction while keeping the outfit as the main reference.`;
-                    }
-
-                } else {
-
-                    outfitAdvice =
-                        "Upload or select an outfit so Muse can coordinate the makeup with its colours and overall style.";
-                }
-            }
-
-
-            // ----------------------------------------------------
-            // OWNED PRODUCTS
-            // ----------------------------------------------------
-
-            let productAdvice = [];
-
-            if (productsOwned.length === 0) {
-
-                productAdvice = [
-                    "Skin base or concealer",
-                    "Blush",
-                    "Mascara",
-                    "Lip balm or lip tint",
-                    "One neutral eyeshadow or eyeliner"
-                ];
-
-            } else {
-
-                const ownedText =
-                    productsOwned.join(" ").toLowerCase();
-
-                if (!ownedText.includes("base") &&
-                    !ownedText.includes("foundation") &&
-                    !ownedText.includes("concealer")) {
-
-                    productAdvice.push(
-                        "Consider adding a lightweight base or concealer."
-                    );
-                }
-
-                if (!ownedText.includes("blush")) {
-
-                    productAdvice.push(
-                        "Consider adding a blush that fits your preferred colour family."
-                    );
-                }
-
-                if (!ownedText.includes("mascara")) {
-
-                    productAdvice.push(
-                        "Mascara can be added for simple eye definition."
-                    );
-                }
-
-                if (!ownedText.includes("lip")) {
-
-                    productAdvice.push(
-                        "Consider a comfortable lip balm, tint or gloss."
-                    );
-                }
-
-                if (productAdvice.length === 0) {
-
-                    productAdvice.push(
-                        "You already have a useful collection for this look. Start with the products you are comfortable using."
-                    );
-                }
-            }
-
-
-            // ----------------------------------------------------
-            // BEGINNER ROUTINE
-            // ----------------------------------------------------
-
-            const routine = [
-                "Prepare your skin with your usual gentle skincare routine.",
-                "Apply your preferred base or concealer if you use one.",
-                "Add blush according to your selected aesthetic.",
-                "Define the eyes using the recommended eye direction.",
-                "Apply your preferred lip product.",
-                "Finish with any optional highlight or setting product you already use."
-            ];
-
-
-            // ----------------------------------------------------
-            // TUTORIAL SEARCH INFORMATION
-            // ----------------------------------------------------
-
-            const tutorialSearchQuery =
-                `${selectedGuide.title} ${experience} makeup tutorial`;
-
-            const tutorial = {
-                platform: "YouTube",
-                searchQuery: tutorialSearchQuery,
-                note:
-                    "Search this phrase on YouTube to find current tutorials matching the selected aesthetic and experience level."
-            };
 
 
             // ----------------------------------------------------
@@ -2552,6 +2252,7 @@ router.post(
 
             let customAdvice = "";
 
+
             if (
                 userQuestion &&
                 userQuestion.trim() !== ""
@@ -2559,6 +2260,7 @@ router.post(
 
                 const q =
                     userQuestion.toLowerCase();
+
 
                 if (
                     q.includes("lip") ||
@@ -2587,20 +2289,13 @@ router.post(
                     customAdvice =
                         `For "${userQuestion}", ${selectedGuide.hair}`;
 
-                } else if (
-                    q.includes("beginner") ||
-                    q.includes("start") ||
-                    q.includes("learn")
-                ) {
-
-                    customAdvice =
-                        `For "${userQuestion}", keep the routine simple and practise the ${selectedGuide.title} style gradually.`;
-
                 } else {
 
                     customAdvice =
-                        `For "${userQuestion}", use the ${selectedGuide.title} direction to keep your beauty look coordinated with your preferences and outfit.`;
+                        `For "${userQuestion}", use the ${selectedGuide.title} direction to keep your beauty look coordinated with your outfit.`;
+
                 }
+
             }
 
 
@@ -2612,30 +2307,13 @@ router.post(
 
                 success: true,
 
-                preferences: {
-                    vibes: selectedVibes,
-                    undertone: undertone,
-                    experience: experience,
-                    matchOutfit: matchOutfit,
-                    ownedProducts: productsOwned
-                },
-
                 makeup: {
 
                     title:
                         selectedGuide.title,
 
-                    difficulty:
-                        selectedGuide.difficulty,
-
                     undertoneMatched:
                         undertone,
-
-                    undertoneAdvice:
-                        undertoneAdvice,
-
-                    experienceAdvice:
-                        experienceAdvice,
 
                     skinBase:
                         selectedGuide.skinBase,
@@ -2652,21 +2330,10 @@ router.post(
                     proTip:
                         selectedGuide.proTip,
 
-                    outfitAdvice:
-                        outfitAdvice,
+                    customAdvice
 
-                    routine:
-                        routine,
-
-                    productAdvice:
-                        productAdvice,
-
-                    tutorial:
-                        tutorial,
-
-                    customAdvice:
-                        customAdvice
                 }
+
             });
 
 
@@ -2677,16 +2344,16 @@ router.post(
                 error
             );
 
+
             return res.status(500).json({
 
                 success: false,
 
                 error:
-                    "Failed to generate makeup recommendation.",
+                    "Failed to generate makeup recommendation."
 
-                details:
-                    error.message
             });
+
 
         } finally {
 
@@ -2707,12 +2374,15 @@ router.post(
                         "Failed to remove temp file:",
                         error
                     );
+
                 }
+
             }
+
         }
+
     }
 );
-
 
 
 // ============================================================
