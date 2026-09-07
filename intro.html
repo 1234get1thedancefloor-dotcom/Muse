@@ -3993,6 +3993,289 @@
             }
         }
 
+        // View Co-Styling Room Modal Handlers
+        function openViewRoomModal(roomId) {
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === roomId);
+            if (!room) return;
+
+            activeViewingRoomId = roomId;
+            const modal = document.getElementById('viewCoStylingModal');
+            if (modal) {
+                renderActiveRoomDetails(room);
+                modal.classList.add('open');
+            }
+        }
+
+        function closeViewRoomModal() {
+            const modal = document.getElementById('viewCoStylingModal');
+            if (modal) modal.classList.remove('open');
+            activeViewingRoomId = null;
+            loadCollabRooms();
+        }
+
+        function handleViewRoomModalBackdropClick(e) {
+            if (e.target && e.target.id === 'viewCoStylingModal') {
+                closeViewRoomModal();
+            }
+        }
+
+        function renderActiveRoomDetails(room) {
+            document.getElementById('viewRoomModalTitle').innerText = room.title;
+            document.getElementById('viewRoomModalSubtitle').innerText = `${room.occasion} • Code: ${room.code} • Theme: ${room.theme}`;
+            document.getElementById('viewRoomHarmonyScore').innerText = `${room.harmonyScore}% Palette Harmony`;
+            document.getElementById('viewRoomFitCount').innerText = (room.outfits || []).length;
+
+            const privacyBadge = document.getElementById('viewRoomPrivacyBadge');
+            if (privacyBadge) {
+                privacyBadge.innerText = room.isPrivate ? 'Private Room' : 'Public Room';
+                privacyBadge.style.background = room.isPrivate ? 'var(--primary-red-light)' : 'var(--surface-muted)';
+                privacyBadge.style.color = room.isPrivate ? 'var(--primary-red)' : 'var(--text-primary)';
+            }
+
+            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+            const isHost = room.host === currentUserName || (room.members && room.members.includes(`${currentUserName} (Host)`));
+            const isApproved = !room.isPrivate || isHost || (room.approvedContributors && room.approvedContributors.some(c => c.toLowerCase() === currentUserName.toLowerCase() || c === 'Guest Stylist' || c === 'Stylist'));
+            const hasRequested = room.pendingRequests && room.pendingRequests.includes(currentUserName);
+
+            // Access Status Banner
+            const accessBanner = document.getElementById('roomAccessBanner');
+            if (accessBanner) {
+                if (room.isPrivate) {
+                    if (isApproved) {
+                        accessBanner.style.background = '#e8f5e9';
+                        accessBanner.style.border = '1px solid #c8e6c9';
+                        accessBanner.innerHTML = `
+                            <div style="font-size: 12.5px; color: #2e7d32; font-weight: 600;">
+                                Contributor Access Granted • You have permission to share outfits in this private room.
+                            </div>
+                            ${isHost ? '<span style="font-size: 11px; font-weight: 800; background: #2e7d32; color: #ffffff; padding: 2px 8px; border-radius: var(--radius-pill);">You are Host</span>' : ''}
+                        `;
+                    } else {
+                        accessBanner.style.background = '#fff3e0';
+                        accessBanner.style.border = '1px solid #ffe0b2';
+                        accessBanner.innerHTML = `
+                            <div style="font-size: 12.5px; color: #e65100; font-weight: 600;">
+                                Private Room • Permission from host (${room.host}) is required to add outfits.
+                            </div>
+                            <div>
+                                ${hasRequested ? `
+                                    <button class="tab-chip" style="font-size: 11.5px; opacity: 0.7; cursor: default;" disabled>Request Sent</button>
+                                ` : `
+                                    <button class="action-button" style="width: auto; padding: 6px 14px; font-size: 11.5px; margin: 0;" onclick="requestRoomAccess('${room.id}')">
+                                        Request Host Access
+                                    </button>
+                                `}
+                            </div>
+                        `;
+                    }
+                } else {
+                    accessBanner.style.background = 'var(--surface-muted)';
+                    accessBanner.style.border = '1px solid var(--border-light)';
+                    accessBanner.innerHTML = `
+                        <div style="font-size: 12.5px; color: var(--text-secondary); font-weight: 600;">
+                            Public Room • Open collaboration session for all community stylists.
+                        </div>
+                    `;
+                }
+            }
+
+            // Host Permissions Panel
+            const hostBox = document.getElementById('hostPermissionsBox');
+            const hostList = document.getElementById('hostContributorsList');
+            if (hostBox && hostList) {
+                if (isHost && room.isPrivate) {
+                    hostBox.classList.remove('hidden');
+                    const pendingHtml = (room.pendingRequests || []).map(req => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 6px 10px; border-radius: var(--radius-card);">
+                            <span style="font-size: 12px; font-weight: 700; color: var(--text-primary);">${req} <span style="font-size: 10.5px; color: var(--primary-red); font-weight: 600;">(Pending)</span></span>
+                            <button class="action-button" style="width: auto; padding: 4px 10px; font-size: 11px; margin: 0;" onclick="approveContributor('${room.id}', '${req}')">
+                                Approve Access
+                            </button>
+                        </div>
+                    `).join('');
+
+                    const approvedHtml = (room.approvedContributors || []).filter(c => c !== currentUserName).map(app => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 6px 10px; border-radius: var(--radius-card);">
+                            <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);">${app}</span>
+                            <button class="tab-chip" style="font-size: 10.5px; padding: 2px 8px; color: var(--primary-red);" onclick="revokeContributor('${room.id}', '${app}')">
+                                Revoke
+                            </button>
+                        </div>
+                    `).join('');
+
+                    hostList.innerHTML = pendingHtml + (approvedHtml || '<div style="font-size: 11.5px; color: var(--text-secondary);">No other approved contributors yet.</div>');
+                } else {
+                    hostBox.classList.add('hidden');
+                }
+            }
+
+            // Add Fit Button Container
+            const addFitContainer = document.getElementById('roomAddFitBtnContainer');
+            if (addFitContainer) {
+                if (isApproved) {
+                    addFitContainer.innerHTML = `
+                        <button class="action-button" style="width: auto; padding: 6px 14px; font-size: 11.5px; margin-top: 0;" onclick="openSelectOutfitModal()">
+                            + Assemble Outfit Look
+                        </button>
+                    `;
+                } else {
+                    addFitContainer.innerHTML = `
+                        <span style="font-size: 11.5px; color: var(--text-secondary); font-weight: 600;">Host access required to add fits</span>
+                    `;
+                }
+            }
+
+            // Palette Swatches
+            const swatchesEl = document.getElementById('viewRoomPaletteSwatches');
+            if (swatchesEl) {
+                swatchesEl.innerHTML = (room.palette || []).map(c => `
+                    <span class="trend-color-dot" style="background: ${c}; width: 14px; height: 14px;" title="${c}"></span>
+                `).join('');
+            }
+
+            // Outfits Grid in Room Details
+            const outfitsEl = document.getElementById('viewRoomOutfitsGrid');
+            if (outfitsEl) {
+                if (!room.outfits || room.outfits.length === 0) {
+                    outfitsEl.innerHTML = `
+                        <div style="grid-column: 1 / -1; background: var(--surface-muted); padding: 18px; border-radius: var(--radius-card); text-align: center; color: var(--text-secondary); font-size: 12.5px;">
+                            No complete outfit looks shared in this room yet. Click '+ Assemble Outfit Look' to coordinate!
+                        </div>
+                    `;
+                } else {
+                    outfitsEl.innerHTML = room.outfits.map(o => {
+                        const pieces = o.pieces && o.pieces.length > 0 ? o.pieces : [
+                            { slot: o.category || 'Piece', name: o.title, category: o.category || 'Top', color: o.color || '', image: o.image }
+                        ];
+
+                        return `
+                            <div class="collab-complete-look-card">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 6px;">
+                                    <div>
+                                        <div style="font-weight: 800; font-size: 13px; color: var(--text-primary); line-height: 1.2;">
+                                            ${o.title}
+                                        </div>
+                                        <div style="font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-top: 2px;">
+                                            Styled by <strong>${o.author}</strong>
+                                        </div>
+                                    </div>
+                                    <span style="font-size: 10.5px; font-weight: 800; background: var(--primary-red-light); color: var(--primary-red); padding: 2px 7px; border-radius: var(--radius-pill); flex-shrink: 0;">
+                                        ${o.harmonyScore || 92}% Match
+                                    </span>
+                                </div>
+
+                                <div class="collab-pieces-grid">
+                                    ${pieces.map(p => `
+                                        <div class="collab-piece-pill">
+                                            <img src="${p.image}" alt="${p.name}" class="collab-piece-thumb">
+                                            <div style="overflow: hidden; flex-grow: 1;">
+                                                <div style="font-size: 8.5px; font-weight: 800; color: var(--text-secondary); text-transform: uppercase;">
+                                                    ${p.slot || p.category}
+                                                </div>
+                                                <div style="font-size: 10.5px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${p.name}">
+                                                    ${p.name}
+                                                </div>
+                                                ${p.color ? `<div style="font-size: 9px; color: var(--text-secondary);">${p.color}</div>` : ''}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--border-light);">
+                                    <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">
+                                        ${pieces.length} Pieces in Look
+                                    </span>
+                                    <button class="tab-chip" style="font-size: 11px; padding: 3px 10px;" onclick="voteOutfitInRoom('${room.id}', '${o.id}')">
+                                        Upvote Look (${o.votes || 0})
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Notes List
+            const notesEl = document.getElementById('viewRoomNotesList');
+            if (notesEl) {
+                if (!room.notes || room.notes.length === 0) {
+                    notesEl.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); padding: 4px;">No stylist notes yet.</div>`;
+                } else {
+                    notesEl.innerHTML = room.notes.map(n => `
+                        <div style="font-size: 12px; line-height: 1.4; padding: 4px 6px; border-bottom: 1px solid var(--border-light);">
+                            <strong style="color: var(--text-primary);">${n.author}:</strong>
+                            <span style="color: var(--text-secondary); margin-left: 4px;">${n.text}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function requestRoomAccess(roomId) {
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === roomId);
+            if (!room) return;
+
+            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+            if (!room.pendingRequests) room.pendingRequests = [];
+            if (!room.pendingRequests.includes(currentUserName)) {
+                room.pendingRequests.push(currentUserName);
+                saveCollabRooms(rooms);
+                renderActiveRoomDetails(room);
+                alert(`Access request submitted to host (${room.host})! You will be granted contributor rights once approved.`);
+            }
+        }
+
+        function approveContributor(roomId, userName) {
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === roomId);
+            if (!room) return;
+
+            if (!room.approvedContributors) room.approvedContributors = [];
+            if (!room.approvedContributors.includes(userName)) {
+                room.approvedContributors.push(userName);
+            }
+            if (room.pendingRequests) {
+                room.pendingRequests = room.pendingRequests.filter(u => u !== userName);
+            }
+            saveCollabRooms(rooms);
+            renderActiveRoomDetails(room);
+        }
+
+        function revokeContributor(roomId, userName) {
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === roomId);
+            if (!room) return;
+
+            if (room.approvedContributors) {
+                room.approvedContributors = room.approvedContributors.filter(u => u !== userName);
+            }
+            saveCollabRooms(rooms);
+            renderActiveRoomDetails(room);
+        }
+
+        function addNoteToRoom() {
+            if (!activeViewingRoomId) return;
+            const input = document.getElementById('viewRoomNewNoteInput');
+            const text = input ? input.value.trim() : '';
+            if (!text) return;
+
+            const currentUserName = localStorage.getItem('muse_userName') || 'Guest Stylist';
+            const rooms = getCollabRooms();
+            const room = rooms.find(r => r.id === activeViewingRoomId);
+            if (room) {
+                if (!room.notes) room.notes = [];
+                room.notes.push({
+                    author: currentUserName,
+                    text: text
+                });
+                saveCollabRooms(rooms);
+                if (input) input.value = '';
+                renderActiveRoomDetails(room);
+            }
+        }
+
         // =====================================================
         // COMPLETE OUTFIT LOOK SELECTION & AI ENGINE
         // =====================================================
