@@ -3779,7 +3779,79 @@
                     </button>
                 </div>
             </div>
-    <!-- BUILD & SAVE CUSTOM OUTFIT MODAL -->
+        </div>
+    </div>
+
+    <!-- FRIEND PROFILE & COMMUNITY POSTS MODAL -->
+    <div id="friendProfileModal" class="modal-backdrop" onclick="handleFriendProfileModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 640px; width: 95%; max-height: 88vh;">
+            <div class="modal-header" style="align-items: flex-start; padding-bottom: 14px; margin-bottom: 14px;">
+                <div style="display: flex; gap: 14px; align-items: center; width: 100%;">
+                    <div id="friendProfileAvatar" class="friend-avatar-badge" style="width: 52px; height: 52px; font-size: 20px; font-weight: 800; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                        AV
+                    </div>
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="modal-title" id="friendProfileName" style="font-size: 18px; letter-spacing: -0.3px;">Aria Vance</span>
+                                <span id="friendProfileStatusBadge" style="font-size: 10px; font-weight: 800; color: #2e7d32; background: #e8f5e9; padding: 2px 8px; border-radius: var(--radius-pill);">
+                                    Online
+                                </span>
+                            </div>
+                            <span id="friendProfileHandle" style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">
+                                @ariavance
+                            </span>
+                        </div>
+                        <div style="display: flex; gap: 6px; align-items: center; margin-top: 5px; flex-wrap: wrap;">
+                            <span id="friendProfileAestheticBadge" style="font-size: 10.5px; font-weight: 700; background: var(--text-primary); color: #ffffff; padding: 2px 8px; border-radius: var(--radius-pill);">
+                                Coquette / Balletcore
+                            </span>
+                            <span id="friendProfileBirthdayBadge" style="font-size: 10px; font-weight: 700; background: var(--surface-muted); color: var(--text-secondary); padding: 2px 8px; border-radius: var(--radius-pill); border: 1px solid var(--border-light);">
+                                Birthday: Sep 18
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeFriendProfileModal()" style="margin-left: 8px;">×</button>
+            </div>
+
+            <!-- Stylist Bio & Current Rotation Strip -->
+            <div style="background: var(--surface-muted); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 12px 14px; margin-bottom: 16px;">
+                <div style="font-size: 10.5px; font-weight: 800; color: var(--primary-red); text-transform: uppercase; letter-spacing: 0.5px;">
+                    Current Capsule Direction
+                </div>
+                <div id="friendProfileLook" style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-top: 3px;">
+                    Silk Ribbon Corset & Pleated Skirt
+                </div>
+            </div>
+
+            <!-- Community Posts Feed Section -->
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px;">
+                        Latest Posts in Community
+                    </div>
+                    <span id="friendProfilePostCountBadge" style="font-size: 10.5px; font-weight: 700; color: var(--text-secondary); background: var(--surface-muted); padding: 2px 8px; border-radius: var(--radius-pill);">
+                        1 Post
+                    </span>
+                </div>
+
+                <div id="friendProfilePostsGrid" style="display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; padding-right: 2px;">
+                    <!-- Populated dynamically by openFriendProfileModal() -->
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 8px;">
+                <button type="button" class="tab-chip" onclick="closeFriendProfileModal()" style="padding: 8px 18px;">
+                    Close
+                </button>
+                <button type="button" id="friendProfileCoStyleBtn" class="action-button" style="width: auto; padding: 8px 22px; font-size: 12px; margin: 0;">
+                    Co-Style in Lounge →
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="buildOutfitModal" class="modal-backdrop" onclick="handleBuildOutfitModalBackdropClick(event)">
         <div class="modal-box" style="max-width: 580px;" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -4593,6 +4665,22 @@
                 saves: 52,
                 saved: false,
                 time: '3 days ago'
+            },
+            {
+                id: 'cp6',
+                author: 'Maya Lin',
+                handle: '@mayalin',
+                category: 'Outfit Post',
+                title: 'Architectural Cashmere Knit & Clean Tailored Pleats',
+                aesthetic: 'Minimalist / Architectural',
+                desc: 'Tactile minimalism: Layered heavyweight oatmeal cashmere crewneck with charcoal wool wide-leg trousers and delicate freshwater pearl drops. Focus on drape, geometric balance, and clean lines.',
+                image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80',
+                tags: ['Minimalist', 'Architectural', 'CashmereKnit', 'Monochrome'],
+                likes: 84,
+                liked: false,
+                saves: 61,
+                saved: false,
+                time: '1 day ago'
             }
         ];
 
@@ -5006,7 +5094,7 @@
                 const color = f.avatarColor || '#e11d48';
 
                 return `
-                    <div class="home-friend-item">
+                    <div class="home-friend-item" onclick="openFriendProfileModal('${f.id}')" title="Click to view ${f.name}'s profile & community posts" style="cursor: pointer;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <div class="friend-avatar-badge" style="background: ${bg}; color: ${color};">
@@ -5034,13 +5122,174 @@
                             <span style="font-size: 10px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;">
                                 ${f.look ? f.look : 'Curating capsule'}
                             </span>
-                            <button class="tab-chip" style="font-size: 10.5px; padding: 3px 8px; background: var(--text-primary); color: #ffffff; border: none; cursor: pointer;" onclick="startCoStylingWithFriend('${f.id}')">
+                            <button class="tab-chip" style="font-size: 10.5px; padding: 3px 8px; background: var(--text-primary); color: #ffffff; border: none; cursor: pointer;" onclick="event.stopPropagation(); startCoStylingWithFriend('${f.id}')">
                                 Co-Style
                             </button>
                         </div>
                     </div>
                 `;
             }).join('');
+        }
+
+        function openFriendProfileModal(friendId) {
+            const friends = getFriendsList();
+            const friend = friends.find(f => f.id === friendId);
+            if (!friend) return;
+
+            const modal = document.getElementById('friendProfileModal');
+            if (!modal) return;
+
+            const avatarEl = document.getElementById('friendProfileAvatar');
+            const nameEl = document.getElementById('friendProfileName');
+            const handleEl = document.getElementById('friendProfileHandle');
+            const statusEl = document.getElementById('friendProfileStatusBadge');
+            const aestheticEl = document.getElementById('friendProfileAestheticBadge');
+            const bdayEl = document.getElementById('friendProfileBirthdayBadge');
+            const lookEl = document.getElementById('friendProfileLook');
+            const postCountEl = document.getElementById('friendProfilePostCountBadge');
+            const postsGrid = document.getElementById('friendProfilePostsGrid');
+            const coStyleBtn = document.getElementById('friendProfileCoStyleBtn');
+
+            const initials = friend.initials || friend.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'ST';
+            const bg = friend.avatarBg || '#ffe4e6';
+            const color = friend.avatarColor || '#e11d48';
+
+            if (avatarEl) {
+                avatarEl.innerText = initials;
+                avatarEl.style.background = bg;
+                avatarEl.style.color = color;
+            }
+
+            if (nameEl) nameEl.innerText = friend.name;
+            if (handleEl) handleEl.innerText = friend.handle || `@${friend.name.toLowerCase().replace(/\s+/g, '.')}`;
+            if (statusEl) statusEl.innerText = friend.status || 'Connected';
+            if (aestheticEl) aestheticEl.innerText = friend.aesthetic || 'Custom Aesthetic';
+
+            if (bdayEl) {
+                if (friend.birthday) {
+                    const parts = friend.birthday.split('-');
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    let bdayFormatted = friend.birthday;
+                    if (parts.length === 2) {
+                        const mIdx = parseInt(parts[0], 10) - 1;
+                        bdayFormatted = `${monthNames[mIdx] || 'Month'} ${parts[1]}`;
+                    } else if (parts.length === 3) {
+                        const mIdx = parseInt(parts[1], 10) - 1;
+                        bdayFormatted = `${monthNames[mIdx] || 'Month'} ${parts[2]}`;
+                    }
+                    bdayEl.innerText = `Birthday: ${bdayFormatted}`;
+                    bdayEl.style.display = 'inline-block';
+                } else {
+                    bdayEl.style.display = 'none';
+                }
+            }
+
+            if (lookEl) {
+                lookEl.innerText = friend.look ? `Currently curating: ${friend.look}` : 'Active stylist in Muse Circle';
+            }
+
+            if (coStyleBtn) {
+                coStyleBtn.onclick = () => {
+                    closeFriendProfileModal();
+                    startCoStylingWithFriend(friend.id);
+                };
+            }
+
+            // Fetch and render community posts by this friend
+            const allPosts = getCommunityPosts();
+            const friendNameLower = friend.name.trim().toLowerCase();
+            const friendHandleLower = (friend.handle || '').trim().toLowerCase().replace('@', '');
+
+            const friendPosts = allPosts.filter(p => {
+                const authorLower = (p.author || '').trim().toLowerCase();
+                const handleLower = (p.handle || '').trim().toLowerCase().replace('@', '');
+                return authorLower === friendNameLower || (handleLower && handleLower === friendHandleLower);
+            });
+
+            if (postCountEl) {
+                postCountEl.innerText = `${friendPosts.length} Post${friendPosts.length === 1 ? '' : 's'}`;
+            }
+
+            if (postsGrid) {
+                if (friendPosts.length === 0) {
+                    postsGrid.innerHTML = `
+                        <div style="background: var(--surface-muted); padding: 24px 16px; border-radius: var(--radius-card); text-align: center; border: 1.5px dashed var(--border-subtle);">
+                            <div style="font-size: 13.5px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+                                No community posts yet from ${friend.name}
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+                                Invite them to collaborate and share curated looks in the Co-Styling Lounge!
+                            </div>
+                            <button type="button" class="tab-chip" onclick="closeFriendProfileModal(); startCoStylingWithFriend('${friend.id}')" style="background: var(--text-primary); color: #ffffff; border: none; font-size: 11px; padding: 6px 14px; font-weight: 700; cursor: pointer;">
+                                + Invite to Co-Style
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    const fallbackImg = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80';
+                    postsGrid.innerHTML = friendPosts.map(p => {
+                        let badgeClass = 'community-cat-badge';
+                        if (p.category === 'Challenge') badgeClass += ' badge-challenge';
+
+                        const tagsHtml = (p.tags || []).map(t => `<span class="community-tag">#${t}</span>`).join('');
+                        const imgHtml = p.image ? `
+                            <img src="${p.image}" alt="${p.title}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin: 8px 0; border: 1px solid var(--border-light);" onerror="this.src='${fallbackImg}'">
+                        ` : '';
+
+                        return `
+                            <div style="background: var(--surface-muted); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 14px; transition: border-color 0.2s ease;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span class="${badgeClass}">${p.category}</span>
+                                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">${p.time || 'Recently'}</span>
+                                </div>
+
+                                <div style="font-size: 14px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; line-height: 1.3;">
+                                    ${p.title}
+                                </div>
+
+                                <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 6px;">
+                                    ${p.desc}
+                                </div>
+
+                                ${imgHtml}
+
+                                <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px;">
+                                    <span class="community-tag" style="background: var(--text-primary); color: #ffffff; font-weight: 700;">${p.aesthetic || 'Fashion'}</span>
+                                    ${tagsHtml}
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-light);">
+                                    <div style="display: flex; gap: 8px; font-size: 11.5px; color: var(--text-secondary); font-weight: 700;">
+                                        <span>${p.likes || 0} Likes</span>
+                                        <span>•</span>
+                                        <span>${p.saves || 0} Saves</span>
+                                    </div>
+                                    <button type="button" class="tab-chip" onclick="closeFriendProfileModal(); showInfoSection('community'); setTimeout(() => document.getElementById('post-${p.id}')?.scrollIntoView({ behavior: 'smooth' }), 100);" style="font-size: 10.5px; padding: 3px 10px; background: #ffffff; border: 1px solid var(--border-light); font-weight: 700; cursor: pointer;">
+                                        View in Feed →
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            modal.classList.add('open');
+            modal.classList.add('active');
+        }
+
+        function closeFriendProfileModal() {
+            const modal = document.getElementById('friendProfileModal');
+            if (modal) {
+                modal.classList.remove('open');
+                modal.classList.remove('active');
+            }
+        }
+
+        function handleFriendProfileModalBackdropClick(e) {
+            if (e.target && e.target.id === 'friendProfileModal') {
+                closeFriendProfileModal();
+            }
         }
 
         function openAddFriendModal() {
@@ -6822,7 +7071,7 @@
             container.innerHTML = friends.map(f => {
                 const init = f.initials || f.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
                 return `
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-muted); padding: 8px 12px; border-radius: var(--radius-pill);">
+                    <div onclick="openFriendProfileModal('${f.id}')" title="Click to view ${f.name}'s profile & community posts" style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-muted); padding: 8px 12px; border-radius: var(--radius-pill); cursor: pointer; transition: background 0.2s ease;">
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <div class="collab-avatar-bubble" style="margin-left: 0; width: 24px; height: 24px; font-size: 10px;">${init}</div>
                             <span style="font-size: 12.5px; font-weight: 700; color: var(--text-primary);">${f.name}</span>
