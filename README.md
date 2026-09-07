@@ -1,7 +1,7 @@
 # Muse
 Your wardrobe becomes a game. Pick a vibe, upload your clothes, and AI builds your perfect look for festivals, parties or everyday life. Plan ahead, sync with friends, recreate inspo, discover affordable products, get beauty tips &amp; playlists—all in one private, encrypted space.
 
-Project Concept: AI-Powered Gamified Personal Stylist & Beauty Assistant
+Project Concept: Personal Stylist & Beauty Assistant
 
 An end-to-end encrypted, gamified fashion and beauty platform that transforms the everyday struggle of getting ready into a fun, personalized experience. The platform combines AI-powered styling, makeup guidance, wardrobe management, social coordination, and shopping recommendations based on the user's wardrobe, vibe, occasion, and region.
 
