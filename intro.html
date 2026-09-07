@@ -3777,6 +3777,233 @@
                     </button>
                 </div>
             </div>
+    <!-- BUILD & SAVE CUSTOM OUTFIT MODAL -->
+    <div id="buildOutfitModal" class="modal-backdrop" onclick="handleBuildOutfitModalBackdropClick(event)">
+        <div class="modal-box" style="max-width: 580px;" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-title" id="buildOutfitModalTitle">Build & Save Custom Outfit</span>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                        Combine tops, bottoms, shoes, and accents from your closet
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeBuildOutfitModal()">×</button>
+            </div>
+
+            <input type="hidden" id="buildOutfitId">
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div>
+                    <label style="margin-top: 0;" for="buildOutfitTitle">Outfit Title:</label>
+                    <input type="text" id="buildOutfitTitle" placeholder="e.g. Silk Corset & Pleats Glam" style="margin-bottom: 0;">
+                </div>
+                <div>
+                    <label style="margin-top: 0;" for="buildOutfitOccasion">Occasion:</label>
+                    <select id="buildOutfitOccasion" style="margin-bottom: 0;">
+                        <option value="Party / Night Out">Party / Night Out</option>
+                        <option value="Casual Chic">Casual Chic</option>
+                        <option value="Date Night">Romantic Date Night</option>
+                        <option value="Diwali / Festive">Diwali / Festive</option>
+                        <option value="Birthday Celebration">Birthday Celebration</option>
+                        <option value="Work / Formal">Work / Formal</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div>
+                    <label style="margin-top: 0;" for="buildOutfitVibe">Aesthetic / Vibe:</label>
+                    <select id="buildOutfitVibe" style="margin-bottom: 0;">
+                        <option value="Romantic Coquette">Romantic Coquette</option>
+                        <option value="90s Minimalist">90s Minimalist</option>
+                        <option value="Chic Parisian">Chic Parisian</option>
+                        <option value="Y2K Retro">Y2K Retro</option>
+                        <option value="Goth Grunge">Goth Grunge</option>
+                        <option value="Classic Tailored">Classic Tailored</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="margin-top: 0;">Base Style:</label>
+                    <div style="display: flex; gap: 6px; margin-top: 2px;">
+                        <button type="button" id="buildTypeTopBottom" class="tab-chip active" onclick="setBuildOutfitType('separates')" style="font-size: 11px; padding: 6px 12px; flex: 1;">
+                            Top + Bottom
+                        </button>
+                        <button type="button" id="buildTypeDress" class="tab-chip" onclick="setBuildOutfitType('dress')" style="font-size: 11px; padding: 6px 12px; flex: 1;">
+                            Dress
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Piece Selectors Grid -->
+            <div style="background: var(--surface-muted); padding: 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light); margin-bottom: 14px;">
+                <div style="font-size: 11.5px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+                    Select Pieces from Your Wardrobe
+                </div>
+
+                <!-- Separates (Top + Bottom) -->
+                <div id="buildSeparatesGroup" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotTop">Top / Shirt / Blouse:</label>
+                        <select id="buildSlotTop" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotBottom">Bottom / Pants / Skirt:</label>
+                        <select id="buildSlotBottom" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                </div>
+
+                <!-- Dress -->
+                <div id="buildDressGroup" class="hidden" style="margin-bottom: 10px;">
+                    <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotDress">Dress / One-Piece:</label>
+                    <select id="buildSlotDress" onchange="updateBuildOutfitLivePreview()"></select>
+                </div>
+
+                <!-- Footwear, Outerwear, Accents -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotShoes">Shoes / Footwear:</label>
+                        <select id="buildSlotShoes" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotOuterwear">Outerwear (Opt):</label>
+                        <select id="buildSlotOuterwear" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11.5px;" for="buildSlotJewelry">Jewelry (Opt):</label>
+                        <select id="buildSlotJewelry" onchange="updateBuildOutfitLivePreview()"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Collage Preview -->
+            <div style="margin-bottom: 12px;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px;">
+                    Outfit Collage Preview
+                </div>
+                <div id="buildOutfitLivePreview" class="saved-outfit-collage" style="min-height: 80px;">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div>
+                <label style="margin-top: 0;" for="buildOutfitNotes">Styling Notes / Tips:</label>
+                <input type="text" id="buildOutfitNotes" placeholder="e.g. Style with red lipstick and mini handbag for evening events" style="margin-bottom: 0;">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; align-items: center;">
+                <button type="button" class="tab-chip" onclick="closeBuildOutfitModal()" style="padding: 10px 18px;">
+                    Cancel
+                </button>
+                <button type="button" class="action-button" onclick="saveCustomOutfitFromModal()" style="padding: 10px 24px; width: auto; margin-top: 0;">
+                    Save Outfit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOG DAILY OUTFIT FOR WEEK MODAL -->
+    <div id="logWeeklyOutfitModal" class="modal-backdrop" onclick="handleLogWeeklyOutfitModalBackdropClick(event)">
+        <div class="modal-box" style="max-width: 560px;" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-title">Log Outfit for the Week</span>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                        Save your daily look to this week's rotation & sync with wardrobe
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeLogWeeklyOutfitModal()">×</button>
+            </div>
+
+            <!-- Day Selector -->
+            <div style="margin-bottom: 12px;">
+                <label style="margin-top: 0;" for="logWeeklyDaySelect">Select Day of Week:</label>
+                <select id="logWeeklyDaySelect" onchange="onWeeklyLogDayChanged()" style="font-weight: 700;"></select>
+            </div>
+
+            <!-- Outfit Source Switcher Tabs -->
+            <div style="display: flex; gap: 6px; margin-bottom: 14px; background: var(--surface-muted); padding: 4px; border-radius: var(--radius-pill); border: 1px solid var(--border-light);">
+                <button type="button" id="logSourceSavedBtn" class="tab-chip active" onclick="setWeeklyLogSource('saved')" style="font-size: 11px; padding: 5px 12px; flex: 1;">
+                    Saved Outfits
+                </button>
+                <button type="button" id="logSourceClosetBtn" class="tab-chip" onclick="setWeeklyLogSource('closet')" style="font-size: 11px; padding: 5px 12px; flex: 1;">
+                    Pick from Closet
+                </button>
+                <button type="button" id="logSourceUploadBtn" class="tab-chip" onclick="setWeeklyLogSource('upload')" style="font-size: 11px; padding: 5px 12px; flex: 1;">
+                    Upload Photo
+                </button>
+            </div>
+
+            <!-- SOURCE 1: FROM SAVED OUTFITS -->
+            <div id="logWeeklySavedPanel" style="margin-bottom: 14px;">
+                <label style="margin: 0 0 4px; font-size: 12px;" for="logWeeklySavedSelect">Choose from Your Saved Looks:</label>
+                <select id="logWeeklySavedSelect" onchange="onWeeklySavedOutfitSelected()"></select>
+            </div>
+
+            <!-- SOURCE 2: FROM CLOSET PIECES -->
+            <div id="logWeeklyClosetPanel" class="hidden" style="margin-bottom: 14px; background: var(--surface-muted); padding: 12px; border-radius: var(--radius-card); border: 1px solid var(--border-light);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11px;" for="logWeeklySlotTop">Top / Blouse:</label>
+                        <select id="logWeeklySlotTop" onchange="updateWeeklyLogLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11px;" for="logWeeklySlotBottom">Bottom / Skirt:</label>
+                        <select id="logWeeklySlotBottom" onchange="updateWeeklyLogLivePreview()"></select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11px;" for="logWeeklySlotShoes">Shoes / Footwear:</label>
+                        <select id="logWeeklySlotShoes" onchange="updateWeeklyLogLivePreview()"></select>
+                    </div>
+                    <div>
+                        <label style="margin: 0 0 4px; font-size: 11px;" for="logWeeklySlotJewelry">Jewelry / Accents (Opt):</label>
+                        <select id="logWeeklySlotJewelry" onchange="updateWeeklyLogLivePreview()"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SOURCE 3: UPLOAD PHOTO -->
+            <div id="logWeeklyUploadPanel" class="hidden" style="margin-bottom: 14px;">
+                <label style="margin: 0 0 4px; font-size: 12px;" for="logWeeklyPhotoFile">Upload Today's Outfit Photo:</label>
+                <input type="file" id="logWeeklyPhotoFile" accept="image/*" onchange="handleWeeklyPhotoUpload(this)">
+                <div id="logWeeklyUploadPreviewBox" class="hidden" style="margin-top: 8px; text-align: center;">
+                    <img id="logWeeklyUploadPreviewImg" src="" alt="Upload Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--border-light);">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div>
+                    <label style="margin-top: 0; font-size: 11.5px;" for="logWeeklyTitle">Outfit Title:</label>
+                    <input type="text" id="logWeeklyTitle" placeholder="e.g. Soft Linen Streetwear Chic" style="margin-bottom: 0;">
+                </div>
+                <div>
+                    <label style="margin-top: 0; font-size: 11.5px;" for="logWeeklyOccasion">Vibe / Occasion:</label>
+                    <input type="text" id="logWeeklyOccasion" placeholder="e.g. Work, Date Night, Casual" style="margin-bottom: 0;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="margin-top: 0; font-size: 11.5px;" for="logWeeklyNotes">Daily Notes / How It Felt:</label>
+                <input type="text" id="logWeeklyNotes" placeholder="e.g. Extremely comfortable and got compliments at lunch" style="margin-bottom: 0;">
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px; background: var(--surface-muted); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-light); margin-bottom: 14px;">
+                <input type="checkbox" id="logWeeklyAlsoSaveWardrobe" checked style="width: auto; margin: 0; accent-color: var(--primary-red); cursor: pointer;">
+                <label for="logWeeklyAlsoSaveWardrobe" style="margin: 0; font-size: 11.5px; font-weight: 600; cursor: pointer;">
+                    Also save this outfit to my permanent Wardrobe collection
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                <button type="button" class="tab-chip" onclick="closeLogWeeklyOutfitModal()" style="padding: 9px 16px;">
+                    Cancel
+                </button>
+                <button type="button" class="action-button" onclick="confirmSaveWeeklyOutfit()" style="padding: 9px 22px; width: auto; margin-top: 0;">
+                    Log Outfit
+                </button>
+            </div>
         </div>
     </div>
 
@@ -5751,6 +5978,10 @@
 
                 return `<option value="${i}" ${i === defaultIdx ? 'selected' : ''}>${name} (${monthNames[dayDate.getMonth()]} ${dayDate.getDate()})${isToday ? ' - Today' : ''}</option>`;
             }).join('');
+        }
+
+        function updateWeeklyLogLivePreview() {
+            // Dropdown selection preview helper
         }
 
         function populateWeeklyLogClosetDropdowns() {
