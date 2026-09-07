@@ -548,6 +548,61 @@
             color: var(--text-primary);
         }
 
+        /* Muse Mentality Home Styles */
+        .mentality-hero-card {
+            background: linear-gradient(135deg, #ffffff 0%, var(--surface-muted) 100%);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 18px 20px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .mentality-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mentality-pillar-card {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 14px 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .mentality-pillar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-subtle);
+        }
+
+        .mentality-pillar-num {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: var(--primary-red);
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .mentality-pillar-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+            letter-spacing: -0.2px;
+        }
+
+        .mentality-pillar-desc {
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+            margin: 0;
+        }
+
         /* Info Section Cards */
         .info-card {
             background: #ffffff;
@@ -795,7 +850,7 @@
 
     <div class="card" id="mainCard">
 
-        <!-- SCREEN 1: ONBOARDING / SIGN UP & LOGIN SCREEN -->
+        <!-- SCREEN 0: INITIAL ONBOARDING / SIGN UP & LOGIN SCREEN -->
         <div id="onboardingScreen" style="display: flex; flex-direction: column; flex-grow: 1;">
 
             <h2>Welcome to Muse</h2>
@@ -836,6 +891,12 @@
                     <option value="indie">Indie / Eclectic Teal</option>
                     <option value="minimalist">Minimalist / Clean Grey</option>
                 </select>
+
+                <div style="margin-top: 20px;">
+                    <button class="action-button" onclick="completeOnboarding()">
+                        Enter Muse Dashboard →
+                    </button>
+                </div>
             </div>
 
             <!-- LOGIN FORM PANEL (Hidden by default) -->
@@ -846,15 +907,81 @@
                 <label for="loginPassword">Password:</label>
                 <input type="password" id="loginPassword" placeholder="••••••••">
 
-                <div style="margin-top: 16px; margin-bottom: 4px;">
-                    <button class="action-button secondary-btn" onclick="handleLoginSubmit()">
-                        Sign In to Muse Account
+                <div style="margin-top: 20px;">
+                    <button class="action-button" onclick="handleLoginSubmit()">
+                        Sign In to Muse Account →
                     </button>
                 </div>
             </div>
 
-            <!-- ONBOARDING ACTION BUTTONS (Pill Styled) -->
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 28px;">
+            <div style="text-align: center; margin-top: 16px;">
+                <button type="button" onclick="skipOnboarding()" style="background: none; border: none; color: var(--text-secondary); font-size: 12.5px; font-weight: 600; cursor: pointer; text-decoration: underline;">
+                    Continue as Guest Stylist
+                </button>
+            </div>
+
+        </div>
+
+        <!-- SCREEN 1: HOME DASHBOARD (MUSE MENTALITY) -->
+        <div id="homeScreen" class="hidden" style="display: flex; flex-direction: column; flex-grow: 1;">
+
+            <h2>Muse Mentality</h2>
+
+            <div class="subtitle">
+                Find Your Vibe. Own Your Look. Elevated by Intuitive Intelligence.
+            </div>
+
+            <!-- Welcome Profile Hero Card -->
+            <div class="mentality-hero-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <div style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                            Personal Style Studio
+                        </div>
+                        <div style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin-top: 2px;">
+                            Welcome, <span id="homeUserName">Stylist</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span id="homeUserAestheticBadge" style="font-size: 11.5px; font-weight: 700; background: var(--text-primary); color: #ffffff; padding: 4px 12px; border-radius: var(--radius-pill);">
+                            Cutesy / Soft Pink
+                        </span>
+                        <button class="tab-chip" style="font-size: 11px; padding: 4px 10px;" onclick="openEditProfileModal()">
+                            Edit Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3 Mentality Architecture Pillar Cards -->
+            <div class="mentality-grid">
+                <div class="mentality-pillar-card">
+                    <div class="mentality-pillar-num">01 // IDENTITY</div>
+                    <div class="mentality-pillar-title">Your Style Architecture</div>
+                    <p class="mentality-pillar-desc">
+                        Define your aesthetic signature, explore dynamic visual moods, and curate looks aligned with your authentic identity.
+                    </p>
+                </div>
+
+                <div class="mentality-pillar-card">
+                    <div class="mentality-pillar-num">02 // UTILITY</div>
+                    <div class="mentality-pillar-title">Your Smart Digital Wardrobe</div>
+                    <p class="mentality-pillar-desc">
+                        Digitize and organize the clothes you already own. Generate coordinated outfit formulas and match pieces for any occasion.
+                    </p>
+                </div>
+
+                <div class="mentality-pillar-card">
+                    <div class="mentality-pillar-num">03 // CREATIVITY</div>
+                    <div class="mentality-pillar-title">Your Multimodal Style Companion</div>
+                    <p class="mentality-pillar-desc">
+                        Multimodal vision analysis, silhouette balancing, personalized makeup pairings, and beauty direction tailored to your undertones.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 3 Primary Action Buttons at the Bottom -->
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 6px;">
                 <button class="action-button" onclick="goToUploadScreen()">
                     Upload Outfit & Analyze Vibe
                 </button>
@@ -1355,6 +1482,43 @@
         </div>
     </div>
 
+    <!-- EDIT PROFILE MODAL -->
+    <div id="editProfileModal" class="modal-backdrop" onclick="handleProfileModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">Edit Stylist Profile</span>
+                <button class="modal-close-btn" onclick="closeEditProfileModal()">×</button>
+            </div>
+
+            <label for="editProfileName">Full Name / Nickname:</label>
+            <input type="text" id="editProfileName" placeholder="e.g. Mahat">
+
+            <label for="editProfileEmail">Email / Username:</label>
+            <input type="email" id="editProfileEmail" placeholder="e.g. mahat@muse.style">
+
+            <label for="editProfileBirthday">Birthday:</label>
+            <input type="date" id="editProfileBirthday">
+
+            <label for="editProfileAesthetic">Daily Aesthetic / Theme:</label>
+            <select id="editProfileAesthetic">
+                <option value="pink">Cutesy / Soft Pink</option>
+                <option value="goth">Goth / Grunge Dark</option>
+                <option value="chic">Chic / Luxury Warm</option>
+                <option value="indie">Indie / Eclectic Teal</option>
+                <option value="minimalist">Minimalist / Clean Grey</option>
+            </select>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                <button type="button" class="tab-chip" onclick="closeEditProfileModal()" style="padding: 10px 18px;">
+                    Cancel
+                </button>
+                <button type="button" class="action-button" onclick="saveProfileModal()" style="padding: 10px 22px; width: auto; margin-top: 0;">
+                    Save Profile
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentFilter = 'All';
 
@@ -1413,6 +1577,7 @@
             const displayName = email.split('@')[0];
             const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
+            localStorage.setItem('muse_has_onboarded', 'true');
             localStorage.setItem('muse_userName', formattedName);
             localStorage.setItem('muse_userEmail', email);
 
@@ -1420,27 +1585,152 @@
             alert(`Welcome back, ${formattedName}! You are signed in.`);
             switchAuthTab('signup');
             document.getElementById('userName').value = formattedName;
+
+            hideAllScreens();
+            document.getElementById('homeScreen').classList.remove('hidden');
+            document.getElementById('navHomeBtn').classList.add('active');
+            document.getElementById('navHeader').classList.add('hidden');
+            updateHomeDashboardDisplay();
+        }
+
+        // Complete Initial Onboarding
+        function completeOnboarding() {
+            const profile = saveUserProfile();
+            localStorage.setItem('muse_has_onboarded', 'true');
+            hideAllScreens();
+            document.getElementById('homeScreen').classList.remove('hidden');
+            document.getElementById('navHomeBtn').classList.add('active');
+            document.getElementById('navHeader').classList.add('hidden');
+            updateHomeDashboardDisplay();
+            checkBirthdayCelebration(profile.birthday, profile.name);
+        }
+
+        // Continue as Guest from Onboarding
+        function skipOnboarding() {
+            localStorage.setItem('muse_has_onboarded', 'true');
+            localStorage.setItem('muse_userName', 'Guest Stylist');
+            updateNavAuthStatus('Guest Stylist');
+            hideAllScreens();
+            document.getElementById('homeScreen').classList.remove('hidden');
+            document.getElementById('navHomeBtn').classList.add('active');
+            document.getElementById('navHeader').classList.add('hidden');
+            updateHomeDashboardDisplay();
+        }
+
+        function updateHomeDashboardDisplay() {
+            const savedName = localStorage.getItem('muse_userName') || 'Stylist';
+            const savedAesthetic = localStorage.getItem('muse_userAesthetic') || 'pink';
+            
+            const homeUser = document.getElementById('homeUserName');
+            if (homeUser) homeUser.innerText = savedName;
+
+            const homeAesthetic = document.getElementById('homeUserAestheticBadge');
+            if (homeAesthetic) {
+                const fullNames = {
+                    pink: 'Cutesy / Soft Pink',
+                    goth: 'Goth / Grunge Dark',
+                    chic: 'Chic / Luxury Warm',
+                    indie: 'Indie / Eclectic Teal',
+                    minimalist: 'Minimalist / Clean Grey'
+                };
+                homeAesthetic.innerText = fullNames[savedAesthetic] || 'Custom Vibe';
+            }
+        }
+
+        function openEditProfileModal(e) {
+            if (e) e.preventDefault();
+            const savedName = localStorage.getItem('muse_userName') || '';
+            const savedEmail = localStorage.getItem('muse_userEmail') || '';
+            const savedBday = localStorage.getItem('muse_userBirthday') || '';
+            const savedAesthetic = localStorage.getItem('muse_userAesthetic') || 'pink';
+
+            document.getElementById('editProfileName').value = savedName;
+            document.getElementById('editProfileEmail').value = savedEmail;
+            document.getElementById('editProfileBirthday').value = savedBday;
+            document.getElementById('editProfileAesthetic').value = savedAesthetic;
+
+            const modal = document.getElementById('editProfileModal');
+            if (modal) modal.classList.add('open');
+        }
+
+        function closeEditProfileModal() {
+            const modal = document.getElementById('editProfileModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function handleProfileModalBackdropClick(e) {
+            if (e.target && e.target.id === 'editProfileModal') {
+                closeEditProfileModal();
+            }
+        }
+
+        function saveProfileModal() {
+            const nameInput = document.getElementById('editProfileName').value.trim();
+            const emailInput = document.getElementById('editProfileEmail').value.trim();
+            const bdayInput = document.getElementById('editProfileBirthday').value;
+            const aestheticInput = document.getElementById('editProfileAesthetic').value;
+
+            if (nameInput) localStorage.setItem('muse_userName', nameInput);
+            if (emailInput) localStorage.setItem('muse_userEmail', emailInput);
+            if (bdayInput) localStorage.setItem('muse_userBirthday', bdayInput);
+            if (aestheticInput) localStorage.setItem('muse_userAesthetic', aestheticInput);
+
+            if (nameInput) document.getElementById('userName').value = nameInput;
+            if (emailInput) document.getElementById('userEmail').value = emailInput;
+            if (bdayInput) document.getElementById('userBirthday').value = bdayInput;
+            if (aestheticInput) document.getElementById('userAesthetic').value = aestheticInput;
+
+            updateNavAuthStatus(nameInput || 'Stylist');
+            updateHomeDashboardDisplay();
+            closeEditProfileModal();
         }
 
         function updateNavAuthStatus(name) {
             const badge = document.getElementById('navAuthBadge');
-            if (name && name !== 'Guest') {
-                badge.innerHTML = `<span><strong>${name}</strong> <a href="#" onclick="logoutUser(event)" style="color: var(--primary-red); margin-left: 6px; text-decoration: none; font-size: 11.5px; font-weight: 700;">(Sign Out)</a></span>`;
+            const aesthetic = localStorage.getItem('muse_userAesthetic') || 'pink';
+            const aestheticLabels = {
+                pink: 'Soft Pink',
+                goth: 'Goth Dark',
+                chic: 'Chic Warm',
+                indie: 'Indie Teal',
+                minimalist: 'Clean Grey'
+            };
+            const aestheticLabel = aestheticLabels[aesthetic] || 'Aesthetic';
+
+            if (name && name !== 'Guest' && name !== 'Guest Stylist') {
+                badge.innerHTML = `
+                    <span>
+                        <strong>${name}</strong> <span style="opacity: 0.7; font-size: 11px;">(${aestheticLabel})</span>
+                        <a href="#" onclick="openEditProfileModal(event)" style="color: var(--text-primary); margin-left: 6px; text-decoration: none; font-size: 11px; font-weight: 700;">Edit</a>
+                        <a href="#" onclick="logoutUser(event)" style="color: var(--primary-red); margin-left: 6px; text-decoration: none; font-size: 11px; font-weight: 700;">Sign Out</a>
+                    </span>
+                `;
             } else {
-                badge.innerHTML = `<span>Guest Stylist</span>`;
+                badge.innerHTML = `
+                    <span>Guest Stylist <a href="#" onclick="openEditProfileModal(event)" style="color: var(--primary-red); margin-left: 6px; text-decoration: none; font-size: 11px; font-weight: 700;">Set Profile</a></span>
+                `;
             }
+
+            updateHomeDashboardDisplay();
         }
 
         function logoutUser(e) {
             if (e) e.preventDefault();
+            localStorage.removeItem('muse_has_onboarded');
             localStorage.removeItem('muse_userName');
             localStorage.removeItem('muse_userEmail');
             localStorage.removeItem('muse_userBirthday');
+            localStorage.removeItem('muse_userAesthetic');
             document.getElementById('userName').value = '';
             document.getElementById('userEmail').value = '';
             document.getElementById('userPassword').value = '';
             document.getElementById('userBirthday').value = '';
-            updateNavAuthStatus('Guest');
+            document.getElementById('userAesthetic').value = 'pink';
+            updateNavAuthStatus('Guest Stylist');
+            hideAllScreens();
+            document.getElementById('onboardingScreen').classList.remove('hidden');
+            document.getElementById('navHomeBtn').classList.add('active');
+            document.getElementById('navHeader').classList.add('hidden');
             alert("You have signed out.");
         }
 
@@ -1464,8 +1754,14 @@
                 document.getElementById('navFaqBtn').classList.add('active');
                 navHeader.classList.remove('hidden');
             } else {
-                // Home
-                document.getElementById('onboardingScreen').classList.remove('hidden');
+                // Home Screen: Muse Mentality Dashboard
+                const hasOnboarded = localStorage.getItem('muse_has_onboarded') === 'true' || Boolean(localStorage.getItem('muse_userName'));
+                if (!hasOnboarded) {
+                    document.getElementById('onboardingScreen').classList.remove('hidden');
+                } else {
+                    document.getElementById('homeScreen').classList.remove('hidden');
+                    updateHomeDashboardDisplay();
+                }
                 document.getElementById('navHomeBtn').classList.add('active');
                 navHeader.classList.add('hidden');
             }
@@ -1551,7 +1847,7 @@
         }
 
         function hideAllScreens() {
-            const screens = ['onboardingScreen', 'uploadScreen', 'wardrobeScreen', 'makeupScreen', 'aboutScreen', 'featuresScreen', 'faqScreen'];
+            const screens = ['onboardingScreen', 'homeScreen', 'uploadScreen', 'wardrobeScreen', 'makeupScreen', 'aboutScreen', 'featuresScreen', 'faqScreen'];
             screens.forEach(s => {
                 const el = document.getElementById(s);
                 if (el) el.classList.add('hidden');
@@ -2787,16 +3083,16 @@
             }
         }
 
-        // Restore saved profile on initial page load
+        // Restore saved profile & determine initial screen on page load
         window.addEventListener('DOMContentLoaded', () => {
             const savedName = localStorage.getItem('muse_userName');
             const savedBday = localStorage.getItem('muse_userBirthday');
             const savedAesthetic = localStorage.getItem('muse_userAesthetic');
             const savedEmail = localStorage.getItem('muse_userEmail');
+            const hasOnboarded = localStorage.getItem('muse_has_onboarded') === 'true' || Boolean(savedName);
 
             if (savedName) {
                 document.getElementById('userName').value = savedName;
-                updateNavAuthStatus(savedName);
             }
             if (savedEmail) {
                 document.getElementById('userEmail').value = savedEmail;
@@ -2805,6 +3101,20 @@
             if (savedBday) document.getElementById('userBirthday').value = savedBday;
             if (savedAesthetic) {
                 document.getElementById('userAesthetic').value = savedAesthetic;
+            }
+
+            hideAllScreens();
+            if (hasOnboarded) {
+                updateNavAuthStatus(savedName || 'Stylist');
+                document.getElementById('homeScreen').classList.remove('hidden');
+                document.getElementById('navHomeBtn').classList.add('active');
+                document.getElementById('navHeader').classList.add('hidden');
+                updateHomeDashboardDisplay();
+            } else {
+                updateNavAuthStatus('Guest Stylist');
+                document.getElementById('onboardingScreen').classList.remove('hidden');
+                document.getElementById('navHomeBtn').classList.add('active');
+                document.getElementById('navHeader').classList.add('hidden');
             }
         });
     </script>
