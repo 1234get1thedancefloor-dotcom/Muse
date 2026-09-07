@@ -25,14 +25,14 @@ export default function App() {
             <a href="#home" onClick={(e) => { e.preventDefault(); setCurrentPage("home"); }}>HOME</a>
             <a href="#about" onClick={(e) => { e.preventDefault(); setCurrentPage("about"); }}>ABOUT</a>
             <a
-  href="#keyfeatures"
-  onClick={(e) => {
-    e.preventDefault();
-    setCurrentPage("keyfeatures");
-  }}
->
-  KEY FEATURES
-</a>
+              href="#keyfeatures"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage("keyfeatures");
+              }}
+            >
+              KEY FEATURES
+             </a>
             <a href="#">FAQ</a>
           </nav>
 
