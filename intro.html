@@ -496,7 +496,8 @@
             transition: opacity 0.25s ease;
         }
 
-        .modal-backdrop.open {
+        .modal-backdrop.open,
+        .modal-backdrop.active {
             opacity: 1;
             pointer-events: auto;
         }
@@ -515,7 +516,8 @@
             transition: transform 0.25s ease;
         }
 
-        .modal-backdrop.open .modal-box {
+        .modal-backdrop.open .modal-box,
+        .modal-backdrop.active .modal-box {
             transform: translateY(0);
         }
 
@@ -6069,12 +6071,16 @@
             setWeeklyLogSource('saved');
 
             onWeeklyLogDayChanged();
+            modal.classList.add('open');
             modal.classList.add('active');
         }
 
         function closeLogWeeklyOutfitModal() {
             const modal = document.getElementById('logWeeklyOutfitModal');
-            if (modal) modal.classList.remove('active');
+            if (modal) {
+                modal.classList.remove('open');
+                modal.classList.remove('active');
+            }
         }
 
         function handleLogWeeklyOutfitModalBackdropClick(e) {
@@ -6175,6 +6181,11 @@
         }
 
         function clearWeeklyOutfitDay(weekKey, dayIdx) {
+            const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            const dayLabel = dayNames[dayIdx] || 'this day';
+            if (!confirm(`Are you sure you want to clear the outfit logged for ${dayLabel}?`)) {
+                return;
+            }
             const store = getWeeklyOutfitsStore();
             if (store[weekKey] && store[weekKey][dayIdx]) {
                 delete store[weekKey][dayIdx];
@@ -8484,12 +8495,18 @@
             }
 
             updateBuildOutfitLivePreview();
-            if (modal) modal.classList.add('active');
+            if (modal) {
+                modal.classList.add('open');
+                modal.classList.add('active');
+            }
         }
 
         function closeBuildOutfitModal() {
             const modal = document.getElementById('buildOutfitModal');
-            if (modal) modal.classList.remove('active');
+            if (modal) {
+                modal.classList.remove('open');
+                modal.classList.remove('active');
+            }
         }
 
         function handleBuildOutfitModalBackdropClick(e) {
