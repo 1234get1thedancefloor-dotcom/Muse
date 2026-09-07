@@ -5606,7 +5606,7 @@
             const submitBtn = document.getElementById('findFitSubmitBtn');
             const uploadBtn = document.getElementById('findFitUploadSubmitBtn');
 
-            const query = (queryInput ? queryInput.value.trim() : '') || 'Oversized Pure Linen Shirt';
+            const query = (queryInput ? queryInput.value.trim() : '') || (currentFindFitMode === 'upload' ? '' : 'Oversized Pure Linen Shirt');
             const category = categorySelect ? categorySelect.value : 'All';
             const retailer = retailerSelect ? retailerSelect.value : 'All';
             const maxBudget = budgetSelect ? budgetSelect.value : '0';
@@ -5624,7 +5624,7 @@
             if (container) {
                 const searchLabel = currentFindFitMode === 'upload' && pendingFindFitFile
                     ? `Analyzing garment photo and querying Indian fashion market via SerpApi...`
-                    : `Searching Indian fashion marketplaces for "${query}" via SerpApi...`;
+                    : `Searching Indian fashion marketplaces for "${query || 'your piece'}" via SerpApi...`;
 
                 container.innerHTML = `
                     <div style="background: var(--surface-muted); padding: 32px 16px; border-radius: var(--radius-card); text-align: center; border: 1.5px dashed var(--border-subtle);">
@@ -5632,7 +5632,7 @@
                             ${searchLabel}
                         </div>
                         <div style="font-size: 12px; color: var(--text-secondary);">
-                            Curating similar pieces and comparing live prices across Myntra, Ajio, Tata CLiQ, Nykaa & Amazon India
+                            Curating similar pieces and comparing live prices across Myntra, Ajio, Tata CLiQ, Nykaa, Zara & Amazon India
                         </div>
                     </div>
                 `;
@@ -5643,7 +5643,7 @@
                 if (currentFindFitMode === 'upload' && pendingFindFitFile) {
                     const formData = new FormData();
                     formData.append('fitImage', pendingFindFitFile);
-                    formData.append('query', query);
+                    if (query) formData.append('query', query);
                     formData.append('category', category);
                     formData.append('retailer', retailer);
                     formData.append('maxBudget', maxBudget);
@@ -5657,7 +5657,7 @@
                     res = await fetch('http://localhost:5000/api/ai/find-fit', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ query, category, retailer, maxBudget, apiKey })
+                        body: JSON.stringify({ query: query || 'Oversized Pure Linen Shirt', category, retailer, maxBudget, apiKey })
                     });
                 }
 
@@ -5670,25 +5670,29 @@
                 }
             } catch (err) {
                 console.warn('Find Fit fetch fallback:', err.message);
+                const activeQuery = query || 'Oversized Pure Linen Shirt';
+                const cleanSlug = encodeURIComponent(activeQuery.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
+                const cleanSearch = encodeURIComponent(activeQuery);
+
                 const fallbackProducts = [
                     {
                         id: 'fallback_1',
-                        title: `${query}: Oversized Pure Linen Drop-Shoulder Shirt`,
+                        title: `Drop-Shoulder Contemporary ${activeQuery}`,
                         brand: 'H&M / Myntra',
-                        price: '₹1,999',
-                        extractedPrice: 1999,
+                        price: '₹1,799',
+                        extractedPrice: 1799,
                         originalPrice: '₹2,999',
                         image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=500&auto=format&fit=crop&q=80',
                         rating: '4.7',
                         reviews: 142,
                         retailer: 'Myntra',
-                        link: `https://www.myntra.com/${encodeURIComponent(query.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}`,
-                        delivery: 'Fast Delivery across India',
+                        link: `https://www.myntra.com/${cleanSlug}`,
+                        delivery: 'Fast Delivery in India (2-3 Days)',
                         matchScore: 98
                     },
                     {
                         id: 'fallback_2',
-                        title: `${query}: Structured Tailored Silk Bustier Top`,
+                        title: `Tailored Liquid-Finish ${activeQuery}`,
                         brand: 'Urbanic / Ajio Luxe',
                         price: '₹1,499',
                         extractedPrice: 1499,
@@ -5697,51 +5701,81 @@
                         rating: '4.6',
                         reviews: 98,
                         retailer: 'Ajio',
-                        link: `https://www.ajio.com/search/?text=${encodeURIComponent(query)}`,
-                        delivery: 'Fast Delivery across India',
-                        matchScore: 95
+                        link: `https://www.ajio.com/search/?text=${cleanSearch}`,
+                        delivery: 'Fast Delivery in India (3-4 Days)',
+                        matchScore: 96
                     },
                     {
                         id: 'fallback_3',
-                        title: `${query}: Pleated High-Waisted Tailored Wool Trousers`,
-                        brand: 'Mango / Tata CLiQ',
-                        price: '₹3,490',
-                        extractedPrice: 3490,
-                        originalPrice: '₹4,990',
+                        title: `Architectural Minimalist ${activeQuery}`,
+                        brand: 'Uniqlo / Tata CLiQ',
+                        price: '₹2,290',
+                        extractedPrice: 2290,
+                        originalPrice: '₹3,490',
                         image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500&auto=format&fit=crop&q=80',
                         rating: '4.8',
                         reviews: 84,
                         retailer: 'Tata CLiQ',
-                        link: `https://www.tatacliq.com/search/?searchCategory=all&text=${encodeURIComponent(query)}`,
-                        delivery: 'Fast Delivery across India',
+                        link: `https://www.tatacliq.com/search/?searchCategory=all&text=${cleanSearch}`,
+                        delivery: 'Express Delivery across India',
                         matchScore: 94
                     },
                     {
                         id: 'fallback_4',
-                        title: `${query}: Handloom Pure Cotton Chikan Kurti Set`,
+                        title: `Handcrafted Artisan ${activeQuery}`,
                         brand: 'FabIndia / Nykaa Fashion',
-                        price: '₹2,190',
-                        extractedPrice: 2190,
-                        originalPrice: '₹2,890',
+                        price: '₹2,499',
+                        extractedPrice: 2499,
+                        originalPrice: '₹3,899',
                         image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=80',
                         rating: '4.9',
                         reviews: 215,
                         retailer: 'Nykaa Fashion',
-                        link: `https://www.nykaafashion.com/search?search=${encodeURIComponent(query)}`,
+                        link: `https://www.nykaafashion.com/search?search=${cleanSearch}`,
                         delivery: 'Fast Delivery across India',
-                        matchScore: 97
+                        matchScore: 95
+                    },
+                    {
+                        id: 'fallback_5',
+                        title: `European Structured ${activeQuery}`,
+                        brand: 'Zara India',
+                        price: '₹3,590',
+                        extractedPrice: 3590,
+                        originalPrice: '₹4,990',
+                        image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&auto=format&fit=crop&q=80',
+                        rating: '4.7',
+                        reviews: 120,
+                        retailer: 'Zara India',
+                        link: `https://www.zara.com/in/en/search?searchTerm=${cleanSearch}`,
+                        delivery: 'Standard Shipping in India',
+                        matchScore: 93
+                    },
+                    {
+                        id: 'fallback_6',
+                        title: `Classic Heritage ${activeQuery}`,
+                        brand: "Levi's / Amazon India",
+                        price: '₹1,599',
+                        extractedPrice: 1599,
+                        originalPrice: '₹2,499',
+                        image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop&q=80',
+                        rating: '4.5',
+                        reviews: 310,
+                        retailer: 'Amazon India',
+                        link: `https://www.amazon.in/s?k=${cleanSearch}`,
+                        delivery: 'Prime Next-Day Delivery',
+                        matchScore: 91
                     }
                 ];
                 currentFindFitProducts = fallbackProducts;
-                renderFindFitResults(fallbackProducts, 'curated_catalog', query, null);
+                renderFindFitResults(fallbackProducts, 'curated_catalog', activeQuery, null);
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.innerText = 'Find Fit →';
+                    submitBtn.innerText = 'Find Fit';
                 }
                 if (uploadBtn) {
                     uploadBtn.disabled = false;
-                    uploadBtn.innerText = 'Analyze Photo & Find Fit →';
+                    uploadBtn.innerText = 'Analyze Photo and Find Fit';
                 }
             }
         }
