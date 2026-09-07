@@ -65,6 +65,15 @@ const About = ({ setCurrentPage }) => {
           <h2>Your Muse</h2>
           <p>Style together, stay connected. Add your friends and create coordinated looks for every moment you share.</p>
         </div>
+
+        <div className="feature-card">
+          <div className="card-header">
+            <span className="card-overline">04 // PRIVACY</span>
+            <span className="star">☆</span>
+          </div>
+          <h2>Your Privacy</h2>
+          <p>The platform prioritizes user privacy through end-to-end encryption and strong controls over personal images, wardrobe data, and shared content.</p>
+        </div>
       </section>
 
       {/* Bottom CTA Section */}
