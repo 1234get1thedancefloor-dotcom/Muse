@@ -919,9 +919,10 @@ router.post('/generate-outfit', async (req, res) => {
                     jewelry: jewelryPieces,
                     outerwear: outerPieces
                 },
-                rawPieces: allLookPieces,
-                rationale: `Artfully balances ${vibe} proportions with cohesive styling suited for ${occasion}.`,
-                hairAndBeauty: `Polished hairstyle and glowing makeup to harmonize with your wardrobe pieces.`
+                stylingRationale: `Artfully balances ${vibe} proportions and textures with cohesive styling suited for ${occasion}.`,
+                rationale: `Artfully balances ${vibe} proportions and textures with cohesive styling suited for ${occasion}.`,
+                beautyTip: `Polished hairstyle and glowing makeup to harmonize with your ${vibe} ensemble.`,
+                hairAndBeauty: `Polished hairstyle and glowing makeup to harmonize with your ${vibe} ensemble.`
             });
         }
 

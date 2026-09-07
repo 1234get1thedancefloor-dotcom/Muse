@@ -2165,12 +2165,12 @@
 
                 <div style="margin-top: 14px; padding: 14px 16px; background: var(--surface-muted); border-radius: var(--radius-card); border-left: 4px solid var(--text-primary);">
                     <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 4px; color: var(--text-primary);">Styling Rationale</div>
-                    <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-secondary);">${o.stylingRationale}</div>
+                    <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-secondary);">${o.stylingRationale || o.rationale || "Artfully balances aesthetic proportions and colors from your personal closet pieces."}</div>
                 </div>
 
                 <div style="margin-top: 10px; padding: 14px 16px; background: var(--primary-red-light); border-radius: var(--radius-card); border-left: 4px solid var(--primary-red);">
                     <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 4px; color: var(--primary-red);">Hair & Beauty Direction</div>
-                    <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${o.beautyTip}</div>
+                    <div style="font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${o.beautyTip || o.hairAndBeauty || "Polished hairstyle and glowing makeup to harmonize with your ensemble."}</div>
                 </div>
 
                 <!-- Interactive Rating & Preference Feedback Panel -->
