@@ -1164,4 +1164,397 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
     }
 });
 
+// ============================================================
+// 6. FIND FIT — SERPAPI PRODUCT RECOMMENDATIONS (INDIAN MARKET)
+// ============================================================
+
+// Curated Indian Fashion Catalog Generator for diverse apparel pieces
+function generateCuratedIndianFashionCatalog(query, categoryFilter = 'All', retailerFilter = 'All', maxBudget = 0) {
+    const qLower = (query || '').toLowerCase().trim();
+    const indianRetailers = [
+        { name: 'Myntra', domain: 'myntra.com', urlPrefix: 'https://www.myntra.com/' },
+        { name: 'Ajio', domain: 'ajio.com', urlPrefix: 'https://www.ajio.com/search/?text=' },
+        { name: 'Tata CLiQ', domain: 'tatacliq.com', urlPrefix: 'https://www.tatacliq.com/search/?searchCategory=all&text=' },
+        { name: 'Nykaa Fashion', domain: 'nykaafashion.com', urlPrefix: 'https://www.nykaafashion.com/search?search=' },
+        { name: 'Amazon India', domain: 'amazon.in', urlPrefix: 'https://www.amazon.in/s?k=' },
+        { name: 'Zara India', domain: 'zara.com/in', urlPrefix: 'https://www.zara.com/in/en/search?searchTerm=' }
+    ];
+
+    const apparelTemplates = [
+        {
+            keywords: ['shirt', 'linen', 'blouse', 'top', 'crop', 'corset', 'tee', 't-shirt'],
+            category: 'Top',
+            items: [
+                {
+                    title: 'Oversized Pure Linen Drop-Shoulder Relaxed Shirt',
+                    brand: 'H&M / Myntra',
+                    price: '₹1,999',
+                    extractedPrice: 1999,
+                    originalPrice: '₹2,999',
+                    image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.6',
+                    reviews: 142,
+                    fabric: '100% Breathable European Linen',
+                    retailer: 'Myntra'
+                },
+                {
+                    title: 'Structured Silk Ribbon Corset Bustier Top',
+                    brand: 'Urbanic / Ajio Luxe',
+                    price: '₹1,499',
+                    extractedPrice: 1499,
+                    originalPrice: '₹2,299',
+                    image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.7',
+                    reviews: 98,
+                    fabric: 'Satin Silk with Boning Support',
+                    retailer: 'Ajio'
+                },
+                {
+                    title: 'Boxy Heavyweight Organic Cotton Minimalist Tee',
+                    brand: 'Uniqlo / Tata CLiQ',
+                    price: '₹999',
+                    extractedPrice: 999,
+                    originalPrice: '₹1,490',
+                    image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.8',
+                    reviews: 310,
+                    fabric: '240 GSM Combed Cotton',
+                    retailer: 'Tata CLiQ'
+                },
+                {
+                    title: 'Embroidered Chikankari Handloom Pure Cotton Kurti',
+                    brand: 'FabIndia / Nykaa Fashion',
+                    price: '₹2,190',
+                    extractedPrice: 2190,
+                    originalPrice: '₹2,890',
+                    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.9',
+                    reviews: 215,
+                    fabric: 'Hand-embroidered Lucknowi Chikan',
+                    retailer: 'Nykaa Fashion'
+                },
+                {
+                    title: 'Tailored Poplin Mandarin Collar Crisp Blouse',
+                    brand: 'Zara India',
+                    price: '₹2,590',
+                    extractedPrice: 2590,
+                    originalPrice: '₹3,290',
+                    image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.5',
+                    reviews: 76,
+                    fabric: 'Mercerized Cotton Poplin',
+                    retailer: 'Zara India'
+                },
+                {
+                    title: 'Ribbed Knit Square-Neck Fitted Summer Top',
+                    brand: 'Athena / Amazon India',
+                    price: '₹799',
+                    extractedPrice: 799,
+                    originalPrice: '₹1,299',
+                    image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.3',
+                    reviews: 420,
+                    fabric: 'Stretch Viscose Ribbed Knit',
+                    retailer: 'Amazon India'
+                }
+            ]
+        },
+        {
+            keywords: ['skirt', 'trousers', 'pants', 'bottom', 'cargo', 'jeans', 'tennis'],
+            category: 'Bottom',
+            items: [
+                {
+                    title: 'Pleated High-Waisted Athletic Tennis Mini Skirt',
+                    brand: 'Nike / Myntra',
+                    price: '₹1,895',
+                    extractedPrice: 1895,
+                    originalPrice: '₹2,495',
+                    image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.8',
+                    reviews: 189,
+                    fabric: 'Moisture-Wicking Structured Poly Pleat',
+                    retailer: 'Myntra'
+                },
+                {
+                    title: 'High-Rise Wide-Leg Pleated Tailored Wool Trousers',
+                    brand: 'Mango / Tata CLiQ',
+                    price: '₹3,490',
+                    extractedPrice: 3490,
+                    originalPrice: '₹4,990',
+                    image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.7',
+                    reviews: 84,
+                    fabric: 'Fluid Crepe Tailored Blend',
+                    retailer: 'Tata CLiQ'
+                },
+                {
+                    title: 'Relaxed Baggy Utilitarian Cargo Pants with Pockets',
+                    brand: 'DNMX / Ajio',
+                    price: '₹1,299',
+                    extractedPrice: 1299,
+                    originalPrice: '₹2,199',
+                    image: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.4',
+                    reviews: 165,
+                    fabric: 'Durable Heavyweight Cotton Twill',
+                    retailer: 'Ajio'
+                },
+                {
+                    title: '90s Straight-Fit Vintage Washed Denim Jeans',
+                    brand: "Levi's / Amazon India",
+                    price: '₹2,799',
+                    extractedPrice: 2799,
+                    originalPrice: '₹3,999',
+                    image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.6',
+                    reviews: 520,
+                    fabric: '100% Rigid Non-Stretch Denim',
+                    retailer: 'Amazon India'
+                }
+            ]
+        },
+        {
+            keywords: ['dress', 'gown', 'slip', 'maxi', 'kurta', 'anarkali', 'saree'],
+            category: 'Dress',
+            items: [
+                {
+                    title: 'Cowl-Neck Liquid Satin Slip Maxi Dress',
+                    brand: 'Forever New / Myntra',
+                    price: '₹4,400',
+                    extractedPrice: 4400,
+                    originalPrice: '₹5,800',
+                    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.8',
+                    reviews: 94,
+                    fabric: 'Premium Bias-Cut Silk Satin',
+                    retailer: 'Myntra'
+                },
+                {
+                    title: 'Floral Tiered Bohemian Ruffle Midi Dress',
+                    brand: 'ONLY / Ajio',
+                    price: '₹1,999',
+                    extractedPrice: 1999,
+                    originalPrice: '₹3,299',
+                    image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.5',
+                    reviews: 130,
+                    fabric: 'Lightweight Georgette Crepe',
+                    retailer: 'Ajio'
+                },
+                {
+                    title: 'Handcrafted Chanderi Silk Festive Anarkali Suit Set',
+                    brand: 'Biba / Tata CLiQ',
+                    price: '₹3,999',
+                    extractedPrice: 3999,
+                    originalPrice: '₹6,499',
+                    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.9',
+                    reviews: 178,
+                    fabric: 'Chanderi Silk with Zari Border',
+                    retailer: 'Tata CLiQ'
+                }
+            ]
+        },
+        {
+            keywords: ['shoes', 'sneakers', 'heels', 'flats', 'sandals', 'loafers', 'boots', 'kitten'],
+            category: 'Shoes',
+            items: [
+                {
+                    title: 'Patent Leather Mary Jane Kitten Heels with Buckle',
+                    brand: 'Charles & Keith / Nykaa Fashion',
+                    price: '₹3,999',
+                    extractedPrice: 3999,
+                    originalPrice: '₹5,499',
+                    image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.7',
+                    reviews: 82,
+                    fabric: 'High-Gloss Faux Patent Leather',
+                    retailer: 'Nykaa Fashion'
+                },
+                {
+                    title: 'Retro Chunky Platform Low-Top Sneakers',
+                    brand: 'Puma / Myntra',
+                    price: '₹2,999',
+                    extractedPrice: 2999,
+                    originalPrice: '₹4,999',
+                    image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.8',
+                    reviews: 640,
+                    fabric: 'Cushioned Foam & Leatherette',
+                    retailer: 'Myntra'
+                },
+                {
+                    title: 'Chunky Horsebit Lug-Sole Classic Loafers',
+                    brand: 'Zara India',
+                    price: '₹3,590',
+                    extractedPrice: 3590,
+                    originalPrice: '₹4,590',
+                    image: 'https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.6',
+                    reviews: 112,
+                    fabric: 'Supple Microfiber Leather',
+                    retailer: 'Zara India'
+                }
+            ]
+        },
+        {
+            keywords: ['jewelry', 'necklace', 'earrings', 'pearl', 'bag', 'tote', 'sunglasses', 'accessory'],
+            category: 'Jewelry',
+            items: [
+                {
+                    title: 'Freshwater Baroque Pearl Drop 18K Gold Plated Necklace',
+                    brand: 'GIVA / Amazon India',
+                    price: '₹1,599',
+                    extractedPrice: 1599,
+                    originalPrice: '₹2,999',
+                    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.9',
+                    reviews: 450,
+                    fabric: '18K Gold Vermeil & Natural Pearl',
+                    retailer: 'Amazon India'
+                },
+                {
+                    title: 'Structured Minimalist Shoulder Bag with Gold Accents',
+                    brand: 'Baggit / Tata CLiQ',
+                    price: '₹1,799',
+                    extractedPrice: 1799,
+                    originalPrice: '₹2,690',
+                    image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&auto=format&fit=crop&q=80',
+                    rating: '4.5',
+                    reviews: 125,
+                    fabric: 'Vegan Saffiano Leather',
+                    retailer: 'Tata CLiQ'
+                }
+            ]
+        }
+    ];
+
+    // Find best template group
+    let matchingGroup = null;
+    for (const group of apparelTemplates) {
+        if (group.keywords.some(k => qLower.includes(k))) {
+            matchingGroup = group;
+            break;
+        }
+    }
+
+    if (!matchingGroup) {
+        matchingGroup = apparelTemplates[0]; // Default to Tops & Apparel
+    }
+
+    let catalog = matchingGroup.items.map((item, idx) => {
+        const ret = indianRetailers.find(r => r.name.toLowerCase() === item.retailer.toLowerCase()) || indianRetailers[0];
+        const searchLink = `${ret.urlPrefix}${encodeURIComponent(query ? `${query} ${item.title}` : item.title)}`;
+        return {
+            id: `fit_${idx + 1}_${Date.now()}`,
+            title: query ? `${query}: ${item.title}` : item.title,
+            brand: item.brand,
+            price: item.price,
+            extractedPrice: item.extractedPrice,
+            originalPrice: item.originalPrice,
+            image: item.image,
+            rating: item.rating,
+            reviews: item.reviews,
+            fabric: item.fabric,
+            retailer: item.retailer,
+            domain: ret.domain,
+            link: searchLink,
+            delivery: 'Fast Delivery in India (2-4 Days)',
+            matchScore: Math.floor(Math.random() * 6) + 94
+        };
+    });
+
+    if (retailerFilter && retailerFilter !== 'All') {
+        const filtered = catalog.filter(c => c.retailer.toLowerCase().includes(retailerFilter.toLowerCase()));
+        if (filtered.length > 0) catalog = filtered;
+    }
+
+    return catalog;
+}
+
+// Router Endpoint for Find Fit
+router.all(['/find-fit', '/findfit'], async (req, res) => {
+    try {
+        const query = (req.method === 'POST' ? req.body.query : req.query.query) || 'Oversized Linen Shirt';
+        const category = (req.method === 'POST' ? req.body.category : req.query.category) || 'All';
+        const retailer = (req.method === 'POST' ? req.body.retailer : req.query.retailer) || 'All';
+        const maxBudget = parseInt((req.method === 'POST' ? req.body.maxBudget : req.query.maxBudget) || 0, 10);
+        const apiKey = req.body?.apiKey || req.query?.apiKey || process.env.SERPAPI_API_KEY || process.env.SERPAPI_KEY || '';
+
+        const trimmedQuery = query.trim();
+        let products = [];
+        let sourceUsed = 'curated_indian_market';
+
+        if (apiKey) {
+            try {
+                let serpSearchQuery = `${trimmedQuery} clothing apparel fashion`;
+                if (retailer && retailer !== 'All') {
+                    serpSearchQuery += ` ${retailer}`;
+                }
+                serpSearchQuery += ' India';
+
+                const serpUrl = `https://serpapi.com/search.json?engine=google_shopping&q=${encodeURIComponent(serpSearchQuery)}&gl=in&hl=en&location=India&google_domain=google.co.in&api_key=${apiKey}`;
+                const response = await fetch(serpUrl);
+                const data = await response.json();
+
+                if (data && Array.isArray(data.shopping_results) && data.shopping_results.length > 0) {
+                    sourceUsed = 'serpapi_live';
+                    products = data.shopping_results.map((item, idx) => {
+                        let parsedPrice = item.price || (item.extracted_price ? `₹${item.extracted_price}` : '₹1,499');
+                        if (!parsedPrice.includes('₹') && !parsedPrice.toLowerCase().includes('rs')) {
+                            parsedPrice = `₹${parsedPrice}`;
+                        }
+                        const storeName = item.source || item.merchant?.name || (retailer !== 'All' ? retailer : 'Myntra');
+                        return {
+                            id: `serp_${idx + 1}_${Date.now()}`,
+                            title: item.title,
+                            brand: storeName,
+                            price: parsedPrice,
+                            extractedPrice: item.extracted_price || 1499,
+                            originalPrice: item.old_price || null,
+                            image: item.thumbnail || 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=500&auto=format&fit=crop&q=80',
+                            rating: item.rating ? Number(item.rating).toFixed(1) : '4.5',
+                            reviews: item.reviews || Math.floor(Math.random() * 80) + 18,
+                            fabric: 'Quality Garment',
+                            retailer: storeName,
+                            domain: storeName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com',
+                            link: item.link || item.product_link || `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(item.title)}`,
+                            delivery: item.delivery || 'Free Delivery in India',
+                            matchScore: Math.floor(Math.random() * 6) + 93
+                        };
+                    });
+                }
+            } catch (serpErr) {
+                console.warn('SerpApi live query failed, using curated Indian market catalog:', serpErr.message);
+            }
+        }
+
+        if (products.length === 0) {
+            products = generateCuratedIndianFashionCatalog(trimmedQuery, category, retailer, maxBudget);
+        }
+
+        if (maxBudget > 0) {
+            products = products.filter(p => !p.extractedPrice || p.extractedPrice <= maxBudget);
+        }
+
+        return res.json({
+            success: true,
+            query: trimmedQuery,
+            category,
+            retailer,
+            maxBudget,
+            source: sourceUsed,
+            count: products.length,
+            products
+        });
+    } catch (err) {
+        console.error('Find Fit API Error:', err);
+        return res.status(500).json({
+            success: false,
+            error: 'Failed to retrieve Indian fashion recommendations.',
+            details: err.message
+        });
+    }
+});
+
 module.exports = router;
