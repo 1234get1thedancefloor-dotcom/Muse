@@ -2898,6 +2898,10 @@
                         <option value="Dark Grunge / Gothic Chic">Dark Grunge / Gothic Chic</option>
                     </select>
                 </div>
+                <div>
+                    <label style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Birthday (Optional)</label>
+                    <input type="date" id="addFriendBirthdayInput" style="font-size: 12.5px; padding: 10px 14px; border-radius: var(--radius-card); border: 1px solid var(--border-light); width: 100%; box-sizing: border-box; margin-top: 4px; outline: none; background: #ffffff;">
+                </div>
                 <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;">
                     <button type="button" class="tab-chip" onclick="closeAddFriendModal()" style="padding: 8px 16px;">Cancel</button>
                     <button type="button" class="action-button" onclick="handleAddFriendSubmit()" style="width: auto; padding: 8px 20px; font-size: 12px; margin-top: 0;">Add to Circle</button>
@@ -2987,6 +2991,96 @@
                     </button>
                     <button type="button" class="action-button" onclick="handleSaveNewEvent()" style="width: auto; padding: 8px 20px; font-size: 12px; margin: 0;">
                         Save to Calendar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STYLE EVENT LOOK & SAVE FOR LATER MODAL -->
+    <div id="styleEventLookModal" class="modal-backdrop" onclick="handleStyleEventModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 680px; width: 95%;">
+            <div class="modal-header">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="modal-title" id="styleEventModalTitle">Style Look for Event</span>
+                        <span id="styleEventAestheticBadge" style="font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-pill); background: var(--text-primary); color: #ffffff;">
+                            Quiet Luxury
+                        </span>
+                    </div>
+                    <div id="styleEventModalSubtitle" style="font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-top: 2px;"></div>
+                </div>
+                <button class="modal-close-btn" onclick="closeStyleEventLookModal()">×</button>
+            </div>
+
+            <!-- Event Theme & Palette Strip -->
+            <div style="background: var(--surface-muted); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 10px 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Occasion Styling Target</div>
+                    <div id="styleEventPaletteText" style="font-size: 12.5px; font-weight: 800; color: var(--text-primary);">Theme Palette</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="styleEventPaletteSwatches" style="display: flex; gap: 4px;"></div>
+                    <span id="styleEventHarmonyScoreBadge" style="font-size: 11px; font-weight: 800; background: var(--primary-red-light); color: var(--primary-red); padding: 2px 8px; border-radius: var(--radius-pill);">
+                        95% Match
+                    </span>
+                </div>
+            </div>
+
+            <!-- 4 Interactive Outfit Slots -->
+            <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 11.5px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px;">
+                        Curated Look Pieces
+                    </span>
+                    <button type="button" class="tab-chip" onclick="autoAssembleEventLookAI()" style="font-size: 10.5px; padding: 3px 10px; background: var(--primary-red); color: #ffffff; border: none; font-weight: 700; cursor: pointer;">
+                        Auto-Recommend from Closet
+                    </button>
+                </div>
+
+                <div class="look-slots-container" id="eventLookSlotsContainer">
+                    <!-- Dynamic slots: Top, Bottom, Shoes, Jewelry -->
+                </div>
+            </div>
+
+            <!-- Quick Closet Item Picker for Active Slot -->
+            <div style="background: var(--surface-muted); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 10px; margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                    <span style="font-size: 11px; font-weight: 800; color: var(--text-primary); text-transform: uppercase;">
+                        Select <span id="eventActiveSlotLabel">Top</span> from Wardrobe:
+                    </span>
+                    <div style="display: flex; gap: 4px;">
+                        <button type="button" class="tab-chip active" id="eventPickerFilterTop" onclick="switchEventPickerFilter('Top', this)" style="font-size: 10px; padding: 2px 6px;">Top</button>
+                        <button type="button" class="tab-chip" id="eventPickerFilterDress" onclick="switchEventPickerFilter('Dress', this)" style="font-size: 10px; padding: 2px 6px;">Dress</button>
+                        <button type="button" class="tab-chip" id="eventPickerFilterBottom" onclick="switchEventPickerFilter('Bottom', this)" style="font-size: 10px; padding: 2px 6px;">Bottom</button>
+                        <button type="button" class="tab-chip" id="eventPickerFilterShoes" onclick="switchEventPickerFilter('Shoes', this)" style="font-size: 10px; padding: 2px 6px;">Shoes</button>
+                        <button type="button" class="tab-chip" id="eventPickerFilterJewelry" onclick="switchEventPickerFilter('Jewelry', this)" style="font-size: 10px; padding: 2px 6px;">Jewelry</button>
+                    </div>
+                </div>
+                <div id="eventWardrobePickerGrid" class="outfit-picker-grid" style="max-height: 160px;">
+                    <!-- Items from wardrobe -->
+                </div>
+            </div>
+
+            <!-- Notes & Checklist -->
+            <div>
+                <label for="eventLookNotesInput" style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                    Stylist Notes / Accessories Checklist
+                </label>
+                <textarea id="eventLookNotesInput" rows="2" placeholder="e.g. Iron the linen trousers beforehand, pair gold hoops and matte red lip..." style="width: 100%; font-size: 12px; padding: 8px 12px; border-radius: var(--radius-card); border: 1px solid var(--border-light); box-sizing: border-box; margin-top: 4px; outline: none; resize: vertical;"></textarea>
+            </div>
+
+            <!-- Action buttons -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; flex-wrap: wrap; gap: 8px;">
+                <button type="button" class="tab-chip" onclick="coStyleEventInRoom()" style="font-size: 11.5px; padding: 6px 12px; background: var(--primary-red-light); color: var(--primary-red); border-color: var(--primary-red); font-weight: 700;">
+                    Co-Style with Friends in Lounge →
+                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="tab-chip" onclick="closeStyleEventLookModal()" style="padding: 8px 16px;">
+                        Close
+                    </button>
+                    <button type="button" class="action-button" onclick="saveEventPlannedOutfit()" style="width: auto; padding: 8px 20px; font-size: 12px; margin: 0;">
+                        Save Outfit for Later
                     </button>
                 </div>
             </div>
@@ -3870,10 +3964,10 @@
         ];
 
         const defaultFriendsList = [
-            { id: 'f1', name: 'Aria Vance', handle: '@ariavance', aesthetic: 'Coquette / Balletcore', initials: 'AV', avatarBg: '#ffe4e6', avatarColor: '#e11d48', status: 'Online', look: 'Silk Ribbon Corset & Pleated Skirt' },
-            { id: 'f2', name: 'Elena Rostova', handle: '@elena_glam', aesthetic: 'Quiet Luxury / Warm Neutral', initials: 'ER', avatarBg: '#fef3c7', avatarColor: '#d97706', status: 'Styling now', look: 'Slip Dress & Minimalist Heels' },
-            { id: 'f3', name: 'Kai Thorne', handle: '@kaistyle', aesthetic: 'Y2K Cyber / Streetwear', initials: 'KT', avatarBg: '#e0f2fe', avatarColor: '#0284c7', status: 'Online', look: 'Oversized Linen Shirt & Trousers' },
-            { id: 'f4', name: 'Maya Lin', handle: '@mayalin', aesthetic: 'Minimalist / Architectural', initials: 'ML', avatarBg: '#f3e8ff', avatarColor: '#7e22ce', status: 'Active today', look: 'Cashmere Knit & Pearl Drop' }
+            { id: 'f1', name: 'Aria Vance', handle: '@ariavance', aesthetic: 'Coquette / Balletcore', birthday: '09-18', initials: 'AV', avatarBg: '#ffe4e6', avatarColor: '#e11d48', status: 'Online', look: 'Silk Ribbon Corset & Pleated Skirt' },
+            { id: 'f2', name: 'Elena Rostova', handle: '@elena_glam', aesthetic: 'Quiet Luxury / Warm Neutral', birthday: '10-12', initials: 'ER', avatarBg: '#fef3c7', avatarColor: '#d97706', status: 'Styling now', look: 'Slip Dress & Minimalist Heels' },
+            { id: 'f3', name: 'Kai Thorne', handle: '@kaistyle', aesthetic: 'Y2K Cyber / Streetwear', birthday: '11-24', initials: 'KT', avatarBg: '#e0f2fe', avatarColor: '#0284c7', status: 'Online', look: 'Oversized Linen Shirt & Trousers' },
+            { id: 'f4', name: 'Maya Lin', handle: '@mayalin', aesthetic: 'Minimalist / Architectural', birthday: '03-15', initials: 'ML', avatarBg: '#f3e8ff', avatarColor: '#7e22ce', status: 'Active today', look: 'Cashmere Knit & Pearl Drop' }
         ];
 
         let activeViewingRoomId = null;
@@ -3968,6 +4062,8 @@
             if (modal) {
                 document.getElementById('addFriendNameInput').value = '';
                 document.getElementById('addFriendHandleInput').value = '';
+                const bdayInput = document.getElementById('addFriendBirthdayInput');
+                if (bdayInput) bdayInput.value = '';
                 modal.classList.add('open');
             }
         }
@@ -3987,10 +4083,12 @@
             const nameInput = document.getElementById('addFriendNameInput');
             const handleInput = document.getElementById('addFriendHandleInput');
             const aestheticInput = document.getElementById('addFriendAestheticInput');
+            const bdayInput = document.getElementById('addFriendBirthdayInput');
 
             const name = nameInput ? nameInput.value.trim() : '';
             let handle = handleInput ? handleInput.value.trim() : '';
             const aesthetic = aestheticInput ? aestheticInput.value : 'Custom Vibe';
+            const birthday = bdayInput ? bdayInput.value : '';
 
             if (!name) {
                 alert('Please enter your friend\'s name!');
@@ -4018,6 +4116,7 @@
                 name: name,
                 handle: handle,
                 aesthetic: aesthetic,
+                birthday: birthday,
                 initials: initials,
                 avatarBg: pickedPal.bg,
                 avatarColor: pickedPal.color,
@@ -4031,6 +4130,8 @@
             closeAddFriendModal();
             renderHomeFriendsList();
             renderConnectedFriends();
+            renderStyleCalendar();
+            renderUpcomingEventsList();
             alert(`${name} (${handle}) added to your Connected Stylists Circle!`);
         }
 
@@ -4161,17 +4262,82 @@
         let selectedCalendarDateStr = null;
         let currentEventsFilter = 'all';
 
+        function getSavedEventLooks() {
+            try {
+                const stored = localStorage.getItem('muse_saved_event_looks');
+                if (stored) return JSON.parse(stored);
+            } catch (e) {
+                console.error(e);
+            }
+            return {};
+        }
+
+        function saveEventLooksMap(map) {
+            localStorage.setItem('muse_saved_event_looks', JSON.stringify(map));
+        }
+
         function getCalendarEvents() {
+            let baseEvents = [];
             try {
                 const stored = localStorage.getItem('muse_calendar_events');
                 if (stored) {
                     const parsed = JSON.parse(stored);
-                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                    if (Array.isArray(parsed) && parsed.length > 0) baseEvents = parsed;
                 }
             } catch (e) {
                 console.error(e);
             }
-            return defaultPopularCelebrations;
+
+            if (baseEvents.length === 0) {
+                baseEvents = defaultPopularCelebrations.map(c => ({ ...c }));
+            }
+
+            const currentYear = new Date().getFullYear();
+            const friends = getFriendsList();
+            const friendBdayEvents = [];
+
+            friends.forEach(f => {
+                if (f.birthday) {
+                    const parts = f.birthday.split('-');
+                    let m = '';
+                    let d = '';
+                    if (parts.length >= 3) {
+                        m = parts[1];
+                        d = parts[2];
+                    } else if (parts.length === 2) {
+                        m = parts[0];
+                        d = parts[1];
+                    }
+
+                    if (m && d) {
+                        const dateThisYear = `${currentYear}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+                        friendBdayEvents.push({
+                            id: `friend_bday_${f.id}`,
+                            title: `${f.name}'s Birthday Celebration`,
+                            date: dateThisYear,
+                            occasion: 'Party / Celebration',
+                            aesthetic: f.aesthetic || 'Curated Vibe',
+                            palette: [f.avatarColor || '#e11d48', '#FFFFF0', '#111111', '#D4AF37'],
+                            paletteText: `Celebration look for ${f.name} (${f.handle})`,
+                            notes: `Plan an outfit matching ${f.aesthetic} to celebrate ${f.name}!`,
+                            isCelebration: true,
+                            isFriendBirthday: true,
+                            friendName: f.name
+                        });
+                    }
+                }
+            });
+
+            // Combine stored/custom events, popular celebrations, and friend birthdays
+            const allEventsMap = new Map();
+            baseEvents.forEach(e => allEventsMap.set(e.id, e));
+            friendBdayEvents.forEach(e => {
+                if (!allEventsMap.has(e.id)) {
+                    allEventsMap.set(e.id, e);
+                }
+            });
+
+            return Array.from(allEventsMap.values());
         }
 
         function saveCalendarEvents(events) {
@@ -4322,8 +4488,9 @@
             if (!container) return;
 
             let events = getCalendarEvents();
+            const savedLooksMap = getSavedEventLooks();
 
-            // Check if user has birthday set and inject if not already present
+            // Check if user has personal birthday set and inject if not already present
             const savedBday = localStorage.getItem('muse_userBirthday');
             const savedName = localStorage.getItem('muse_userName') || 'Stylist';
             if (savedBday && savedBday.includes('-')) {
@@ -4391,6 +4558,22 @@
                     <span class="trend-color-dot" style="background: ${c}; width: 10px; height: 10px;" title="${c}"></span>
                 `).join('') : '';
 
+                const savedLook = savedLooksMap[ev.id] || ev.savedOutfit;
+                const hasSavedLook = Boolean(savedLook && savedLook.pieces && savedLook.pieces.length > 0);
+
+                let badgeLabel = 'Custom Event';
+                let badgeStyle = 'background: var(--surface-hover); color: var(--text-secondary);';
+                if (ev.isFriendBirthday) {
+                    badgeLabel = "Friend's Birthday";
+                    badgeStyle = 'background: #fce7f3; color: #be185d;';
+                } else if (ev.id === 'user_bday_event') {
+                    badgeLabel = 'Your Birthday';
+                    badgeStyle = 'background: var(--primary-red-light); color: var(--primary-red);';
+                } else if (ev.isCelebration) {
+                    badgeLabel = 'Celebration';
+                    badgeStyle = 'background: var(--primary-red-light); color: var(--primary-red);';
+                }
+
                 return `
                     <div class="event-card-item">
                         <div style="display: flex; align-items: center; gap: 10px; flex-grow: 1; overflow: hidden;">
@@ -4403,15 +4586,14 @@
                                     <span style="font-weight: 800; font-size: 12.5px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${ev.title}">
                                         ${ev.title}
                                     </span>
-                                    ${ev.isCelebration ? `
-                                        <span style="font-size: 9.5px; font-weight: 800; background: var(--primary-red-light); color: var(--primary-red); padding: 1px 6px; border-radius: var(--radius-pill);">
-                                            Celebration
+                                    <span style="font-size: 9.5px; font-weight: 800; ${badgeStyle} padding: 1px 6px; border-radius: var(--radius-pill);">
+                                        ${badgeLabel}
+                                    </span>
+                                    ${hasSavedLook ? `
+                                        <span style="font-size: 9.5px; font-weight: 800; background: #e8f5e9; color: #2e7d32; padding: 1px 6px; border-radius: var(--radius-pill);">
+                                            Look Planned (${savedLook.pieces.length} pcs)
                                         </span>
-                                    ` : `
-                                        <span style="font-size: 9.5px; font-weight: 700; background: var(--surface-hover); color: var(--text-secondary); padding: 1px 6px; border-radius: var(--radius-pill);">
-                                            Custom Event
-                                        </span>
-                                    `}
+                                    ` : ''}
                                 </div>
 
                                 <div style="font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-top: 2px;">
@@ -4425,17 +4607,24 @@
                                     </div>
                                 ` : ''}
 
-                                ${ev.notes ? `
+                                ${hasSavedLook && savedLook.pieces ? `
+                                    <div style="display: flex; gap: 4px; align-items: center; margin-top: 4px;">
+                                        ${savedLook.pieces.map(p => `
+                                            <img src="${p.image}" alt="${p.name}" style="width: 22px; height: 22px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border-light);" title="${p.slot}: ${p.name}">
+                                        `).join('')}
+                                        <span style="font-size: 9.5px; color: #2e7d32; font-weight: 700;">${savedLook.harmonyScore || 95}% Synergy</span>
+                                    </div>
+                                ` : (ev.notes ? `
                                     <div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         Note: ${ev.notes}
                                     </div>
-                                ` : ''}
+                                ` : '')}
                             </div>
                         </div>
 
                         <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0;">
-                            <button class="tab-chip" style="font-size: 10.5px; padding: 3px 10px; background: var(--text-primary); color: #ffffff; border: none; cursor: pointer;" onclick="styleLookForEvent('${ev.id}')" title="Style outfit for this event from your wardrobe">
-                                Style Look →
+                            <button class="tab-chip" style="font-size: 10.5px; padding: 3px 10px; background: ${hasSavedLook ? 'var(--surface-muted)' : 'var(--text-primary)'}; color: ${hasSavedLook ? 'var(--text-primary)' : '#ffffff'}; border: 1px solid var(--border-light); font-weight: 700; cursor: pointer;" onclick="openStyleEventLookModal('${ev.id}')" title="Style and save outfit for this occasion">
+                                ${hasSavedLook ? 'Edit Look →' : 'Style Look →'}
                             </button>
                             ${!ev.isCelebration ? `
                                 <button type="button" class="tab-chip" onclick="deleteCustomEvent('${ev.id}')" style="font-size: 9.5px; padding: 2px 6px; color: var(--primary-red); border-color: transparent;">
@@ -4446,6 +4635,356 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // =====================================================
+        // STYLE EVENT LOOK & SAVE FOR LATER ENGINE
+        // =====================================================
+
+        let activeStylingEventId = null;
+        let eventLookSlots = {
+            top: null,
+            dress: null,
+            bottom: null,
+            shoes: null,
+            jewelry: null
+        };
+        let eventLookPickerFilter = 'Top';
+
+        function openStyleEventLookModal(eventId) {
+            const events = getCalendarEvents();
+            const ev = events.find(e => e.id === eventId);
+            if (!ev) return;
+
+            activeStylingEventId = eventId;
+            const modal = document.getElementById('styleEventLookModal');
+            if (!modal) return;
+
+            document.getElementById('styleEventModalTitle').innerText = `Style Look: ${ev.title}`;
+            const badge = document.getElementById('styleEventAestheticBadge');
+            if (badge) badge.innerText = ev.aesthetic;
+
+            const parts = ev.date ? ev.date.split('-') : ['2026', '09', '01'];
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const monthIdx = parseInt(parts[1], 10) - 1;
+            const monthStr = monthNames[monthIdx] || 'Date';
+            const formattedDate = `${monthStr} ${parts[2]}, ${parts[0]}`;
+
+            document.getElementById('styleEventModalSubtitle').innerText = `${formattedDate} • ${ev.occasion}`;
+            document.getElementById('styleEventPaletteText').innerText = ev.paletteText || 'Coordinated Event Palette';
+
+            const swatchesEl = document.getElementById('styleEventPaletteSwatches');
+            if (swatchesEl) {
+                swatchesEl.innerHTML = (ev.palette || ['#111111', '#FFFFF0', '#E60023']).map(c => `
+                    <span class="trend-color-dot" style="background: ${c}; width: 12px; height: 12px;" title="${c}"></span>
+                `).join('');
+            }
+
+            // Check if saved look already exists for this event
+            const savedLooksMap = getSavedEventLooks();
+            const existingSaved = savedLooksMap[eventId] || ev.savedOutfit;
+
+            if (existingSaved && existingSaved.slots) {
+                eventLookSlots = {
+                    top: existingSaved.slots.top || null,
+                    dress: existingSaved.slots.dress || null,
+                    bottom: existingSaved.slots.bottom || null,
+                    shoes: existingSaved.slots.shoes || null,
+                    jewelry: existingSaved.slots.jewelry || null
+                };
+                const notesInput = document.getElementById('eventLookNotesInput');
+                if (notesInput) notesInput.value = existingSaved.notes || ev.notes || '';
+            } else {
+                autoAssembleEventLookAI(false);
+                const notesInput = document.getElementById('eventLookNotesInput');
+                if (notesInput) notesInput.value = ev.notes || '';
+            }
+
+            renderEventLookSlots();
+            renderEventWardrobePicker();
+            modal.classList.add('open');
+        }
+
+        function closeStyleEventLookModal() {
+            const modal = document.getElementById('styleEventLookModal');
+            if (modal) modal.classList.remove('open');
+            activeStylingEventId = null;
+        }
+
+        function handleStyleEventModalBackdropClick(e) {
+            if (e.target && e.target.id === 'styleEventLookModal') {
+                closeStyleEventLookModal();
+            }
+        }
+
+        function renderEventLookSlots() {
+            const container = document.getElementById('eventLookSlotsContainer');
+            if (!container) return;
+
+            const isDressActive = Boolean(eventLookSlots.dress);
+
+            const slots = [
+                {
+                    key: isDressActive ? 'dress' : 'top',
+                    label: isDressActive ? 'Dress / One-Piece' : 'Top / Shirt',
+                    item: isDressActive ? eventLookSlots.dress : eventLookSlots.top,
+                    placeholder: isDressActive ? 'Select Dress' : 'Select Top'
+                },
+                {
+                    key: 'bottom',
+                    label: isDressActive ? 'Bottom (Disabled)' : 'Bottom / Skirt / Pants',
+                    item: isDressActive ? null : eventLookSlots.bottom,
+                    placeholder: isDressActive ? 'N/A for Dress' : 'Select Bottom',
+                    disabled: isDressActive
+                },
+                {
+                    key: 'shoes',
+                    label: 'Footwear / Shoes',
+                    item: eventLookSlots.shoes,
+                    placeholder: 'Select Shoes'
+                },
+                {
+                    key: 'jewelry',
+                    label: 'Jewelry / Bag',
+                    item: eventLookSlots.jewelry,
+                    placeholder: 'Select Accessory'
+                }
+            ];
+
+            container.innerHTML = slots.map(s => {
+                if (s.item) {
+                    return `
+                        <div class="look-slot-card filled" style="background: #ffffff; border: 1.5px solid var(--text-primary); border-radius: var(--radius-card); padding: 8px; display: flex; flex-direction: column; min-height: 105px; position: relative;">
+                            <button type="button" class="slot-remove-btn" onclick="removeEventLookPiece('${s.key}')" title="Remove piece" style="position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: var(--surface-muted); border: 1px solid var(--border-light); font-size: 11px; cursor: pointer;">×</button>
+                            <img src="${s.item.image}" alt="${s.item.name}" style="width: 100%; height: 58px; object-fit: contain; border-radius: 6px; margin-bottom: 4px; background: var(--surface-muted);">
+                            <div style="font-size: 8.5px; font-weight: 800; color: var(--text-secondary); text-transform: uppercase;">${s.label}</div>
+                            <div style="font-size: 10.5px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${s.item.name}">
+                                ${s.item.name}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="look-slot-card ${s.disabled ? 'opacity-50' : ''}" style="background: #ffffff; border: 1.5px dashed var(--border-subtle); border-radius: var(--radius-card); padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 105px; cursor: ${s.disabled ? 'default' : 'pointer'};" onclick="${s.disabled ? '' : `switchEventPickerFilter('${s.key === 'top' ? 'Top' : s.key === 'bottom' ? 'Bottom' : s.key === 'shoes' ? 'Shoes' : 'Jewelry'}')`}">
+                        <div style="font-size: 10px; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 2px;">
+                            ${s.label}
+                        </div>
+                        <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">
+                            ${s.placeholder}
+                        </div>
+                        ${!s.disabled ? '<span style="font-size: 9.5px; color: var(--primary-red); font-weight: 700; margin-top: 4px;">+ Pick</span>' : ''}
+                    </div>
+                `;
+            }).join('');
+
+            // Calculate harmony
+            const harmony = calculateEventLookHarmony();
+            const badge = document.getElementById('styleEventHarmonyScoreBadge');
+            if (badge) badge.innerText = `${harmony}% Match`;
+        }
+
+        function calculateEventLookHarmony() {
+            let count = 0;
+            if (eventLookSlots.dress || eventLookSlots.top) count++;
+            if (eventLookSlots.dress || eventLookSlots.bottom) count++;
+            if (eventLookSlots.shoes) count++;
+            if (eventLookSlots.jewelry) count++;
+
+            if (count === 0) return 60;
+            if (count === 1) return 75;
+            if (count === 2) return 86;
+            if (count === 3) return 94;
+            return 98;
+        }
+
+        function removeEventLookPiece(slotKey) {
+            eventLookSlots[slotKey] = null;
+            renderEventLookSlots();
+        }
+
+        function switchEventPickerFilter(cat, btn = null) {
+            eventLookPickerFilter = cat;
+            const label = document.getElementById('eventActiveSlotLabel');
+            if (label) label.innerText = cat;
+
+            const buttons = document.querySelectorAll('#styleEventLookModal .tab-chip');
+            buttons.forEach(b => {
+                if (['Top', 'Dress', 'Bottom', 'Shoes', 'Jewelry'].includes(b.innerText.trim())) {
+                    b.classList.remove('active');
+                    if (b.innerText.trim() === cat) b.classList.add('active');
+                }
+            });
+
+            renderEventWardrobePicker();
+        }
+
+        function renderEventWardrobePicker() {
+            const grid = document.getElementById('eventWardrobePickerGrid');
+            if (!grid) return;
+
+            const allItems = getWardrobeItems();
+            const filtered = allItems.filter(i => {
+                if (eventLookPickerFilter === 'Top') return i.category === 'Top';
+                if (eventLookPickerFilter === 'Dress') return i.category === 'Dress';
+                if (eventLookPickerFilter === 'Bottom') return i.category === 'Bottom';
+                if (eventLookPickerFilter === 'Shoes') return i.category === 'Shoes';
+                if (eventLookPickerFilter === 'Jewelry') return i.category === 'Jewelry' || i.category === 'Accessories';
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; background: #ffffff; padding: 12px; border-radius: var(--radius-card); text-align: center; color: var(--text-secondary); font-size: 11px;">
+                        No ${eventLookPickerFilter} items found in your wardrobe. Upload more in Digital Wardrobe!
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="outfit-picker-card" onclick="selectEventPickerItem('${item.id}')" title="Click to add to ${eventLookPickerFilter}">
+                    <img src="${item.image}" alt="${item.name}" class="outfit-picker-thumb">
+                    <div style="font-size: 9px; font-weight: 800; color: var(--text-secondary); text-transform: uppercase;">${item.category}</div>
+                    <div style="font-size: 11px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${item.name}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectEventPickerItem(itemId) {
+            const allItems = getWardrobeItems();
+            const item = allItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            if (item.category === 'Dress') {
+                eventLookSlots.dress = item;
+                eventLookSlots.top = null;
+                eventLookSlots.bottom = null;
+            } else if (item.category === 'Top') {
+                eventLookSlots.top = item;
+                eventLookSlots.dress = null;
+            } else if (item.category === 'Bottom') {
+                eventLookSlots.bottom = item;
+                eventLookSlots.dress = null;
+            } else if (item.category === 'Shoes') {
+                eventLookSlots.shoes = item;
+            } else if (item.category === 'Jewelry' || item.category === 'Accessories') {
+                eventLookSlots.jewelry = item;
+            }
+
+            renderEventLookSlots();
+        }
+
+        function autoAssembleEventLookAI(render = true) {
+            const allItems = getWardrobeItems();
+            const events = getCalendarEvents();
+            const ev = events.find(e => e.id === activeStylingEventId);
+            const targetAesthetic = ev ? ev.aesthetic : 'Quiet Luxury';
+
+            const dresses = allItems.filter(i => i.category === 'Dress');
+            const tops = allItems.filter(i => i.category === 'Top');
+            const bottoms = allItems.filter(i => i.category === 'Bottom');
+            const shoes = allItems.filter(i => i.category === 'Shoes');
+            const jewelry = allItems.filter(i => i.category === 'Jewelry' || i.category === 'Accessories');
+
+            if (targetAesthetic.includes('Quiet Luxury') && dresses.length > 0) {
+                eventLookSlots.dress = dresses[0];
+                eventLookSlots.top = null;
+                eventLookSlots.bottom = null;
+            } else if (tops.length > 0) {
+                eventLookSlots.top = tops[0];
+                eventLookSlots.dress = null;
+                if (bottoms.length > 0) eventLookSlots.bottom = bottoms[0];
+            } else if (dresses.length > 0) {
+                eventLookSlots.dress = dresses[0];
+                eventLookSlots.top = null;
+                eventLookSlots.bottom = null;
+            }
+
+            if (shoes.length > 0) eventLookSlots.shoes = shoes[0];
+            if (jewelry.length > 0) eventLookSlots.jewelry = jewelry[0];
+
+            if (render) {
+                renderEventLookSlots();
+            }
+        }
+
+        function saveEventPlannedOutfit() {
+            if (!activeStylingEventId) return;
+
+            const pieces = [];
+            if (eventLookSlots.dress) {
+                pieces.push({ slot: 'Dress', name: eventLookSlots.dress.name, category: 'Dress', color: eventLookSlots.dress.color, image: eventLookSlots.dress.image });
+            } else if (eventLookSlots.top) {
+                pieces.push({ slot: 'Top', name: eventLookSlots.top.name, category: 'Top', color: eventLookSlots.top.color, image: eventLookSlots.top.image });
+            }
+
+            if (!eventLookSlots.dress && eventLookSlots.bottom) {
+                pieces.push({ slot: 'Bottom', name: eventLookSlots.bottom.name, category: 'Bottom', color: eventLookSlots.bottom.color, image: eventLookSlots.bottom.image });
+            }
+
+            if (eventLookSlots.shoes) {
+                pieces.push({ slot: 'Shoes', name: eventLookSlots.shoes.name, category: 'Shoes', color: eventLookSlots.shoes.color, image: eventLookSlots.shoes.image });
+            }
+
+            if (eventLookSlots.jewelry) {
+                pieces.push({ slot: 'Jewelry', name: eventLookSlots.jewelry.name, category: 'Jewelry', color: eventLookSlots.jewelry.color, image: eventLookSlots.jewelry.image });
+            }
+
+            if (pieces.length === 0) {
+                alert('Please select at least one piece to save this outfit!');
+                return;
+            }
+
+            const notesInput = document.getElementById('eventLookNotesInput');
+            const notes = notesInput ? notesInput.value.trim() : '';
+            const harmony = calculateEventLookHarmony();
+
+            const savedLook = {
+                eventId: activeStylingEventId,
+                slots: { ...eventLookSlots },
+                pieces: pieces,
+                harmonyScore: harmony,
+                notes: notes,
+                savedAt: new Date().toISOString()
+            };
+
+            const savedLooksMap = getSavedEventLooks();
+            savedLooksMap[activeStylingEventId] = savedLook;
+            saveEventLooksMap(savedLooksMap);
+
+            // Also update event object in muse_calendar_events if present
+            const events = getCalendarEvents();
+            const ev = events.find(e => e.id === activeStylingEventId);
+            if (ev) {
+                ev.savedOutfit = savedLook;
+                saveCalendarEvents(events);
+            }
+
+            closeStyleEventLookModal();
+            renderUpcomingEventsList();
+            renderStyleCalendar();
+            alert(`Outfit successfully planned and saved for "${ev ? ev.title : 'this event'}"!`);
+        }
+
+        function coStyleEventInRoom() {
+            const events = getCalendarEvents();
+            const ev = events.find(e => e.id === activeStylingEventId);
+            const title = ev ? ev.title : 'Special Event Styling';
+            const theme = ev ? `${ev.aesthetic} - ${ev.paletteText || 'Coordinated Palette'}` : 'Occasion Look';
+
+            closeStyleEventLookModal();
+            goToCoStylingLounge();
+
+            setTimeout(() => {
+                openCreateRoomModal();
+                const titleInput = document.getElementById('newRoomTitle');
+                if (titleInput) titleInput.value = `Co-Styling: ${title}`;
+                const themeInput = document.getElementById('newRoomTheme');
+                if (themeInput) themeInput.value = theme;
+            }, 150);
         }
 
         function openAddEventModal() {
@@ -4525,15 +5064,6 @@
             saveCalendarEvents(filtered);
             renderStyleCalendar();
             renderUpcomingEventsList();
-        }
-
-        function styleLookForEvent(eventId) {
-            const events = getCalendarEvents();
-            const ev = events.find(e => e.id === eventId);
-            if (!ev) return;
-
-            goToWardrobeScreen();
-            alert(`Styling outfit for "${ev.title}" (Dress code: ${ev.aesthetic})! Filter pieces from your closet or assemble a matching capsule.`);
         }
 
         function getCollabRooms() {
