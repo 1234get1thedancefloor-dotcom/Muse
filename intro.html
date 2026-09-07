@@ -2168,6 +2168,96 @@
             color: var(--text-secondary);
         }
 
+        /* Profile Screen Badges Bar & Badges Shelf */
+        .profile-badges-preview-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+            flex-wrap: wrap;
+        }
+
+        .profile-badge-mini-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-pill);
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .profile-badge-mini-chip:hover {
+            border-color: var(--primary-red);
+            transform: translateY(-1px);
+        }
+
+        .profile-badge-mini-chip.unlocked {
+            background: #fffbf0;
+            border-color: #f59e0b;
+            color: #b45309;
+        }
+
+        .profile-badge-mini-icon {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #f59e0b;
+            color: #ffffff;
+            font-size: 8px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-badges-filter-bar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .profile-badge-filter-btn {
+            font-size: 10px;
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border-light);
+            background: var(--surface-muted);
+            color: var(--text-secondary);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .profile-badge-filter-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--border-subtle);
+        }
+
+        .profile-badge-filter-btn.active {
+            background: var(--text-primary);
+            color: #ffffff;
+            border-color: var(--text-primary);
+        }
+
+        .profile-badges-shelf-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
         /* Info Section Cards */
         .info-card {
             background: #ffffff;
@@ -2499,7 +2589,7 @@
                 Find Your Vibe. Own Your Look. Elevated by Intuitive Intelligence.
             </div>
 
-            <!-- Welcome Profile Hero Card -->
+            <!-- Welcome Profile Hero Card with Badges Showcase -->
             <div class="mentality-hero-card">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                     <div>
@@ -2518,6 +2608,22 @@
                             Edit Profile
                         </button>
                     </div>
+                </div>
+
+                <!-- Profile Badges Preview Strip -->
+                <div class="profile-badges-preview-bar">
+                    <div style="font-size: 11px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Style & Sound Badges</span>
+                        <span id="homeProfileBadgesCountBadge" style="font-size: 9.5px; font-weight: 800; background: #fffbf0; color: #b45309; border: 1px solid #f59e0b; padding: 1px 6px; border-radius: var(--radius-pill);">
+                            0 Unlocked
+                        </span>
+                    </div>
+                    <div id="homeProfileBadgesMiniList" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap; flex: 1;">
+                        <!-- Populated dynamically by renderProfileBadges() -->
+                    </div>
+                    <button type="button" onclick="openEditProfileModal()" style="background: none; border: none; font-size: 10.5px; font-weight: 700; color: var(--primary-red); cursor: pointer; text-decoration: underline; padding: 0;">
+                        View Badges Shelf →
+                    </button>
                 </div>
             </div>
 
@@ -3696,38 +3802,90 @@
         </div>
     </div>
 
-    <!-- EDIT PROFILE MODAL -->
+    <!-- EDIT PROFILE & BADGES MODAL -->
     <div id="editProfileModal" class="modal-backdrop" onclick="handleProfileModalBackdropClick(event)">
-        <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-box" style="max-width: 620px; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <span class="modal-title">Edit Stylist Profile</span>
+                <div>
+                    <span class="modal-title">Stylist Profile & Badges</span>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                        Manage your style profile, aesthetic signature, and earned achievements
+                    </div>
+                </div>
                 <button class="modal-close-btn" onclick="closeEditProfileModal()">×</button>
             </div>
 
-            <label for="editProfileName">Full Name / Nickname:</label>
-            <input type="text" id="editProfileName" placeholder="e.g. Mahat">
+            <!-- Profile Info Form -->
+            <div style="background: var(--surface-muted); padding: 12px; border-radius: var(--radius-card); border: 1px solid var(--border-light); margin-bottom: 16px;">
+                <div style="font-size: 11px; font-weight: 800; color: var(--primary-red); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px;">
+                    Stylist Details
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div>
+                        <label for="editProfileName" style="margin-top: 0; font-size: 11.5px;">Full Name / Nickname:</label>
+                        <input type="text" id="editProfileName" placeholder="e.g. Mahat" style="margin-bottom: 0;">
+                    </div>
+                    <div>
+                        <label for="editProfileEmail" style="margin-top: 0; font-size: 11.5px;">Email / Username:</label>
+                        <input type="email" id="editProfileEmail" placeholder="e.g. mahat@muse.style" style="margin-bottom: 0;">
+                    </div>
+                </div>
 
-            <label for="editProfileEmail">Email / Username:</label>
-            <input type="email" id="editProfileEmail" placeholder="e.g. mahat@muse.style">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label for="editProfileBirthday" style="margin-top: 0; font-size: 11.5px;">Birthday:</label>
+                        <input type="date" id="editProfileBirthday" style="margin-bottom: 0;">
+                    </div>
+                    <div>
+                        <label for="editProfileAesthetic" style="margin-top: 0; font-size: 11.5px;">Daily Aesthetic / Theme:</label>
+                        <select id="editProfileAesthetic" style="margin-bottom: 0;">
+                            <option value="pink">Cutesy / Soft Pink</option>
+                            <option value="goth">Goth / Grunge Dark</option>
+                            <option value="chic">Chic / Luxury Warm</option>
+                            <option value="indie">Indie / Eclectic Teal</option>
+                            <option value="minimalist">Minimalist / Clean Grey</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-            <label for="editProfileBirthday">Birthday:</label>
-            <input type="date" id="editProfileBirthday">
+            <!-- Style & Sound Badges Collection Shelf -->
+            <div style="border-top: 1px solid var(--border-light); padding-top: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
+                    <div>
+                        <div style="font-size: 13px; font-weight: 800; color: var(--text-primary);">
+                            Style & Sound Badges Collection
+                        </div>
+                        <div style="font-size: 11px; color: var(--text-secondary);">
+                            Achievements unlocked across streaks, aesthetic exploration, soundtrack listening, and wardrobe curation
+                        </div>
+                    </div>
+                    <span id="profileModalBadgesCounterBadge" style="font-size: 10.5px; font-weight: 800; background: #fffbf0; color: #b45309; border: 1px solid #f59e0b; padding: 2px 8px; border-radius: var(--radius-pill);">
+                        0 / 12 Unlocked
+                    </span>
+                </div>
 
-            <label for="editProfileAesthetic">Daily Aesthetic / Theme:</label>
-            <select id="editProfileAesthetic">
-                <option value="pink">Cutesy / Soft Pink</option>
-                <option value="goth">Goth / Grunge Dark</option>
-                <option value="chic">Chic / Luxury Warm</option>
-                <option value="indie">Indie / Eclectic Teal</option>
-                <option value="minimalist">Minimalist / Clean Grey</option>
-            </select>
+                <!-- Filter Chips -->
+                <div class="profile-badges-filter-bar" id="profileBadgesFilterBar">
+                    <button type="button" class="profile-badge-filter-btn active" onclick="filterProfileBadges('all', this)">All (12)</button>
+                    <button type="button" class="profile-badge-filter-btn" onclick="filterProfileBadges('streak', this)">Streaks</button>
+                    <button type="button" class="profile-badge-filter-btn" onclick="filterProfileBadges('aesthetic', this)">Aesthetics</button>
+                    <button type="button" class="profile-badge-filter-btn" onclick="filterProfileBadges('soundtrack', this)">Soundtracks</button>
+                    <button type="button" class="profile-badge-filter-btn" onclick="filterProfileBadges('wardrobe', this)">Wardrobe</button>
+                </div>
 
-            <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
-                <button type="button" class="tab-chip" onclick="closeEditProfileModal()" style="padding: 10px 18px;">
+                <!-- Badges Grid Shelf -->
+                <div id="profileModalBadgesGrid" class="profile-badges-shelf-grid">
+                    <!-- Populated dynamically by renderProfileBadgesShelf() -->
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; border-top: 1px solid var(--border-light); padding-top: 12px;">
+                <button type="button" class="tab-chip" onclick="closeEditProfileModal()" style="padding: 9px 18px;">
                     Cancel
                 </button>
-                <button type="button" class="action-button" onclick="saveProfileModal()" style="padding: 10px 22px; width: auto; margin-top: 0;">
-                    Save Profile
+                <button type="button" class="action-button" onclick="saveProfileModal()" style="padding: 9px 22px; width: auto; margin-top: 0;">
+                    Save Changes
                 </button>
             </div>
         </div>
@@ -4814,6 +4972,9 @@
             // Render Outfits of the Week Log (with auto-focus on Today)
             renderWeeklyOutfits(true);
 
+            // Render Profile Badges Preview
+            renderProfileBadges();
+
             // Load or refresh real-time Google Fashion Trends
             loadTrendingAesthetics();
         }
@@ -4973,6 +5134,8 @@
             document.getElementById('editProfileEmail').value = savedEmail;
             document.getElementById('editProfileBirthday').value = savedBday;
             document.getElementById('editProfileAesthetic').value = savedAesthetic;
+
+            renderProfileBadgesShelf('all');
 
             const modal = document.getElementById('editProfileModal');
             if (modal) modal.classList.add('open');
@@ -6405,7 +6568,11 @@
                 trackTitle: 'Satin Dewdrop Lounge - Studio Muse',
                 artist: 'Studio Muse (CC0 Original)',
                 license: 'CC0 Public Domain',
-                chords: [261.63, 329.63, 392.00, 493.88] // C maj7
+                bpm: 88,
+                chords: [261.63, 329.63, 392.00, 493.88], // Cmaj7
+                altChords: [220.00, 261.63, 329.63, 392.00], // Amin7
+                bassNotes: [65.41, 82.41, 55.00, 73.42],
+                arpNotes: [523.25, 659.25, 783.99, 987.77, 783.99, 659.25]
             },
             preppy: {
                 key: 'preppy',
@@ -6416,7 +6583,11 @@
                 trackTitle: 'Oxford Quad & Campus Stroll - Studio Muse',
                 artist: 'Studio Muse (CC-BY 4.0)',
                 license: 'CC-BY 4.0',
-                chords: [293.66, 369.99, 440.00, 554.37] // D maj7
+                bpm: 114,
+                chords: [293.66, 369.99, 440.00, 554.37], // Dmaj7
+                altChords: [196.00, 246.94, 293.66, 369.99], // Gmaj7
+                bassNotes: [73.42, 110.00, 98.00, 73.42],
+                arpNotes: [587.33, 739.99, 880.00, 739.99, 587.33, 440.00]
             },
             dark_academia: {
                 key: 'dark_academia',
@@ -6427,7 +6598,11 @@
                 trackTitle: 'Baroque Nocturne in D Minor - Studio Muse',
                 artist: 'Studio Muse (CC0 Original)',
                 license: 'CC0 Public Domain',
-                chords: [220.00, 261.63, 329.63, 392.00] // A min7
+                bpm: 76,
+                chords: [220.00, 261.63, 329.63, 392.00], // Amin7
+                altChords: [146.83, 174.61, 220.00, 261.63], // Dmin7
+                bassNotes: [55.00, 73.42, 58.27, 49.00],
+                arpNotes: [440.00, 523.25, 659.25, 783.99, 659.25, 523.25]
             },
             y2k: {
                 key: 'y2k',
@@ -6438,7 +6613,11 @@
                 trackTitle: 'Neo-Chrome Hyper Pulse - Studio Muse',
                 artist: 'Studio Muse (CC-BY 4.0)',
                 license: 'CC-BY 4.0',
-                chords: [174.61, 261.63, 349.23, 415.30] // F min(maj7)
+                bpm: 124,
+                chords: [174.61, 261.63, 349.23, 415.30], // Fm7
+                altChords: [138.59, 207.65, 261.63, 329.63], // Dbmaj7
+                bassNotes: [87.31, 87.31, 116.54, 103.83],
+                arpNotes: [698.46, 830.61, 1046.50, 830.61, 698.46, 523.25]
             },
             streetwear: {
                 key: 'streetwear',
@@ -6449,7 +6628,11 @@
                 trackTitle: 'Concrete Echoes Lo-Fi Groove - Studio Muse',
                 artist: 'Studio Muse (CC0 Original)',
                 license: 'CC0 Public Domain',
-                chords: [196.00, 233.08, 293.66, 349.23] // G min7
+                bpm: 90,
+                chords: [196.00, 233.08, 293.66, 349.23], // Gmin7
+                altChords: [130.81, 196.00, 233.08, 293.66], // Cmin7
+                bassNotes: [49.00, 49.00, 65.41, 55.00],
+                arpNotes: [392.00, 466.16, 587.33, 466.16, 349.23, 293.66]
             },
             indie_sleaze: {
                 key: 'indie_sleaze',
@@ -6460,7 +6643,11 @@
                 trackTitle: 'Overdrive Garage & Flashbulb - Studio Muse',
                 artist: 'Studio Muse (CC-BY 4.0)',
                 license: 'CC-BY 4.0',
-                chords: [164.81, 246.94, 329.63, 392.00] // E min7
+                bpm: 128,
+                chords: [164.81, 246.94, 329.63, 392.00], // Emin7
+                altChords: [196.00, 246.94, 293.66, 392.00], // Gmaj
+                bassNotes: [82.41, 82.41, 98.00, 110.00],
+                arpNotes: [329.63, 392.00, 493.88, 587.33, 493.88, 392.00]
             },
             romantic_coquette: {
                 key: 'romantic_coquette',
@@ -6471,7 +6658,11 @@
                 trackTitle: 'Ethereal Ribbon Reverie - Studio Muse',
                 artist: 'Studio Muse (CC-BY 4.0)',
                 license: 'CC-BY 4.0',
-                chords: [349.23, 440.00, 523.25, 659.25] // F maj7
+                bpm: 80,
+                chords: [174.61, 220.00, 261.63, 329.63], // Fmaj7
+                altChords: [261.63, 329.63, 392.00, 493.88], // Cmaj7
+                bassNotes: [87.31, 110.00, 130.81, 98.00],
+                arpNotes: [349.23, 440.00, 523.25, 659.25, 783.99, 659.25]
             },
             quiet_luxury: {
                 key: 'quiet_luxury',
@@ -6482,7 +6673,11 @@
                 trackTitle: 'Cashmere & Warm Velvet Lounge - Studio Muse',
                 artist: 'Studio Muse (CC0 Original)',
                 license: 'CC0 Public Domain',
-                chords: [261.63, 311.13, 392.00, 466.16] // C min7
+                bpm: 86,
+                chords: [261.63, 311.13, 392.00, 466.16], // Cmin7
+                altChords: [174.61, 207.65, 261.63, 311.13], // Fmin7
+                bassNotes: [65.41, 82.41, 87.31, 98.00],
+                arpNotes: [523.25, 622.25, 783.99, 932.33, 783.99, 622.25]
             },
             boho_chic: {
                 key: 'boho_chic',
@@ -6493,7 +6688,11 @@
                 trackTitle: 'Sunlit Shoreline & Breeze - Studio Muse',
                 artist: 'Studio Muse (CC0 Original)',
                 license: 'CC0 Public Domain',
-                chords: [246.94, 329.63, 392.00, 493.88] // B min7
+                bpm: 96,
+                chords: [196.00, 246.94, 293.66, 392.00], // Gmaj
+                altChords: [246.94, 293.66, 369.99, 440.00], // Bmin7
+                bassNotes: [98.00, 123.47, 130.81, 110.00],
+                arpNotes: [392.00, 493.88, 587.33, 739.99, 587.33, 493.88]
             },
             ninety_minimalist: {
                 key: 'ninety_minimalist',
@@ -6504,9 +6703,125 @@
                 trackTitle: 'Spatial Synthesis & Monochrome - Studio Muse',
                 artist: 'Studio Muse (CC0 Original)',
                 license: 'CC0 Public Domain',
-                chords: [220.00, 277.18, 329.63, 440.00] // A maj
+                bpm: 104,
+                chords: [293.66, 349.23, 440.00, 523.25], // Dmin7
+                altChords: [220.00, 261.63, 329.63, 392.00], // Amin7
+                bassNotes: [73.42, 73.42, 55.00, 55.00],
+                arpNotes: [587.33, 698.46, 880.00, 698.46, 587.33, 440.00]
             }
         };
+
+        // Complete 12-Badge Gamification Catalog
+        const MUSE_BADGES_CATALOG = [
+            {
+                id: 'flawless_streak',
+                category: 'streak',
+                code: 'FS',
+                name: 'Flawless Streak',
+                desc: 'Log 5 or more daily styled looks in a single week.',
+                evaluate: (stats) => stats.weeklyCompletedCount >= 5,
+                progress: (stats) => `${Math.min(stats.weeklyCompletedCount, 5)}/5 days`
+            },
+            {
+                id: 'seven_day_icon',
+                category: 'streak',
+                code: '7D',
+                name: 'Seven-Day Icon',
+                desc: 'Complete all 7 days of the style week rotation.',
+                evaluate: (stats) => stats.weeklyCompletedCount >= 7,
+                progress: (stats) => `${Math.min(stats.weeklyCompletedCount, 7)}/7 days`
+            },
+            {
+                id: 'daily_muse',
+                category: 'streak',
+                code: 'DM',
+                name: 'Daily Muse',
+                desc: 'Log at least 3 daily styled outfits in your style rotation.',
+                evaluate: (stats) => stats.weeklyCompletedCount >= 3,
+                progress: (stats) => `${Math.min(stats.weeklyCompletedCount, 3)}/3 days`
+            },
+            {
+                id: 'vibe_explorer',
+                category: 'aesthetic',
+                code: 'VE',
+                name: 'Vibe Explorer',
+                desc: 'Explore 3 or more distinct aesthetic styles in one week.',
+                evaluate: (stats) => stats.uniqueWeeklyVibesCount >= 3,
+                progress: (stats) => `${Math.min(stats.uniqueWeeklyVibesCount, 3)}/3 vibes`
+            },
+            {
+                id: 'style_chameleon',
+                category: 'aesthetic',
+                code: 'SC',
+                name: 'Style Chameleon',
+                desc: 'Switch up your aesthetic vibe across consecutive days.',
+                evaluate: (stats) => stats.hasSwitchedConsecutiveVibes,
+                progress: (stats) => stats.hasSwitchedConsecutiveVibes ? 'Achieved' : '0/1 streak'
+            },
+            {
+                id: 'aesthetic_alchemist',
+                category: 'aesthetic',
+                code: 'AA',
+                name: 'Aesthetic Alchemist',
+                desc: 'Explore 5 or more total unique aesthetics across all looks.',
+                evaluate: (stats) => stats.allTimeUniqueVibesCount >= 5,
+                progress: (stats) => `${Math.min(stats.allTimeUniqueVibesCount, 5)}/5 aesthetics`
+            },
+            {
+                id: 'monochrome_maestro',
+                category: 'aesthetic',
+                code: 'MM',
+                name: 'Monochrome Maestro',
+                desc: 'Style minimalist, clean girl, or tailored monochrome looks.',
+                evaluate: (stats) => stats.hasMonochromeLook,
+                progress: (stats) => stats.hasMonochromeLook ? 'Achieved' : '0/1 look'
+            },
+            {
+                id: 'high_glam_virtuoso',
+                category: 'aesthetic',
+                code: 'HG',
+                name: 'High Glam Virtuoso',
+                desc: 'Style coquette, party, celebration, or evening looks.',
+                evaluate: (stats) => stats.hasGlamLook,
+                progress: (stats) => stats.hasGlamLook ? 'Achieved' : '0/1 glam look'
+            },
+            {
+                id: 'soundtracked_stylist',
+                category: 'soundtrack',
+                code: 'SS',
+                name: 'Soundtracked Stylist',
+                desc: 'Listen to outfit soundtracks matching your daily aesthetic.',
+                evaluate: (stats) => stats.hasListenedSoundtrack,
+                progress: (stats) => stats.hasListenedSoundtrack ? 'Soundtrack active' : 'Play 1 track'
+            },
+            {
+                id: 'sonic_curator',
+                category: 'soundtrack',
+                code: 'SC',
+                name: 'Sonic Curator',
+                desc: 'Play the curated Weekly Mixtape playlist in style recap.',
+                evaluate: (stats) => stats.hasPlayedMixtape,
+                progress: (stats) => stats.hasPlayedMixtape ? 'Curated' : 'Play mixtape'
+            },
+            {
+                id: 'capsule_architect',
+                category: 'wardrobe',
+                code: 'CA',
+                name: 'Capsule Architect',
+                desc: 'Save 3 or more outfits to your permanent Wardrobe collection.',
+                evaluate: (stats) => stats.savedWardrobeCount >= 3,
+                progress: (stats) => `${Math.min(stats.savedWardrobeCount, 3)}/3 outfits`
+            },
+            {
+                id: 'occasion_master',
+                category: 'wardrobe',
+                code: 'OM',
+                name: 'Occasion Master',
+                desc: 'Plan and save outfits for calendar events and celebrations.',
+                evaluate: (stats) => stats.plannedEventsCount >= 1,
+                progress: (stats) => `${Math.min(stats.plannedEventsCount, 1)}/1 planned`
+            }
+        ];
 
         // Aesthetic / Vibe Detector Engine
         function detectOutfitVibe(title = '', occasion = '', notes = '', pieces = [], userAesthetic = '') {
@@ -6550,22 +6865,24 @@
         }
 
         // =====================================================
-        // ROYALTY-FREE WEB AUDIO SYNTHESIZER & SOUND ENGINE
+        // PROCEDURAL GROOVE AUDIO SYNTHESIZER & MUSIC ENGINE
         // =====================================================
         class MuseAudioSynthesizer {
             constructor() {
                 this.ctx = null;
-                this.activeOscillators = [];
-                this.gainNode = null;
-                this.filterNode = null;
                 this.isPlaying = false;
                 this.currentVibeKey = null;
                 this.currentTrackTitle = '';
+                this.stepTimer = null;
+                this.stepIndex = 0;
                 this.isMixtapeActive = false;
                 this.mixtapeQueue = [];
                 this.mixtapeCurrentIndex = 0;
-                this.mixtapeTimer = null;
+                this.mixtapeTrackTimer = null;
+                this.noiseBuffer = null;
+                this.masterGain = null;
                 this.hasListened = (localStorage.getItem('muse_has_listened_soundtrack') === 'true');
+                this.hasPlayedMixtape = (localStorage.getItem('muse_has_played_mixtape') === 'true');
             }
 
             init() {
@@ -6573,11 +6890,187 @@
                     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
                     if (AudioContextClass) {
                         this.ctx = new AudioContextClass();
+                        this.masterGain = this.ctx.createGain();
+                        this.masterGain.gain.setValueAtTime(0.32, this.ctx.currentTime);
+                        this.masterGain.connect(this.ctx.destination);
+
+                        // Create 1-second white noise buffer for percussions
+                        const bufferSize = this.ctx.sampleRate;
+                        this.noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                        const output = this.noiseBuffer.getChannelData(0);
+                        for (let i = 0; i < bufferSize; i++) {
+                            output[i] = Math.random() * 2 - 1;
+                        }
                     }
                 }
                 if (this.ctx && this.ctx.state === 'suspended') {
                     this.ctx.resume();
                 }
+            }
+
+            triggerKick(t) {
+                if (!this.ctx || !this.masterGain) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(145, t);
+                osc.frequency.exponentialRampToValueAtTime(42, t + 0.11);
+
+                gain.gain.setValueAtTime(0.55, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+                osc.start(t);
+                osc.stop(t + 0.13);
+            }
+
+            triggerSnare(t) {
+                if (!this.ctx || !this.masterGain || !this.noiseBuffer) return;
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = this.noiseBuffer;
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'highpass';
+                filter.frequency.setValueAtTime(900, t);
+
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(0.28, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.masterGain);
+                noise.start(t);
+                noise.stop(t + 0.15);
+            }
+
+            triggerHiHat(t, isAccent = false) {
+                if (!this.ctx || !this.masterGain || !this.noiseBuffer) return;
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = this.noiseBuffer;
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(7500, t);
+                filter.Q.setValueAtTime(3.0, t);
+
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(isAccent ? 0.22 : 0.12, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + (isAccent ? 0.08 : 0.04));
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.masterGain);
+                noise.start(t);
+                noise.stop(t + 0.09);
+            }
+
+            triggerBass(t, freq) {
+                if (!this.ctx || !this.masterGain) return;
+                const osc = this.ctx.createOscillator();
+                const filter = this.ctx.createBiquadFilter();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, t);
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(450, t);
+
+                gain.gain.setValueAtTime(0.42, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.masterGain);
+                osc.start(t);
+                osc.stop(t + 0.35);
+            }
+
+            triggerChord(t, freqs, duration = 0.48) {
+                if (!this.ctx || !this.masterGain) return;
+                freqs.forEach((freq, i) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    const filter = this.ctx.createBiquadFilter();
+
+                    osc.type = (i % 2 === 0) ? 'sine' : 'triangle';
+                    osc.frequency.setValueAtTime(freq, t);
+                    osc.detune.setValueAtTime((i % 2 === 0 ? 4 : -4), t);
+
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(1600, t);
+
+                    gain.gain.setValueAtTime(0.12, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(this.masterGain);
+                    osc.start(t);
+                    osc.stop(t + duration + 0.02);
+                });
+            }
+
+            triggerArp(t, freq) {
+                if (!this.ctx || !this.masterGain) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, t);
+
+                gain.gain.setValueAtTime(0.18, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+                osc.start(t);
+                osc.stop(t + 0.18);
+            }
+
+            playStep() {
+                if (!this.ctx || !this.isPlaying) return;
+                const now = this.ctx.currentTime + 0.02;
+                const vibeData = MUSE_AESTHETIC_SOUNDTRACKS[this.currentVibeKey] || MUSE_AESTHETIC_SOUNDTRACKS.clean_girl;
+                const step = this.stepIndex % 16;
+
+                // 1. Kick Drums (steps 0, 8, and occasionally 10)
+                if (step === 0 || step === 8 || (step === 10 && (this.currentVibeKey === 'streetwear' || this.currentVibeKey === 'y2k'))) {
+                    this.triggerKick(now);
+                }
+
+                // 2. Snare / Claps (steps 4 and 12)
+                if (step === 4 || step === 12) {
+                    this.triggerSnare(now);
+                }
+
+                // 3. Hi-Hats (every even 16th step)
+                if (step % 2 === 0) {
+                    this.triggerHiHat(now, step === 2 || step === 6 || step === 10 || step === 14);
+                }
+
+                // 4. Bassline (steps 0, 3, 6, 8, 11)
+                if (step === 0 || step === 3 || step === 8 || step === 11) {
+                    const bassNotes = vibeData.bassNotes || [65.41, 73.42, 82.41, 98.00];
+                    const bassIdx = Math.floor(this.stepIndex / 8) % bassNotes.length;
+                    this.triggerBass(now, bassNotes[bassIdx]);
+                }
+
+                // 5. Polyphonic Chord Stabs (steps 0 and 6)
+                if (step === 0) {
+                    this.triggerChord(now, vibeData.chords || [261.63, 329.63, 392.00, 493.88], 0.45);
+                } else if (step === 6) {
+                    this.triggerChord(now, vibeData.altChords || vibeData.chords, 0.35);
+                }
+
+                // 6. Melodic Pluck / Arpeggio sequence
+                if (step % 2 === 1 || step === 2 || step === 10) {
+                    const arpNotes = vibeData.arpNotes || [523.25, 659.25, 783.99];
+                    const arpIdx = (step + Math.floor(this.stepIndex / 4)) % arpNotes.length;
+                    this.triggerArp(now, arpNotes[arpIdx]);
+                }
+
+                this.stepIndex++;
             }
 
             playVibeSoundscape(vibeKey, trackTitle, onFinishCallback = null) {
@@ -6590,91 +7083,41 @@
                 this.currentVibeKey = vibeKey;
                 this.currentTrackTitle = trackTitle || vibeData.trackTitle;
                 this.isPlaying = true;
+                this.stepIndex = 0;
                 this.hasListened = true;
                 localStorage.setItem('muse_has_listened_soundtrack', 'true');
 
-                const now = this.ctx.currentTime;
+                // Compute interval step speed based on BPM (16th note steps)
+                const bpm = vibeData.bpm || 96;
+                const stepMs = Math.round((60000 / bpm) / 4);
 
-                // Master Gain
-                this.gainNode = this.ctx.createGain();
-                this.gainNode.gain.setValueAtTime(0.001, now);
-                this.gainNode.gain.exponentialRampToValueAtTime(0.18, now + 0.8);
-
-                // Low-pass Filter for lush warm analog feel
-                this.filterNode = this.ctx.createBiquadFilter();
-                this.filterNode.type = 'lowpass';
-                this.filterNode.frequency.setValueAtTime(1400, now);
-                this.filterNode.Q.setValueAtTime(2.5, now);
-
-                this.filterNode.connect(this.gainNode);
-                this.gainNode.connect(this.ctx.destination);
-
-                // Build polyphonic chord cluster
-                const chordFrequencies = vibeData.chords || [261.63, 329.63, 392.00, 493.88];
-                const oscTypes = ['sine', 'triangle', 'sine', 'triangle'];
-
-                chordFrequencies.forEach((freq, idx) => {
-                    const osc = this.ctx.createOscillator();
-                    osc.type = oscTypes[idx % oscTypes.length];
-                    osc.frequency.setValueAtTime(freq, now);
-
-                    // Gentle pitch detune / chorusing
-                    const detuneAmount = (idx % 2 === 0 ? 3.5 : -3.5) * (idx + 1);
-                    osc.detune.setValueAtTime(detuneAmount, now);
-
-                    // Sub-gain for smooth voicing
-                    const voiceGain = this.ctx.createGain();
-                    voiceGain.gain.setValueAtTime(0.25, now);
-
-                    osc.connect(voiceGain);
-                    voiceGain.connect(this.filterNode);
-
-                    osc.start(now);
-                    this.activeOscillators.push(osc);
-                });
-
-                // Subtle LFO modulation on filter for breathing ambient texture
-                const lfo = this.ctx.createOscillator();
-                const lfoGain = this.ctx.createGain();
-                lfo.frequency.setValueAtTime(0.35, now);
-                lfoGain.gain.setValueAtTime(280, now);
-                lfo.connect(lfoGain);
-                lfoGain.connect(this.filterNode.frequency);
-                lfo.start(now);
-                this.activeOscillators.push(lfo);
+                this.playStep();
+                this.stepTimer = setInterval(() => {
+                    this.playStep();
+                }, stepMs);
 
                 this.notifyUI();
 
-                // If callback exists (for mixtape preview transition)
+                // If callback exists (for mixtape progression)
                 if (onFinishCallback) {
-                    clearTimeout(this.mixtapeTimer);
-                    this.mixtapeTimer = setTimeout(() => {
+                    clearTimeout(this.mixtapeTrackTimer);
+                    this.mixtapeTrackTimer = setTimeout(() => {
                         if (this.isPlaying && this.isMixtapeActive) {
                             onFinishCallback();
                         }
-                    }, 10000); // 10-second curated preview per outfit in mixtape
+                    }, 12000); // 12-second groove preview per outfit in mixtape
                 }
             }
 
             stopCurrent() {
-                if (this.gainNode && this.ctx) {
-                    const now = this.ctx.currentTime;
-                    this.gainNode.gain.cancelScheduledValues(now);
-                    this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, now);
-                    this.gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+                if (this.stepTimer) {
+                    clearInterval(this.stepTimer);
+                    this.stepTimer = null;
                 }
-
-                setTimeout(() => {
-                    this.activeOscillators.forEach(osc => {
-                        try { osc.stop(); osc.disconnect(); } catch (e) {}
-                    });
-                    this.activeOscillators = [];
-                }, 350);
-
+                clearTimeout(this.mixtapeTrackTimer);
                 this.isPlaying = false;
                 this.currentVibeKey = null;
                 this.currentTrackTitle = '';
-                clearTimeout(this.mixtapeTimer);
                 this.notifyUI();
             }
 
@@ -6690,6 +7133,8 @@
 
             startMixtape(trackQueue) {
                 if (!trackQueue || trackQueue.length === 0) return;
+                this.hasPlayedMixtape = true;
+                localStorage.setItem('muse_has_played_mixtape', 'true');
                 this.mixtapeQueue = trackQueue;
                 this.mixtapeCurrentIndex = 0;
                 this.isMixtapeActive = true;
@@ -6722,10 +7167,180 @@
             notifyUI() {
                 renderWeeklyOutfits();
                 updateWeeklyRecapModalAudioState();
+                renderProfileBadges();
             }
         }
 
         const museAudio = new MuseAudioSynthesizer();
+
+        // =====================================================
+        // UNIFIED USER BADGES & ACHIEVEMENTS ENGINE
+        // =====================================================
+
+        function getUserStats() {
+            const monday = getMondayOfWeek(currentWeeklyLogDate);
+            const weekKey = getWeekKey(monday);
+            const store = getWeeklyOutfitsStore();
+            const weekData = store[weekKey] || {};
+
+            let weeklyCompletedCount = 0;
+            const uniqueWeeklyVibes = new Set();
+            const chronologicalVibes = [];
+            let hasMonochromeLook = false;
+            let hasGlamLook = false;
+
+            for (let i = 0; i < 7; i++) {
+                const outfit = weekData[i];
+                if (outfit) {
+                    weeklyCompletedCount++;
+                    const detectedVibe = detectOutfitVibe(outfit.title, outfit.occasion, outfit.notes, outfit.pieces || []);
+                    const vibeKey = outfit.vibeKey || detectedVibe.key;
+                    const vibeObj = MUSE_AESTHETIC_SOUNDTRACKS[vibeKey] || detectedVibe;
+                    uniqueWeeklyVibes.add(vibeObj.name);
+                    chronologicalVibes.push(vibeObj.name);
+
+                    if (vibeKey === 'clean_girl' || vibeKey === 'ninety_minimalist') hasMonochromeLook = true;
+                    if (vibeKey === 'romantic_coquette' || vibeKey === 'quiet_luxury' || (outfit.occasion && outfit.occasion.toLowerCase().includes('party'))) hasGlamLook = true;
+                }
+            }
+
+            let hasSwitchedConsecutiveVibes = false;
+            if (chronologicalVibes.length >= 2) {
+                for (let i = 0; i < chronologicalVibes.length - 1; i++) {
+                    if (chronologicalVibes[i] !== chronologicalVibes[i + 1]) {
+                        hasSwitchedConsecutiveVibes = true;
+                        break;
+                    }
+                }
+            }
+
+            // All-time unique aesthetics across all weeks in store
+            const allTimeVibes = new Set();
+            Object.values(store).forEach(weekObj => {
+                Object.values(weekObj).forEach(o => {
+                    if (o) {
+                        const detected = detectOutfitVibe(o.title, o.occasion, o.notes, o.pieces || []);
+                        allTimeVibes.add(detected.name);
+                        if (detected.key === 'clean_girl' || detected.key === 'ninety_minimalist') hasMonochromeLook = true;
+                        if (detected.key === 'romantic_coquette' || detected.key === 'quiet_luxury') hasGlamLook = true;
+                    }
+                });
+            });
+
+            const savedWardrobeOutfits = getSavedWardrobeOutfits();
+            const savedLooksMap = getSavedEventLooks();
+            const plannedEventsCount = Object.keys(savedLooksMap).length;
+
+            return {
+                weeklyCompletedCount,
+                uniqueWeeklyVibesCount: uniqueWeeklyVibes.size,
+                hasSwitchedConsecutiveVibes,
+                allTimeUniqueVibesCount: allTimeVibes.size,
+                hasMonochromeLook,
+                hasGlamLook,
+                hasListenedSoundtrack: museAudio.hasListened || museAudio.isPlaying,
+                hasPlayedMixtape: museAudio.hasPlayedMixtape || museAudio.isMixtapeActive,
+                savedWardrobeCount: savedWardrobeOutfits.length,
+                plannedEventsCount
+            };
+        }
+
+        function getUserBadgesStatus() {
+            const stats = getUserStats();
+            let unlockedCount = 0;
+
+            const badges = MUSE_BADGES_CATALOG.map(b => {
+                const isUnlocked = b.evaluate(stats);
+                if (isUnlocked) unlockedCount++;
+                return {
+                    ...b,
+                    isUnlocked,
+                    progressText: b.progress(stats)
+                };
+            });
+
+            return {
+                badges,
+                unlockedCount,
+                totalCount: MUSE_BADGES_CATALOG.length
+            };
+        }
+
+        function renderProfileBadges() {
+            const container = document.getElementById('homeProfileBadgesMiniList');
+            const countBadge = document.getElementById('homeProfileBadgesCountBadge');
+            if (!container) return;
+
+            const { badges, unlockedCount, totalCount } = getUserBadgesStatus();
+
+            if (countBadge) {
+                countBadge.innerText = `${unlockedCount} / ${totalCount} Unlocked`;
+            }
+
+            const unlockedBadges = badges.filter(b => b.isUnlocked);
+
+            if (unlockedBadges.length === 0) {
+                container.innerHTML = `
+                    <span style="font-size: 10px; color: var(--text-secondary); font-style: italic;">
+                        Log your looks or listen to soundtracks to unlock your first badge!
+                    </span>
+                `;
+                return;
+            }
+
+            container.innerHTML = unlockedBadges.slice(0, 4).map(b => `
+                <div class="profile-badge-mini-chip unlocked" onclick="openEditProfileModal()" title="${b.name}: ${b.desc}">
+                    <span class="profile-badge-mini-icon">${b.code}</span>
+                    <span>${b.name}</span>
+                </div>
+            `).join('') + (unlockedBadges.length > 4 ? `
+                <span style="font-size: 10px; font-weight: 700; color: #b45309;">+${unlockedBadges.length - 4} more</span>
+            ` : '');
+        }
+
+        let currentProfileBadgesFilter = 'all';
+
+        function filterProfileBadges(cat, btn) {
+            currentProfileBadgesFilter = cat;
+            const parent = btn ? btn.parentElement : null;
+            if (parent) {
+                parent.querySelectorAll('.profile-badge-filter-btn').forEach(b => b.classList.remove('active'));
+            }
+            if (btn) btn.classList.add('active');
+            renderProfileBadgesShelf(cat);
+        }
+
+        function renderProfileBadgesShelf(filterCategory = 'all') {
+            const grid = document.getElementById('profileModalBadgesGrid');
+            const counter = document.getElementById('profileModalBadgesCounterBadge');
+            if (!grid) return;
+
+            const { badges, unlockedCount, totalCount } = getUserBadgesStatus();
+
+            if (counter) {
+                counter.innerText = `${unlockedCount} / ${totalCount} Unlocked`;
+            }
+
+            const filteredBadges = filterCategory === 'all' 
+                ? badges 
+                : badges.filter(b => b.category === filterCategory);
+
+            grid.innerHTML = filteredBadges.map(b => `
+                <div class="vibe-badge-card ${b.isUnlocked ? 'unlocked' : ''}">
+                    <div class="vibe-badge-icon-box">${b.code}</div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 4px;">
+                            <span class="vibe-badge-name">${b.name}</span>
+                            <span class="vibe-badge-status">${b.isUnlocked ? 'Unlocked' : 'Locked'}</span>
+                        </div>
+                        <div class="vibe-badge-desc">${b.desc}</div>
+                        <div style="font-size: 8.5px; font-weight: 700; color: ${b.isUnlocked ? '#b45309' : 'var(--text-secondary)'}; margin-top: 3px;">
+                            Progress: ${b.progressText}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
         let currentWeeklyLogDate = new Date();
         let currentWeeklyLogSource = 'saved';
@@ -7347,6 +7962,7 @@
 
             closeLogWeeklyOutfitModal();
             renderWeeklyOutfits();
+            renderProfileBadges();
         }
 
         function clearWeeklyOutfitDay(weekKey, dayIdx) {
@@ -7360,6 +7976,7 @@
                 delete store[weekKey][dayIdx];
                 saveWeeklyOutfitsStore(store);
                 renderWeeklyOutfits();
+                renderProfileBadges();
             }
         }
 
@@ -7372,7 +7989,7 @@
             if (!wardrobeOutfits.some(o => o.title === outfit.title || o.id === outfit.id)) {
                 wardrobeOutfits.unshift({
                     id: `outfit_${Date.now()}`,
-                    title: outfit.title,
+                    title,
                     occasion: outfit.occasion || 'Casual Chic',
                     vibe: outfit.vibe || 'Signature Look',
                     notes: outfit.notes || 'Saved from Outfits of the Week log',
@@ -7391,6 +8008,7 @@
             if (outfitsBadge) outfitsBadge.innerText = wardrobeOutfits.length;
 
             renderWeeklyOutfits();
+            renderProfileBadges();
             alert(`"${outfit.title}" has been saved to your permanent Wardrobe collection!`);
         }
 
@@ -7579,66 +8197,25 @@
                 }
             }
 
-            // Gamification Badges Evaluation
+            // Render Badges Shelf in Weekly Recap
             const badgesEl = document.getElementById('vibeGamificationBadges');
             if (badgesEl) {
-                // Badge 1: Vibe Explorer (explored 3+ distinct aesthetics)
-                const isVibeExplorer = uniqueVibes.size >= 3;
-
-                // Badge 2: Style Chameleon (different vibes across consecutive days)
-                let isStyleChameleon = false;
-                if (chronologicalVibes.length >= 2) {
-                    for (let i = 0; i < chronologicalVibes.length - 1; i++) {
-                        if (chronologicalVibes[i] !== chronologicalVibes[i + 1]) {
-                            isStyleChameleon = true;
-                            break;
-                        }
-                    }
-                }
-
-                // Badge 3: Soundtracked Stylist (played/listened to outfit soundtracks)
-                const isSoundtracked = museAudio.hasListened || museAudio.isPlaying;
-
-                // Badge 4: Flawless Streak (logged 5+ days in the week)
-                const isFlawlessStreak = completedCount >= 5;
-
-                badgesEl.innerHTML = `
-                    <div class="vibe-badge-card ${isVibeExplorer ? 'unlocked' : ''}">
-                        <div class="vibe-badge-icon-box">VE</div>
-                        <div>
-                            <div class="vibe-badge-name">Vibe Explorer</div>
-                            <div class="vibe-badge-desc">Explore 3 or more distinct aesthetic styles in one week (${uniqueVibes.size}/3 explored)</div>
-                            <div class="vibe-badge-status">${isVibeExplorer ? 'Unlocked' : 'Locked'}</div>
+                const { badges } = getUserBadgesStatus();
+                badgesEl.innerHTML = badges.map(b => `
+                    <div class="vibe-badge-card ${b.isUnlocked ? 'unlocked' : ''}">
+                        <div class="vibe-badge-icon-box">${b.code}</div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 4px;">
+                                <span class="vibe-badge-name">${b.name}</span>
+                                <span class="vibe-badge-status">${b.isUnlocked ? 'Unlocked' : 'Locked'}</span>
+                            </div>
+                            <div class="vibe-badge-desc">${b.desc}</div>
+                            <div style="font-size: 8.5px; font-weight: 700; color: ${b.isUnlocked ? '#b45309' : 'var(--text-secondary)'}; margin-top: 3px;">
+                                Progress: ${b.progressText}
+                            </div>
                         </div>
                     </div>
-
-                    <div class="vibe-badge-card ${isStyleChameleon ? 'unlocked' : ''}">
-                        <div class="vibe-badge-icon-box">SC</div>
-                        <div>
-                            <div class="vibe-badge-name">Style Chameleon</div>
-                            <div class="vibe-badge-desc">Switch up your aesthetic vibe across consecutive days</div>
-                            <div class="vibe-badge-status">${isStyleChameleon ? 'Unlocked' : 'Locked'}</div>
-                        </div>
-                    </div>
-
-                    <div class="vibe-badge-card ${isSoundtracked ? 'unlocked' : ''}">
-                        <div class="vibe-badge-icon-box">SS</div>
-                        <div>
-                            <div class="vibe-badge-name">Soundtracked Stylist</div>
-                            <div class="vibe-badge-desc">Listen to ambient soundscapes and soundtracks matching your looks</div>
-                            <div class="vibe-badge-status">${isSoundtracked ? 'Unlocked' : 'Locked'}</div>
-                        </div>
-                    </div>
-
-                    <div class="vibe-badge-card ${isFlawlessStreak ? 'unlocked' : ''}">
-                        <div class="vibe-badge-icon-box">FS</div>
-                        <div>
-                            <div class="vibe-badge-name">Flawless Streak</div>
-                            <div class="vibe-badge-desc">Complete 5 or more daily styled looks in a single week (${completedCount}/5 days)</div>
-                            <div class="vibe-badge-status">${isFlawlessStreak ? 'Unlocked' : 'Locked'}</div>
-                        </div>
-                    </div>
-                `;
+                `).join('');
             }
 
             updateWeeklyRecapModalAudioState();
@@ -7692,6 +8269,7 @@
 
             museAudio.startMixtape(queue);
             updateWeeklyRecapModalAudioState();
+            renderProfileBadges();
         }
 
         // =====================================================
