@@ -1506,7 +1506,7 @@
             background: #ffffff;
         }
 
-        /* Outfits of the Week Styles */
+        /* Outfits of the Week Styles (Rotating Carousel Layout) */
         .home-weekly-outfits-card {
             background: linear-gradient(135deg, #ffffff 0%, var(--surface-muted) 100%);
             border: 1px solid var(--border-light);
@@ -1516,35 +1516,141 @@
             box-shadow: var(--shadow-subtle);
             width: 100%;
             box-sizing: border-box;
+            position: relative;
+        }
+
+        .weekly-carousel-outer {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin: 4px 0 10px 0;
+        }
+
+        .weekly-carousel-viewport {
+            width: 100%;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 6px 4px 10px 4px;
+        }
+
+        .weekly-carousel-viewport::-webkit-scrollbar {
+            display: none;
         }
 
         .weekly-days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            width: 100%;
+            display: flex;
+            gap: 12px;
+            width: max-content;
             box-sizing: border-box;
-        }
-
-        @media (max-width: 992px) {
-            .weekly-days-grid {
-                grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-                gap: 8px;
-            }
         }
 
         .weekly-day-col {
             background: #ffffff;
             border: 1px solid var(--border-light);
             border-radius: var(--radius-card);
-            padding: 9px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 230px;
+            width: 190px;
+            min-width: 190px;
+            max-width: 190px;
+            min-height: 245px;
             box-sizing: border-box;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+        }
+
+        .weekly-carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 8;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .weekly-carousel-nav-btn:hover {
+            background: var(--text-primary);
+            color: #ffffff;
+            transform: translateY(-50%) scale(1.08);
+            border-color: var(--text-primary);
+        }
+
+        .weekly-carousel-nav-btn.prev {
+            left: -12px;
+        }
+
+        .weekly-carousel-nav-btn.next {
+            right: -12px;
+        }
+
+        .weekly-pills-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .weekly-day-pill-btn {
+            border: 1px solid var(--border-light);
+            background: #ffffff;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .weekly-day-pill-btn:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        .weekly-day-pill-btn.active {
+            background: var(--text-primary);
+            color: #ffffff;
+            border-color: var(--text-primary);
+        }
+
+        .weekly-day-pill-btn.has-outfit::after {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--primary-red);
+            display: inline-block;
+        }
+
+        .weekly-day-pill-btn.active.has-outfit::after {
+            background: #ffffff;
         }
 
         .weekly-day-col:hover {
@@ -2139,8 +2245,21 @@
                     Logs your daily outfits and refreshes every week. Save any outfit directly into your permanent Wardrobe collection with 1 click.
                 </div>
 
-                <!-- 7-Day Weekly Grid -->
-                <div id="weeklyDaysGrid" class="weekly-days-grid">
+                <!-- Rotating 7-Day Carousel -->
+                <div class="weekly-carousel-outer">
+                    <button type="button" class="weekly-carousel-nav-btn prev" onclick="rotateWeeklyCarousel(-1)" title="Previous Day">‹</button>
+                    
+                    <div class="weekly-carousel-viewport" id="weeklyCarouselViewport">
+                        <div id="weeklyDaysGrid" class="weekly-days-grid">
+                            <!-- Populated dynamically by renderWeeklyOutfits() -->
+                        </div>
+                    </div>
+
+                    <button type="button" class="weekly-carousel-nav-btn next" onclick="rotateWeeklyCarousel(1)" title="Next Day">›</button>
+                </div>
+
+                <!-- Quick-jump Day Indicators Bar -->
+                <div id="weeklyDayPillsBar" class="weekly-pills-bar">
                     <!-- Populated dynamically by renderWeeklyOutfits() -->
                 </div>
             </div>
@@ -3873,8 +3992,8 @@
             renderStyleCalendar();
             renderUpcomingEventsList();
 
-            // Render Outfits of the Week Log
-            renderWeeklyOutfits();
+            // Render Outfits of the Week Log (with auto-focus on Today)
+            renderWeeklyOutfits(true);
 
             // Load or refresh real-time Google Fashion Trends
             loadTrendingAesthetics();
@@ -5349,24 +5468,76 @@
             localStorage.setItem('muse_weekly_outfits_store', JSON.stringify(store));
         }
 
+        let activeWeeklyCarouselIndex = 0;
+
+        function rotateWeeklyCarousel(direction) {
+            const viewport = document.getElementById('weeklyCarouselViewport');
+            if (!viewport) return;
+
+            const cardStep = 202; // 190px width + 12px gap
+            const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+            
+            // Circular loop check
+            if (direction > 0 && viewport.scrollLeft >= maxScroll - 15) {
+                viewport.scrollTo({ left: 0, behavior: 'smooth' });
+                activeWeeklyCarouselIndex = 0;
+                updateWeeklyDayPillsActive(0);
+                return;
+            }
+
+            if (direction < 0 && viewport.scrollLeft <= 15) {
+                viewport.scrollTo({ left: maxScroll, behavior: 'smooth' });
+                activeWeeklyCarouselIndex = 6;
+                updateWeeklyDayPillsActive(6);
+                return;
+            }
+
+            const newScroll = viewport.scrollLeft + (direction * cardStep);
+            viewport.scrollTo({ left: Math.max(0, Math.min(maxScroll, newScroll)), behavior: 'smooth' });
+            
+            activeWeeklyCarouselIndex = Math.max(0, Math.min(6, Math.round(newScroll / cardStep)));
+            updateWeeklyDayPillsActive(activeWeeklyCarouselIndex);
+        }
+
+        function scrollToWeeklyDayIndex(dayIdx) {
+            const viewport = document.getElementById('weeklyCarouselViewport');
+            if (!viewport) return;
+            activeWeeklyCarouselIndex = Math.max(0, Math.min(6, dayIdx));
+            const cardStep = 202;
+            viewport.scrollTo({
+                left: activeWeeklyCarouselIndex * cardStep,
+                behavior: 'smooth'
+            });
+            updateWeeklyDayPillsActive(activeWeeklyCarouselIndex);
+        }
+
+        function updateWeeklyDayPillsActive(activeIdx) {
+            const pills = document.querySelectorAll('.weekly-day-pill-btn');
+            pills.forEach((pill, i) => {
+                pill.classList.toggle('active', i === activeIdx);
+            });
+        }
+
         function prevWeeklyOutfitsWeek() {
             currentWeeklyLogDate.setDate(currentWeeklyLogDate.getDate() - 7);
-            renderWeeklyOutfits();
+            renderWeeklyOutfits(true);
         }
 
         function nextWeeklyOutfitsWeek() {
             currentWeeklyLogDate.setDate(currentWeeklyLogDate.getDate() + 7);
-            renderWeeklyOutfits();
+            renderWeeklyOutfits(true);
         }
 
         function jumpWeeklyOutfitsToCurrentWeek() {
             currentWeeklyLogDate = new Date();
-            renderWeeklyOutfits();
+            renderWeeklyOutfits(true);
         }
 
-        function renderWeeklyOutfits() {
+        function renderWeeklyOutfits(autoCenterToday = false) {
             const grid = document.getElementById('weeklyDaysGrid');
             const rangeLabel = document.getElementById('weeklyOutfitsRangeLabel');
+            const viewport = document.getElementById('weeklyCarouselViewport');
+            const pillsBar = document.getElementById('weeklyDayPillsBar');
             if (!grid) return;
 
             const monday = getMondayOfWeek(currentWeeklyLogDate);
@@ -5395,6 +5566,7 @@
 
             const today = new Date();
             const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            let todayIndexInWeek = -1;
 
             grid.innerHTML = daysOfWeek.map((d, index) => {
                 const dayDate = new Date(monday);
@@ -5402,13 +5574,14 @@
 
                 const dateStr = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, '0')}-${String(dayDate.getDate()).padStart(2, '0')}`;
                 const isToday = (dateStr === todayStr);
+                if (isToday) todayIndexInWeek = index;
                 const dayFormatted = `${monthNames[dayDate.getMonth()]} ${dayDate.getDate()}`;
 
                 const outfit = weekData[index];
 
                 if (!outfit) {
                     return `
-                        <div class="weekly-day-col ${isToday ? 'today' : ''}">
+                        <div class="weekly-day-col ${isToday ? 'today' : ''}" id="weeklyDayCol_${index}">
                             <div>
                                 <div class="weekly-day-header">
                                     <span class="weekly-day-title">${d.short}</span>
@@ -5436,7 +5609,7 @@
                 const isSavedInWardrobe = outfit.savedInWardrobe || savedWardrobeOutfits.some(o => o.title === outfit.title || o.id === outfit.id);
 
                 return `
-                    <div class="weekly-day-col ${isToday ? 'today' : ''}">
+                    <div class="weekly-day-col ${isToday ? 'today' : ''}" id="weeklyDayCol_${index}">
                         <div>
                             <div class="weekly-day-header">
                                 <span class="weekly-day-title">${d.short}</span>
@@ -5488,6 +5661,46 @@
                     </div>
                 `;
             }).join('');
+
+            // Populate Day Indicators Bar
+            if (pillsBar) {
+                pillsBar.innerHTML = daysOfWeek.map((d, index) => {
+                    const hasOutfit = Boolean(weekData[index]);
+                    const dayDate = new Date(monday);
+                    dayDate.setDate(monday.getDate() + index);
+                    const dateStr = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, '0')}-${String(dayDate.getDate()).padStart(2, '0')}`;
+                    const isToday = (dateStr === todayStr);
+
+                    return `
+                        <button type="button" class="weekly-day-pill-btn ${index === activeWeeklyCarouselIndex ? 'active' : ''} ${hasOutfit ? 'has-outfit' : ''}" onclick="scrollToWeeklyDayIndex(${index})" title="${d.name} (${hasOutfit ? 'Outfit Logged' : 'No Outfit'})">
+                            <span>${d.short}</span>
+                            ${isToday ? '<span style="font-size: 8px; opacity: 0.85;">(Today)</span>' : ''}
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            // Bind sync scroll listener
+            if (viewport && !viewport.dataset.hasScrollListener) {
+                viewport.dataset.hasScrollListener = 'true';
+                let scrollDebounce;
+                viewport.addEventListener('scroll', () => {
+                    clearTimeout(scrollDebounce);
+                    scrollDebounce = setTimeout(() => {
+                        const cardStep = 202;
+                        const idx = Math.max(0, Math.min(6, Math.round(viewport.scrollLeft / cardStep)));
+                        if (idx !== activeWeeklyCarouselIndex) {
+                            activeWeeklyCarouselIndex = idx;
+                            updateWeeklyDayPillsActive(activeWeeklyCarouselIndex);
+                        }
+                    }, 60);
+                }, { passive: true });
+            }
+
+            // Auto-focus on today if requested or initial render
+            if (autoCenterToday && todayIndexInWeek >= 0) {
+                scrollToWeeklyDayIndex(todayIndexInWeek);
+            }
         }
 
         function setWeeklyLogSource(src) {
