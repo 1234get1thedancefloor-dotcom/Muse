@@ -996,6 +996,189 @@
             flex-shrink: 0;
         }
 
+        /* Style Calendar & Upcoming Events */
+        .home-calendar-card {
+            background: linear-gradient(135deg, #ffffff 0%, var(--surface-muted) 100%);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 18px 20px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .home-calendar-layout {
+            display: grid;
+            grid-template-columns: 1.05fr 1.35fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .home-calendar-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .home-calendar-widget {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-nav-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-nav-btn:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-subtle);
+        }
+
+        .calendar-weekdays-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .calendar-days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+
+        .calendar-day-cell {
+            padding: 5px 2px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 32px;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .calendar-day-cell.other-month {
+            color: #b0b0b0;
+            opacity: 0.45;
+        }
+
+        .calendar-day-cell.today {
+            border: 1.5px solid var(--primary-red);
+            font-weight: 800;
+        }
+
+        .calendar-day-cell.selected {
+            background: var(--text-primary);
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .calendar-day-cell:hover:not(.selected) {
+            background: var(--surface-muted);
+        }
+
+        .calendar-event-indicator {
+            width: 4.5px;
+            height: 4.5px;
+            border-radius: 50%;
+            background: var(--primary-red);
+            margin-top: 2px;
+        }
+
+        .calendar-day-cell.selected .calendar-event-indicator {
+            background: #ffffff;
+        }
+
+        .home-events-widget {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .home-events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 255px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .event-card-item {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .event-card-item:hover {
+            transform: translateY(-1px);
+            border-color: var(--border-subtle);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .event-date-badge {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 4px 8px;
+            text-align: center;
+            min-width: 48px;
+            flex-shrink: 0;
+        }
+
+        .event-date-month {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--primary-red);
+            text-transform: uppercase;
+        }
+
+        .event-date-day {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+
         /* Outfit Selection Modal Styles */
         .outfit-picker-grid {
             display: grid;
@@ -1575,6 +1758,92 @@
 
                 <div id="homeFriendsGrid" class="home-friends-grid">
                     <!-- Populated dynamically by renderHomeFriendsList() -->
+                </div>
+            </div>
+
+            <!-- Occasion & Style Calendar Section -->
+            <div class="home-calendar-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <div style="font-size: 11px; font-weight: 800; color: var(--primary-red); text-transform: uppercase; letter-spacing: 0.8px;">
+                            Occasion & Style Planner
+                        </div>
+                        <div style="font-size: 15px; font-weight: 800; color: var(--text-primary); margin-top: 1px;">
+                            Style Calendar & Upcoming Events
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" class="tab-chip" onclick="openAddEventModal()" style="font-size: 11px; padding: 5px 12px; background: var(--text-primary); color: #ffffff; border: none; font-weight: 700; cursor: pointer;">
+                            + Add Upcoming Event
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Calendar + Events Split Grid Container -->
+                <div class="home-calendar-layout">
+                    <!-- Left: Interactive Style Calendar View -->
+                    <div class="home-calendar-widget">
+                        <div class="calendar-widget-header">
+                            <button type="button" class="calendar-nav-btn" onclick="prevCalendarMonth()" title="Previous Month">‹</button>
+                            <div id="calendarMonthYearLabel" style="font-size: 13.5px; font-weight: 800; color: var(--text-primary);">
+                                September 2026
+                            </div>
+                            <button type="button" class="calendar-nav-btn" onclick="nextCalendarMonth()" title="Next Month">›</button>
+                        </div>
+                        
+                        <div class="calendar-weekdays-grid">
+                            <span>Su</span>
+                            <span>Mo</span>
+                            <span>Tu</span>
+                            <span>We</span>
+                            <span>Th</span>
+                            <span>Fr</span>
+                            <span>Sa</span>
+                        </div>
+
+                        <div id="calendarDaysGrid" class="calendar-days-grid">
+                            <!-- Populated dynamically by renderStyleCalendar() -->
+                        </div>
+
+                        <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); padding-top: 8px;">
+                            <span id="calendarSelectedDateLabel" style="font-size: 11.5px; color: var(--text-secondary); font-weight: 600;">
+                                Select a date to view occasions
+                            </span>
+                            <button type="button" class="tab-chip" onclick="jumpCalendarToToday()" style="font-size: 10px; padding: 2px 8px;">
+                                Jump to Today
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Upcoming Events & Occasions List -->
+                    <div class="home-events-widget">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 11.5px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px;">
+                                Upcoming Occasions
+                            </span>
+                            <span id="upcomingEventsCountBadge" style="font-size: 10px; font-weight: 800; color: var(--primary-red); background: var(--primary-red-light); padding: 2px 7px; border-radius: var(--radius-pill);">
+                                0 Events
+                            </span>
+                        </div>
+
+                        <!-- Filter Chips for Events -->
+                        <div style="display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap;">
+                            <button type="button" class="tab-chip active" id="eventFilterAll" onclick="filterEventsList('all', this)" style="font-size: 10px; padding: 2px 8px;">
+                                All Events
+                            </button>
+                            <button type="button" class="tab-chip" id="eventFilterCelebrations" onclick="filterEventsList('celebrations', this)" style="font-size: 10px; padding: 2px 8px;">
+                                Popular Celebrations
+                            </button>
+                            <button type="button" class="tab-chip" id="eventFilterCustom" onclick="filterEventsList('custom', this)" style="font-size: 10px; padding: 2px 8px;">
+                                My Events
+                            </button>
+                        </div>
+
+                        <!-- Scrollable Events List -->
+                        <div id="homeEventsListContainer" class="home-events-list">
+                            <!-- Populated dynamically by renderUpcomingEventsList() -->
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -2637,6 +2906,93 @@
         </div>
     </div>
 
+    <!-- ADD UPCOMING EVENT MODAL -->
+    <div id="addEventModal" class="modal-backdrop" onclick="handleAddEventModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 500px;">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-title">Add Upcoming Event</span>
+                    <div style="font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-top: 2px;">
+                        Plan and coordinate outfits for your upcoming occasions
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeAddEventModal()">×</button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div>
+                    <label for="newEventTitleInput" style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                        Event Title
+                    </label>
+                    <input type="text" id="newEventTitleInput" placeholder="e.g. Elena's Wedding, Gala Evening, Friday Night Dinner..." style="width: 100%; font-size: 12.5px; padding: 9px 12px; border-radius: var(--radius-card); border: 1px solid var(--border-light); box-sizing: border-box; margin-top: 4px; outline: none;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label for="newEventDateInput" style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                            Date
+                        </label>
+                        <input type="date" id="newEventDateInput" style="width: 100%; font-size: 12.5px; padding: 8px 10px; border-radius: var(--radius-card); border: 1px solid var(--border-light); box-sizing: border-box; margin-top: 4px; outline: none; background: #ffffff;">
+                    </div>
+                    <div>
+                        <label for="newEventOccasionInput" style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                            Occasion / Type
+                        </label>
+                        <select id="newEventOccasionInput" style="width: 100%; font-size: 12.5px; padding: 8px 10px; border-radius: var(--radius-card); border: 1px solid var(--border-light); box-sizing: border-box; margin-top: 4px; outline: none; background: #ffffff;">
+                            <option value="Dinner Date / Night Out">Dinner Date / Night Out</option>
+                            <option value="Wedding / Reception">Wedding / Reception</option>
+                            <option value="Cocktail / Gala">Cocktail / Gala</option>
+                            <option value="Music Festival / Concert">Music Festival / Concert</option>
+                            <option value="Party / Celebration">Party / Celebration</option>
+                            <option value="Work / Professional Event">Work / Professional Event</option>
+                            <option value="Casual Brunch / Meetup">Casual Brunch / Meetup</option>
+                            <option value="Holiday Gathering">Holiday Gathering</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="newEventAestheticInput" style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                        Target Aesthetic / Dress Code
+                    </label>
+                    <select id="newEventAestheticInput" style="width: 100%; font-size: 12.5px; padding: 8px 10px; border-radius: var(--radius-card); border: 1px solid var(--border-light); box-sizing: border-box; margin-top: 4px; outline: none; background: #ffffff;">
+                        <option value="Quiet Luxury / Warm Neutral">Quiet Luxury / Warm Neutral</option>
+                        <option value="Coquette / Balletcore">Coquette / Balletcore</option>
+                        <option value="Y2K Cyber / Streetwear">Y2K Cyber / Streetwear</option>
+                        <option value="Minimalist / Architectural">Minimalist / Architectural</option>
+                        <option value="Old Money / Classic Tailored">Old Money / Classic Tailored</option>
+                        <option value="Cutesy / Soft Pink">Cutesy / Soft Pink</option>
+                        <option value="Gothic Glam / Noir">Gothic Glam / Noir</option>
+                        <option value="Boho Chic / Festival">Boho Chic / Festival</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="newEventPaletteInput" style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                        Color Palette Theme (Optional)
+                    </label>
+                    <input type="text" id="newEventPaletteInput" placeholder="e.g. Burgundy, Champagne Ivory, Soft Gold" style="width: 100%; font-size: 12.5px; padding: 9px 12px; border-radius: var(--radius-card); border: 1px solid var(--border-light); box-sizing: border-box; margin-top: 4px; outline: none;">
+                </div>
+
+                <div>
+                    <label for="newEventNotesInput" style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">
+                        Outfit Notes / Checklist (Optional)
+                    </label>
+                    <textarea id="newEventNotesInput" rows="2" placeholder="e.g. Pair the kitten heels, silk slip dress, and pearl earrings..." style="width: 100%; font-size: 12.5px; padding: 8px 12px; border-radius: var(--radius-card); border: 1px solid var(--border-light); box-sizing: border-box; margin-top: 4px; outline: none; resize: vertical;"></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px;">
+                    <button type="button" class="tab-chip" onclick="closeAddEventModal()" style="padding: 8px 16px;">
+                        Cancel
+                    </button>
+                    <button type="button" class="action-button" onclick="handleSaveNewEvent()" style="width: auto; padding: 8px 20px; font-size: 12px; margin: 0;">
+                        Save to Calendar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentFilter = 'All';
 
@@ -2783,6 +3139,10 @@
 
             // Render Friends & Connected Stylists Circle
             renderHomeFriendsList();
+
+            // Render Style Calendar & Upcoming Events
+            renderStyleCalendar();
+            renderUpcomingEventsList();
 
             // Load or refresh real-time Google Fashion Trends
             loadTrendingAesthetics();
@@ -3700,6 +4060,480 @@
                     if (themeInput) themeInput.value = 'Coordinated Capsule & Palette Matching';
                 }, 150);
             }
+        }
+
+        // =====================================================
+        // OCCASION STYLE CALENDAR & UPCOMING CELEBRATIONS ENGINE
+        // =====================================================
+
+        const defaultPopularCelebrations = [
+            {
+                id: 'ev_ny',
+                title: "New Year's Eve & Midnight Countdown",
+                date: "2026-12-31",
+                occasion: "Party / Celebration",
+                aesthetic: "Gothic Glam / Noir",
+                palette: ["#111111", "#C0C0C0", "#D4AF37", "#E60023"],
+                paletteText: "Glitter Silver, Midnight Noir & Crimson Pop",
+                notes: "Statement velvet blazer, metallic accessories, and bold evening lip.",
+                isCelebration: true
+            },
+            {
+                id: 'ev_val',
+                title: "Valentine's Romantic Soiree",
+                date: "2027-02-14",
+                occasion: "Dinner Date / Night Out",
+                aesthetic: "Coquette / Balletcore",
+                palette: ["#F4C2C2", "#E60023", "#FFFFF0", "#36454F"],
+                paletteText: "Powder Pink, Crimson Red & Silk Ivory",
+                notes: "Soft corset top, pleated silk skirt, and freshwater pearl jewelry.",
+                isCelebration: true
+            },
+            {
+                id: 'ev_met',
+                title: "Met Gala & Global Fashion Week",
+                date: "2027-05-03",
+                occasion: "Cocktail / Gala",
+                aesthetic: "Minimalist / Architectural",
+                palette: ["#111111", "#FFFFF0", "#D4AF37", "#4A69BD"],
+                paletteText: "Avant-Garde Black, Pure Ivory & Liquid Gold",
+                notes: "Sculptural silhouette, architectural tailoring, and sleek hair styling.",
+                isCelebration: true
+            },
+            {
+                id: 'ev_summer',
+                title: "Summer Solstice & Rooftop Sunset",
+                date: "2027-06-21",
+                occasion: "Casual Brunch / Meetup",
+                aesthetic: "Boho Chic / Festival",
+                palette: ["#FFA07A", "#FFD700", "#FFFFF0", "#20B2AA"],
+                paletteText: "Sun Coral, Golden Yellow & Breezy Linen",
+                notes: "Open back linen sundress, strappy woven sandals, and gold hoops.",
+                isCelebration: true
+            },
+            {
+                id: 'ev_fall',
+                title: "Autumn Equinox & Layering Showcase",
+                date: "2026-09-22",
+                occasion: "Casual Brunch / Meetup",
+                aesthetic: "Quiet Luxury / Warm Neutral",
+                palette: ["#C19A6B", "#8B4513", "#FFFFF0", "#36454F"],
+                paletteText: "Warm Terracotta, Cashmere Cream & Deep Chocolate",
+                notes: "Oversized wool trench coat, wide-leg trousers, and leather boots.",
+                isCelebration: true
+            },
+            {
+                id: 'ev_halloween',
+                title: "Halloween Masquerade Ball",
+                date: "2026-10-31",
+                occasion: "Party / Celebration",
+                aesthetic: "Gothic Glam / Noir",
+                palette: ["#111111", "#4B0082", "#E60023", "#FF7518"],
+                paletteText: "Vampy Noir, Deep Indigo & Blood Crimson",
+                notes: "Lace details, dark velvet capelet, and dramatic winged eyeliner.",
+                isCelebration: true
+            },
+            {
+                id: 'ev_diwali',
+                title: "Diwali Festival of Lights Gala",
+                date: "2026-11-08",
+                occasion: "Holiday Gathering",
+                aesthetic: "Old Money / Classic Tailored",
+                palette: ["#D4AF37", "#990000", "#FF8C00", "#008080"],
+                paletteText: "Antique Gold, Royal Crimson & Vibrant Emerald",
+                notes: "Embroidered silk ensemble, gold statement earrings, and radiant highlighter.",
+                isCelebration: true
+            },
+            {
+                id: 'ev_xmas',
+                title: "Winter Holiday & Christmas Gala",
+                date: "2026-12-25",
+                occasion: "Holiday Gathering",
+                aesthetic: "Quiet Luxury / Warm Neutral",
+                palette: ["#00563B", "#8B0000", "#FFFFF0", "#D4AF37"],
+                paletteText: "Deep Pine Green, Wine Burgundy & Pearl Ivory",
+                notes: "Satin slip maxi dress, cashmere wrap, and kitten heels.",
+                isCelebration: true
+            }
+        ];
+
+        let currentCalendarDate = new Date();
+        let selectedCalendarDateStr = null;
+        let currentEventsFilter = 'all';
+
+        function getCalendarEvents() {
+            try {
+                const stored = localStorage.getItem('muse_calendar_events');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            return defaultPopularCelebrations;
+        }
+
+        function saveCalendarEvents(events) {
+            localStorage.setItem('muse_calendar_events', JSON.stringify(events));
+        }
+
+        function renderStyleCalendar() {
+            const grid = document.getElementById('calendarDaysGrid');
+            const label = document.getElementById('calendarMonthYearLabel');
+            if (!grid || !label) return;
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            label.innerText = `${monthNames[month]} ${year}`;
+
+            const today = new Date();
+            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            const prevLastDay = new Date(year, month, 0).getDate();
+
+            const allEvents = getCalendarEvents();
+            
+            // Generate set of dates that have events
+            const eventDatesSet = new Set(allEvents.map(e => e.date));
+
+            let daysHtml = '';
+
+            // Previous month trailing days
+            for (let i = firstDayIndex; i > 0; i--) {
+                const dayNum = prevLastDay - i + 1;
+                const prevMonth = month === 0 ? 11 : month - 1;
+                const prevYear = month === 0 ? year - 1 : year;
+                const dateStr = `${prevYear}-${String(prevMonth + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+                const hasEvent = eventDatesSet.has(dateStr);
+
+                daysHtml += `
+                    <div class="calendar-day-cell other-month" onclick="selectCalendarDate('${dateStr}')">
+                        <span>${dayNum}</span>
+                        ${hasEvent ? '<span class="calendar-event-indicator"></span>' : ''}
+                    </div>
+                `;
+            }
+
+            // Current month days
+            for (let dayNum = 1; dayNum <= lastDay; dayNum++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+                const isToday = (dateStr === todayStr);
+                const isSelected = (dateStr === selectedCalendarDateStr);
+                const hasEvent = eventDatesSet.has(dateStr);
+
+                let cellClasses = 'calendar-day-cell';
+                if (isToday) cellClasses += ' today';
+                if (isSelected) cellClasses += ' selected';
+
+                daysHtml += `
+                    <div class="${cellClasses}" onclick="selectCalendarDate('${dateStr}')" title="${dateStr}">
+                        <span>${dayNum}</span>
+                        ${hasEvent ? '<span class="calendar-event-indicator"></span>' : ''}
+                    </div>
+                `;
+            }
+
+            // Next month leading days to complete 35 or 42 grid cells
+            const totalCells = firstDayIndex + lastDay;
+            const remainingCells = totalCells > 35 ? 42 - totalCells : 35 - totalCells;
+            for (let dayNum = 1; dayNum <= remainingCells; dayNum++) {
+                const nextMonth = month === 11 ? 0 : month + 1;
+                const nextYear = month === 11 ? year + 1 : year;
+                const dateStr = `${nextYear}-${String(nextMonth + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+                const hasEvent = eventDatesSet.has(dateStr);
+
+                daysHtml += `
+                    <div class="calendar-day-cell other-month" onclick="selectCalendarDate('${dateStr}')">
+                        <span>${dayNum}</span>
+                        ${hasEvent ? '<span class="calendar-event-indicator"></span>' : ''}
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = daysHtml;
+        }
+
+        function prevCalendarMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderStyleCalendar();
+        }
+
+        function nextCalendarMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderStyleCalendar();
+        }
+
+        function jumpCalendarToToday() {
+            currentCalendarDate = new Date();
+            const today = new Date();
+            selectedCalendarDateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            
+            const dateLabel = document.getElementById('calendarSelectedDateLabel');
+            if (dateLabel) {
+                dateLabel.innerText = `Selected: Today (${selectedCalendarDateStr})`;
+            }
+
+            renderStyleCalendar();
+            renderUpcomingEventsList();
+        }
+
+        function selectCalendarDate(dateStr) {
+            if (selectedCalendarDateStr === dateStr) {
+                selectedCalendarDateStr = null;
+                const dateLabel = document.getElementById('calendarSelectedDateLabel');
+                if (dateLabel) dateLabel.innerText = "All upcoming occasions shown";
+            } else {
+                selectedCalendarDateStr = dateStr;
+                const parts = dateStr.split('-');
+                const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                
+                const dateLabel = document.getElementById('calendarSelectedDateLabel');
+                if (dateLabel) {
+                    dateLabel.innerText = `Selected: ${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+                }
+            }
+
+            renderStyleCalendar();
+            renderUpcomingEventsList();
+        }
+
+        function filterEventsList(cat, btn) {
+            currentEventsFilter = cat;
+            const parent = btn ? btn.parentElement : null;
+            if (parent) {
+                parent.querySelectorAll('.tab-chip').forEach(b => b.classList.remove('active'));
+            }
+            if (btn) btn.classList.add('active');
+            renderUpcomingEventsList();
+        }
+
+        function renderUpcomingEventsList() {
+            const container = document.getElementById('homeEventsListContainer');
+            const countBadge = document.getElementById('upcomingEventsCountBadge');
+            if (!container) return;
+
+            let events = getCalendarEvents();
+
+            // Check if user has birthday set and inject if not already present
+            const savedBday = localStorage.getItem('muse_userBirthday');
+            const savedName = localStorage.getItem('muse_userName') || 'Stylist';
+            if (savedBday && savedBday.includes('-')) {
+                const bdayParts = savedBday.split('-');
+                if (bdayParts.length >= 3) {
+                    const currentYear = new Date().getFullYear();
+                    const bdayDateThisYear = `${currentYear}-${bdayParts[1]}-${bdayParts[2]}`;
+                    
+                    if (!events.some(e => e.id === 'user_bday_event')) {
+                        events.push({
+                            id: 'user_bday_event',
+                            title: `${savedName}'s Birthday Celebration`,
+                            date: bdayDateThisYear,
+                            occasion: 'Party / Celebration',
+                            aesthetic: localStorage.getItem('muse_userAesthetic') || 'Cutesy / Soft Pink',
+                            palette: ['#F4C2C2', '#E60023', '#D4AF37'],
+                            paletteText: 'Signature Birthday Glow Palette',
+                            notes: 'Head-to-toe curated favorite outfit with elevated glam makeup!',
+                            isCelebration: true
+                        });
+                    }
+                }
+            }
+
+            // Apply category filtering
+            if (currentEventsFilter === 'celebrations') {
+                events = events.filter(e => e.isCelebration);
+            } else if (currentEventsFilter === 'custom') {
+                events = events.filter(e => !e.isCelebration);
+            }
+
+            // Apply selected date filtering if active
+            if (selectedCalendarDateStr) {
+                const dateMatched = events.filter(e => e.date === selectedCalendarDateStr);
+                if (dateMatched.length > 0) {
+                    events = dateMatched;
+                }
+            }
+
+            // Sort chronologically
+            events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            if (countBadge) {
+                countBadge.innerText = `${events.length} Event${events.length === 1 ? '' : 's'}`;
+            }
+
+            if (events.length === 0) {
+                container.innerHTML = `
+                    <div style="background: var(--surface-muted); padding: 16px; border-radius: var(--radius-card); text-align: center; color: var(--text-secondary); font-size: 12px; border: 1px dashed var(--border-subtle);">
+                        No occasions scheduled for this selection. Click '+ Add Upcoming Event' to plan a look!
+                    </div>
+                `;
+                return;
+            }
+
+            const monthShortNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+
+            container.innerHTML = events.map(ev => {
+                const parts = ev.date ? ev.date.split('-') : ['2026', '09', '01'];
+                const monthIdx = parseInt(parts[1], 10) - 1;
+                const monthStr = monthShortNames[monthIdx] || 'DATE';
+                const dayStr = parts[2] || '01';
+
+                const paletteSwatches = Array.isArray(ev.palette) ? ev.palette.map(c => `
+                    <span class="trend-color-dot" style="background: ${c}; width: 10px; height: 10px;" title="${c}"></span>
+                `).join('') : '';
+
+                return `
+                    <div class="event-card-item">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-grow: 1; overflow: hidden;">
+                            <div class="event-date-badge">
+                                <div class="event-date-month">${monthStr}</div>
+                                <div class="event-date-day">${dayStr}</div>
+                            </div>
+                            <div style="overflow: hidden; flex-grow: 1;">
+                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                    <span style="font-weight: 800; font-size: 12.5px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${ev.title}">
+                                        ${ev.title}
+                                    </span>
+                                    ${ev.isCelebration ? `
+                                        <span style="font-size: 9.5px; font-weight: 800; background: var(--primary-red-light); color: var(--primary-red); padding: 1px 6px; border-radius: var(--radius-pill);">
+                                            Celebration
+                                        </span>
+                                    ` : `
+                                        <span style="font-size: 9.5px; font-weight: 700; background: var(--surface-hover); color: var(--text-secondary); padding: 1px 6px; border-radius: var(--radius-pill);">
+                                            Custom Event
+                                        </span>
+                                    `}
+                                </div>
+
+                                <div style="font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-top: 2px;">
+                                    ${ev.occasion} • <strong style="color: var(--text-primary);">${ev.aesthetic}</strong>
+                                </div>
+
+                                ${ev.paletteText ? `
+                                    <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px; display: flex; align-items: center; gap: 4px;">
+                                        <div style="display: flex; gap: 3px;">${paletteSwatches}</div>
+                                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${ev.paletteText}</span>
+                                    </div>
+                                ` : ''}
+
+                                ${ev.notes ? `
+                                    <div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        Note: ${ev.notes}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0;">
+                            <button class="tab-chip" style="font-size: 10.5px; padding: 3px 10px; background: var(--text-primary); color: #ffffff; border: none; cursor: pointer;" onclick="styleLookForEvent('${ev.id}')" title="Style outfit for this event from your wardrobe">
+                                Style Look →
+                            </button>
+                            ${!ev.isCelebration ? `
+                                <button type="button" class="tab-chip" onclick="deleteCustomEvent('${ev.id}')" style="font-size: 9.5px; padding: 2px 6px; color: var(--primary-red); border-color: transparent;">
+                                    Delete
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAddEventModal() {
+            const modal = document.getElementById('addEventModal');
+            if (modal) {
+                document.getElementById('newEventTitleInput').value = '';
+                const today = new Date();
+                const defaultDateStr = selectedCalendarDateStr || `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                document.getElementById('newEventDateInput').value = defaultDateStr;
+                document.getElementById('newEventPaletteInput').value = '';
+                document.getElementById('newEventNotesInput').value = '';
+                modal.classList.add('open');
+            }
+        }
+
+        function closeAddEventModal() {
+            const modal = document.getElementById('addEventModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function handleAddEventModalBackdropClick(e) {
+            if (e.target && e.target.id === 'addEventModal') {
+                closeAddEventModal();
+            }
+        }
+
+        function handleSaveNewEvent() {
+            const titleInput = document.getElementById('newEventTitleInput');
+            const dateInput = document.getElementById('newEventDateInput');
+            const occasionInput = document.getElementById('newEventOccasionInput');
+            const aestheticInput = document.getElementById('newEventAestheticInput');
+            const paletteInput = document.getElementById('newEventPaletteInput');
+            const notesInput = document.getElementById('newEventNotesInput');
+
+            const title = titleInput ? titleInput.value.trim() : '';
+            const date = dateInput ? dateInput.value : '';
+            const occasion = occasionInput ? occasionInput.value : 'Special Occasion';
+            const aesthetic = aestheticInput ? aestheticInput.value : 'Curated Look';
+            const paletteText = paletteInput ? paletteInput.value.trim() : '';
+            const notes = notesInput ? notesInput.value.trim() : '';
+
+            if (!title) {
+                alert('Please enter an event title (e.g. Wedding Reception, Dinner Date)!');
+                return;
+            }
+
+            if (!date) {
+                alert('Please select a date for the event!');
+                return;
+            }
+
+            const newEvent = {
+                id: 'ev_' + Date.now(),
+                title: title,
+                date: date,
+                occasion: occasion,
+                aesthetic: aesthetic,
+                palette: ['#111111', '#FFFFF0', '#E60023', '#C19A6B'],
+                paletteText: paletteText || 'Personalized Event Palette',
+                notes: notes,
+                isCelebration: false
+            };
+
+            const events = getCalendarEvents();
+            events.push(newEvent);
+            saveCalendarEvents(events);
+
+            closeAddEventModal();
+            renderStyleCalendar();
+            renderUpcomingEventsList();
+            alert(`Event "${title}" added to your Style Calendar!`);
+        }
+
+        function deleteCustomEvent(eventId) {
+            const events = getCalendarEvents();
+            const filtered = events.filter(e => e.id !== eventId);
+            saveCalendarEvents(filtered);
+            renderStyleCalendar();
+            renderUpcomingEventsList();
+        }
+
+        function styleLookForEvent(eventId) {
+            const events = getCalendarEvents();
+            const ev = events.find(e => e.id === eventId);
+            if (!ev) return;
+
+            goToWardrobeScreen();
+            alert(`Styling outfit for "${ev.title}" (Dress code: ${ev.aesthetic})! Filter pieces from your closet or assemble a matching capsule.`);
         }
 
         function getCollabRooms() {
