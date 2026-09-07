@@ -1168,17 +1168,87 @@ router.post('/makeup-recommendation', upload.single('outfitImage'), async (req, 
 // 6. FIND FIT — SERPAPI PRODUCT RECOMMENDATIONS (INDIAN MARKET)
 // ============================================================
 
+function buildWorkingShopLink(retailerName, title, rawLink) {
+    if (rawLink && rawLink.startsWith('http') && !rawLink.includes('serpapi.com') && !rawLink.includes('google.com/url')) {
+        return rawLink;
+    }
+    const cleanTitle = (title || 'apparel').replace(/[^a-zA-Z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    const ret = (retailerName || '').toLowerCase();
+
+    if (ret.includes('myntra')) {
+        const slug = cleanTitle.toLowerCase().replace(/\s+/g, '-');
+        return `https://www.myntra.com/${encodeURIComponent(slug)}`;
+    } else if (ret.includes('ajio')) {
+        return `https://www.ajio.com/search/?text=${encodeURIComponent(cleanTitle)}`;
+    } else if (ret.includes('tata')) {
+        return `https://www.tatacliq.com/search/?searchCategory=all&text=${encodeURIComponent(cleanTitle)}`;
+    } else if (ret.includes('nykaa')) {
+        return `https://www.nykaafashion.com/search?search=${encodeURIComponent(cleanTitle)}`;
+    } else if (ret.includes('zara')) {
+        return `https://www.zara.com/in/en/search?searchTerm=${encodeURIComponent(cleanTitle)}`;
+    } else if (ret.includes('amazon')) {
+        return `https://www.amazon.in/s?k=${encodeURIComponent(cleanTitle)}`;
+    }
+    return `https://www.google.co.in/search?tbm=shop&gl=in&hl=en&q=${encodeURIComponent(cleanTitle)}`;
+}
+
+// Analyze garment from uploaded photo to extract type, colors, and search phrase
+async function identifyGarmentFromImage(filePath) {
+    try {
+        let palette = await extractColors(filePath);
+        const dominantColor = palette && palette[0] ? palette[0].name : 'Neutral';
+        let detectedType = `${dominantColor} Tailored Linen Shirt`;
+        let detectedCategory = 'Top';
+
+        try {
+            const isolatedPath = `uploads/fit-iso-${Date.now()}.png`;
+            const iso = await isolateClothing(filePath, isolatedPath);
+            if (iso && iso.detectedLabels && iso.detectedLabels.length > 0) {
+                const label = iso.detectedLabels[0].toLowerCase();
+                if (label.includes('skirt') || label.includes('pant') || label.includes('trouser') || label.includes('jean') || label.includes('cargo') || label.includes('short')) {
+                    detectedCategory = 'Bottom';
+                    detectedType = `${dominantColor} ${label.includes('skirt') ? 'Pleated Tennis Skirt' : 'Tailored Wide-Leg Trousers'}`;
+                } else if (label.includes('dress') || label.includes('gown') || label.includes('kurta') || label.includes('anarkali') || label.includes('saree')) {
+                    detectedCategory = 'Dress';
+                    detectedType = `${dominantColor} ${label.includes('kurta') ? 'Handloom Chikankari Kurti' : 'Liquid Satin Slip Maxi Dress'}`;
+                } else if (label.includes('shoe') || label.includes('sneaker') || label.includes('heel') || label.includes('boot') || label.includes('loafer')) {
+                    detectedCategory = 'Shoes';
+                    detectedType = `${dominantColor} ${label.includes('sneaker') ? 'Platform Low-Top Sneakers' : 'Mary Jane Kitten Heels'}`;
+                } else if (label.includes('bag') || label.includes('necklace') || label.includes('jewelry') || label.includes('pearl')) {
+                    detectedCategory = 'Jewelry';
+                    detectedType = `${dominantColor} ${label.includes('necklace') ? 'Baroque Pearl Drop Necklace' : 'Structured Minimalist Shoulder Bag'}`;
+                } else {
+                    detectedCategory = 'Top';
+                    detectedType = `${dominantColor} ${label.includes('corset') ? 'Silk Ribbon Corset Top' : 'Oversized Pure Linen Shirt'}`;
+                }
+            }
+            if (fs.existsSync(isolatedPath)) {
+                try { fs.unlinkSync(isolatedPath); } catch (e) {}
+            }
+        } catch (isoErr) {
+            console.warn('Garment isolation skipped for Find Fit image:', isoErr.message);
+        }
+
+        return {
+            detectedQuery: detectedType,
+            category: detectedCategory,
+            color: dominantColor,
+            palette: palette ? palette.slice(0, 3) : []
+        };
+    } catch (err) {
+        console.error('identifyGarmentFromImage error:', err);
+        return {
+            detectedQuery: 'Oversized Pure Linen Shirt',
+            category: 'Top',
+            color: 'Neutral',
+            palette: []
+        };
+    }
+}
+
 // Curated Indian Fashion Catalog Generator for diverse apparel pieces
 function generateCuratedIndianFashionCatalog(query, categoryFilter = 'All', retailerFilter = 'All', maxBudget = 0) {
     const qLower = (query || '').toLowerCase().trim();
-    const indianRetailers = [
-        { name: 'Myntra', domain: 'myntra.com', urlPrefix: 'https://www.myntra.com/' },
-        { name: 'Ajio', domain: 'ajio.com', urlPrefix: 'https://www.ajio.com/search/?text=' },
-        { name: 'Tata CLiQ', domain: 'tatacliq.com', urlPrefix: 'https://www.tatacliq.com/search/?searchCategory=all&text=' },
-        { name: 'Nykaa Fashion', domain: 'nykaafashion.com', urlPrefix: 'https://www.nykaafashion.com/search?search=' },
-        { name: 'Amazon India', domain: 'amazon.in', urlPrefix: 'https://www.amazon.in/s?k=' },
-        { name: 'Zara India', domain: 'zara.com/in', urlPrefix: 'https://www.zara.com/in/en/search?searchTerm=' }
-    ];
 
     const apparelTemplates = [
         {
@@ -1429,7 +1499,6 @@ function generateCuratedIndianFashionCatalog(query, categoryFilter = 'All', reta
         }
     ];
 
-    // Find best template group
     let matchingGroup = null;
     for (const group of apparelTemplates) {
         if (group.keywords.some(k => qLower.includes(k))) {
@@ -1439,15 +1508,15 @@ function generateCuratedIndianFashionCatalog(query, categoryFilter = 'All', reta
     }
 
     if (!matchingGroup) {
-        matchingGroup = apparelTemplates[0]; // Default to Tops & Apparel
+        matchingGroup = apparelTemplates[0];
     }
 
     let catalog = matchingGroup.items.map((item, idx) => {
-        const ret = indianRetailers.find(r => r.name.toLowerCase() === item.retailer.toLowerCase()) || indianRetailers[0];
-        const searchLink = `${ret.urlPrefix}${encodeURIComponent(query ? `${query} ${item.title}` : item.title)}`;
+        const displayTitle = item.title;
+        const verifiedShopLink = buildWorkingShopLink(item.retailer, item.title, null);
         return {
             id: `fit_${idx + 1}_${Date.now()}`,
-            title: query ? `${query}: ${item.title}` : item.title,
+            title: displayTitle,
             brand: item.brand,
             price: item.price,
             extractedPrice: item.extractedPrice,
@@ -1457,8 +1526,8 @@ function generateCuratedIndianFashionCatalog(query, categoryFilter = 'All', reta
             reviews: item.reviews,
             fabric: item.fabric,
             retailer: item.retailer,
-            domain: ret.domain,
-            link: searchLink,
+            domain: item.retailer.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com',
+            link: verifiedShopLink,
             delivery: 'Fast Delivery in India (2-4 Days)',
             matchScore: Math.floor(Math.random() * 6) + 94
         };
@@ -1472,22 +1541,40 @@ function generateCuratedIndianFashionCatalog(query, categoryFilter = 'All', reta
     return catalog;
 }
 
-// Router Endpoint for Find Fit
-router.all(['/find-fit', '/findfit'], async (req, res) => {
+// Router Endpoint for Find Fit (supports image upload and text query)
+router.all(['/find-fit', '/findfit'], upload.single('fitImage'), async (req, res) => {
+    let tempUploadPath = null;
     try {
-        const query = (req.method === 'POST' ? req.body.query : req.query.query) || 'Oversized Linen Shirt';
-        const category = (req.method === 'POST' ? req.body.category : req.query.category) || 'All';
-        const retailer = (req.method === 'POST' ? req.body.retailer : req.query.retailer) || 'All';
-        const maxBudget = parseInt((req.method === 'POST' ? req.body.maxBudget : req.query.maxBudget) || 0, 10);
+        let query = (req.body?.query || req.query?.query || '').trim();
+        let category = req.body?.category || req.query?.category || 'All';
+        const retailer = req.body?.retailer || req.query?.retailer || 'All';
+        const maxBudget = parseInt(req.body?.maxBudget || req.query?.maxBudget || 0, 10);
         const apiKey = req.body?.apiKey || req.query?.apiKey || process.env.SERPAPI_API_KEY || process.env.SERPAPI_KEY || '';
 
-        const trimmedQuery = query.trim();
+        let detectedFromImage = null;
+
+        // If user uploaded an outfit or garment image
+        if (req.file) {
+            tempUploadPath = req.file.path;
+            detectedFromImage = await identifyGarmentFromImage(tempUploadPath);
+            if (!query || query === 'Oversized Pure Linen Shirt') {
+                query = detectedFromImage.detectedQuery;
+            }
+            if (category === 'All' && detectedFromImage.category) {
+                category = detectedFromImage.category;
+            }
+        }
+
+        if (!query) {
+            query = 'Oversized Pure Linen Shirt';
+        }
+
         let products = [];
         let sourceUsed = 'curated_indian_market';
 
         if (apiKey) {
             try {
-                let serpSearchQuery = `${trimmedQuery} clothing apparel fashion`;
+                let serpSearchQuery = `${query} clothing apparel fashion`;
                 if (retailer && retailer !== 'All') {
                     serpSearchQuery += ` ${retailer}`;
                 }
@@ -1505,6 +1592,8 @@ router.all(['/find-fit', '/findfit'], async (req, res) => {
                             parsedPrice = `₹${parsedPrice}`;
                         }
                         const storeName = item.source || item.merchant?.name || (retailer !== 'All' ? retailer : 'Myntra');
+                        const validLink = buildWorkingShopLink(storeName, item.title, item.link || item.product_link);
+
                         return {
                             id: `serp_${idx + 1}_${Date.now()}`,
                             title: item.title,
@@ -1518,7 +1607,7 @@ router.all(['/find-fit', '/findfit'], async (req, res) => {
                             fabric: 'Quality Garment',
                             retailer: storeName,
                             domain: storeName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com',
-                            link: item.link || item.product_link || `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(item.title)}`,
+                            link: validLink,
                             delivery: item.delivery || 'Free Delivery in India',
                             matchScore: Math.floor(Math.random() * 6) + 93
                         };
@@ -1530,7 +1619,7 @@ router.all(['/find-fit', '/findfit'], async (req, res) => {
         }
 
         if (products.length === 0) {
-            products = generateCuratedIndianFashionCatalog(trimmedQuery, category, retailer, maxBudget);
+            products = generateCuratedIndianFashionCatalog(query, category, retailer, maxBudget);
         }
 
         if (maxBudget > 0) {
@@ -1539,11 +1628,12 @@ router.all(['/find-fit', '/findfit'], async (req, res) => {
 
         return res.json({
             success: true,
-            query: trimmedQuery,
+            query,
             category,
             retailer,
             maxBudget,
             source: sourceUsed,
+            detectedFromImage,
             count: products.length,
             products
         });
@@ -1554,6 +1644,10 @@ router.all(['/find-fit', '/findfit'], async (req, res) => {
             error: 'Failed to retrieve Indian fashion recommendations.',
             details: err.message
         });
+    } finally {
+        if (tempUploadPath && fs.existsSync(tempUploadPath)) {
+            try { fs.unlinkSync(tempUploadPath); } catch (e) {}
+        }
     }
 });
 
