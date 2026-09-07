@@ -432,28 +432,120 @@
             color: var(--text-primary);
         }
 
-        .delete-btn {
+        .card-action-bar {
             position: absolute;
             top: 6px;
             right: 6px;
+            display: flex;
+            gap: 4px;
+            z-index: 5;
+        }
+
+        .card-action-btn {
             background: rgba(17, 17, 17, 0.75);
             color: #ffffff;
             border: none;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            font-size: 13px;
-            line-height: 24px;
-            text-align: center;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             padding: 0;
             transition: all 0.2s ease;
             backdrop-filter: blur(4px);
+            font-size: 13px;
         }
 
-        .delete-btn:hover {
-            background: var(--primary-red);
+        .card-action-btn:hover {
             transform: scale(1.1);
+        }
+
+        .card-action-btn.edit-btn:hover {
+            background: var(--text-primary);
+        }
+
+        .card-action-btn.delete-btn:hover {
+            background: var(--primary-red);
+        }
+
+        /* Edit Wardrobe Modal Styles */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            border-radius: var(--radius-card);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            border: 1px solid var(--border-light);
+            transform: translateY(20px);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-backdrop.open .modal-box {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .modal-title {
+            font-weight: 800;
+            font-size: 17px;
+            letter-spacing: -0.3px;
+            color: var(--text-primary);
+        }
+
+        .modal-close-btn {
+            background: var(--surface-muted);
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text-primary);
         }
 
         /* Info Section Cards */
@@ -931,9 +1023,24 @@
             </div>
 
             <!-- Wardrobe Catalog Header & Filter Tabs -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <span style="font-weight: 800; font-size: 16px; letter-spacing: -0.2px;">Closet Catalog</span>
-                <span id="wardrobeCount" style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">0 pieces</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <span style="font-weight: 800; font-size: 16px; letter-spacing: -0.2px;">Closet Catalog</span>
+                    <span id="wardrobeCount" style="font-size: 13px; color: var(--text-secondary); font-weight: 600; margin-left: 8px;">0 pieces</span>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button class="tab-chip" style="font-size: 11px; padding: 4px 10px;" onclick="resetDefaultWardrobe()" title="Reload starter pieces">
+                        Reset Defaults
+                    </button>
+                    <button class="tab-chip" style="font-size: 11px; padding: 4px 10px; color: var(--primary-red);" onclick="clearAllWardrobeItems()" title="Remove all pieces">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Search / Filter Bar -->
+            <div style="position: relative; margin-bottom: 12px;">
+                <input type="text" id="wardrobeSearchInput" placeholder="Search closet by piece name, color, material, or style..." oninput="filterWardrobeSearch(this.value)" style="width: 100%; padding: 10px 16px; border-radius: var(--radius-pill); border: 1px solid var(--border-light); font-size: 13px; box-sizing: border-box; background: var(--surface-muted); outline: none;">
             </div>
 
             <div class="wardrobe-tabs" id="wardrobeTabs">
@@ -1129,6 +1236,123 @@
 
         </div>
 
+    </div>
+
+    <!-- EDIT WARDROBE PIECE MODAL -->
+    <div id="editWardrobeModal" class="modal-backdrop" onclick="handleModalBackdropClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">Edit Closet Piece</span>
+                <button class="modal-close-btn" onclick="closeEditWardrobeModal()">×</button>
+            </div>
+            
+            <input type="hidden" id="editItemId">
+            <input type="hidden" id="editItemExistingImage">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="margin-top: 0;" for="editItemCategory">Category:</label>
+                    <select id="editItemCategory">
+                        <option value="Top">Top / Shirt / Blouse</option>
+                        <option value="Dress">Dress / One-Piece</option>
+                        <option value="Bottom">Bottom / Skirt / Pants</option>
+                        <option value="Shoes">Shoes / Heels / Sneakers</option>
+                        <option value="Jewelry">Jewelry & Accessories</option>
+                        <option value="Outerwear">Jacket & Outerwear</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="margin-top: 0;" for="editItemName">Piece Name / Description:</label>
+                    <input type="text" id="editItemName" placeholder="e.g. Silk Ivory Corset, Chunky Loafers">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label for="editItemColor">Color:</label>
+                    <input type="text" id="editItemColor" placeholder="e.g. Powder Pink, Gold, Black, Emerald">
+                </div>
+
+                <div>
+                    <label for="editItemMaterial">Material:</label>
+                    <select id="editItemMaterial">
+                        <option value="Silk">Silk / Satin</option>
+                        <option value="Cotton">Cotton / Linen</option>
+                        <option value="Leather">Leather / Suede</option>
+                        <option value="Denim">Denim / Twill</option>
+                        <option value="Velvet">Velvet / Corduroy</option>
+                        <option value="Wool">Wool / Cashmere / Knit</option>
+                        <option value="Chiffon">Chiffon / Tulle / Sheer</option>
+                        <option value="Metal">Gold / Silver / Metallic</option>
+                        <option value="Synthetic">Polyester / Spandex</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label for="editItemPattern">Pattern:</label>
+                    <select id="editItemPattern">
+                        <option value="Solid">Solid / Plain</option>
+                        <option value="Floral">Floral / Botanical</option>
+                        <option value="Striped">Striped / Pinstripe</option>
+                        <option value="Plaid">Plaid / Houndstooth / Check</option>
+                        <option value="Lace">Lace / Crochet / Ribbed</option>
+                        <option value="Animal Print">Animal Print</option>
+                        <option value="Embroidered">Embroidered / Beaded</option>
+                        <option value="Graphic">Graphic / Abstract</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="editItemStyle">Style / Aesthetic:</label>
+                    <select id="editItemStyle">
+                        <option value="Soft Coquette">Soft Coquette / Romantic</option>
+                        <option value="90s Minimalist">90s Minimalist / Clean</option>
+                        <option value="Chic Parisian">Chic Parisian / Luxury</option>
+                        <option value="Goth Grunge">Goth / Grunge / Edge</option>
+                        <option value="Y2K Retro">Y2K / Indie Pop</option>
+                        <option value="Classic Tailored">Classic Tailored / Formal</option>
+                        <option value="Streetwear">Streetwear / Casual</option>
+                        <option value="Festive Royal">Festive Royal / Traditional</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Formality Slider -->
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 16px 0 6px;">
+                    <label style="margin: 0;" for="editItemFormality">Formality Level (1 - 10):</label>
+                    <span id="editFormalityBadge" style="font-size: 12px; font-weight: 800; background: var(--text-primary); color: #ffffff; padding: 2px 10px; border-radius: var(--radius-pill);">
+                        Level 5 - Smart Casual
+                    </span>
+                </div>
+                <input type="range" id="editItemFormality" min="1" max="10" value="5" style="width: 100%; accent-color: var(--primary-red); cursor: pointer;" oninput="updateEditFormalityBadge(this.value)">
+            </div>
+
+            <div style="margin-top: 14px;">
+                <label for="editItemFile">Update Photo (Optional):</label>
+                <input type="file" id="editItemFile" accept="image/*">
+                <div style="margin-top: 10px; text-align: center;">
+                    <img id="editItemPreview" src="" alt="Piece Preview" style="max-height: 120px; border-radius: 12px; border: 1px solid var(--border-light); object-fit: contain;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: space-between; align-items: center;">
+                <button type="button" onclick="deleteWardrobeItemFromModal()" style="background: none; border: none; color: var(--primary-red); font-size: 13px; font-weight: 700; cursor: pointer; padding: 6px 0;">
+                    Delete Piece
+                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="tab-chip" onclick="closeEditWardrobeModal()" style="padding: 10px 18px;">
+                        Cancel
+                    </button>
+                    <button type="button" class="action-button" onclick="saveEditWardrobeItem()" style="padding: 10px 22px; width: auto; margin-top: 0;">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1476,6 +1700,136 @@
             }
         }
 
+        let wardrobeSearchQuery = '';
+
+        // Live preview for Edit Item photo
+        const editFileInput = document.getElementById('editItemFile');
+        const editItemPreview = document.getElementById('editItemPreview');
+
+        if (editFileInput) {
+            editFileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        editItemPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function updateEditFormalityBadge(val) {
+            const num = parseInt(val, 10);
+            let label = "Casual";
+            if (num <= 2) label = "Ultra Casual / Loungewear";
+            else if (num <= 4) label = "Casual Everyday";
+            else if (num <= 6) label = "Smart Casual / Elevated";
+            else if (num <= 8) label = "Semi-Formal / Cocktail";
+            else label = "Black Tie / Royal Festive Couture";
+
+            const badge = document.getElementById('editFormalityBadge');
+            if (badge) {
+                badge.innerText = `Level ${num} - ${label}`;
+            }
+        }
+
+        // Open Edit Modal for a specific wardrobe item
+        function openEditWardrobeModal(id) {
+            const items = getWardrobeItems();
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('editItemId').value = item.id;
+            document.getElementById('editItemCategory').value = item.category || 'Top';
+            document.getElementById('editItemName').value = item.name || '';
+            document.getElementById('editItemColor').value = item.color || '';
+            document.getElementById('editItemMaterial').value = item.material || 'Cotton';
+            document.getElementById('editItemPattern').value = item.pattern || 'Solid';
+            document.getElementById('editItemStyle').value = item.style || 'Classic Tailored';
+            
+            const formalityVal = item.formality || 5;
+            document.getElementById('editItemFormality').value = formalityVal;
+            updateEditFormalityBadge(formalityVal);
+
+            document.getElementById('editItemExistingImage').value = item.image || '';
+            editItemPreview.src = item.image || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
+            if (editFileInput) editFileInput.value = '';
+
+            const modal = document.getElementById('editWardrobeModal');
+            modal.classList.add('open');
+        }
+
+        function closeEditWardrobeModal() {
+            const modal = document.getElementById('editWardrobeModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function handleModalBackdropClick(e) {
+            if (e.target && e.target.id === 'editWardrobeModal') {
+                closeEditWardrobeModal();
+            }
+        }
+
+        // Save Edits to Wardrobe Item
+        function saveEditWardrobeItem() {
+            const id = document.getElementById('editItemId').value;
+            const cat = document.getElementById('editItemCategory').value;
+            const name = document.getElementById('editItemName').value.trim();
+            const color = document.getElementById('editItemColor').value.trim();
+            const material = document.getElementById('editItemMaterial').value;
+            const pattern = document.getElementById('editItemPattern').value;
+            const style = document.getElementById('editItemStyle').value;
+            const formality = parseInt(document.getElementById('editItemFormality').value, 10) || 5;
+            const existingImage = document.getElementById('editItemExistingImage').value;
+            const file = editFileInput ? editFileInput.files[0] : null;
+
+            if (!name) {
+                alert("Please enter a name or description for this piece!");
+                return;
+            }
+
+            const commitEdit = (imgSrc) => {
+                let items = getWardrobeItems();
+                const index = items.findIndex(i => i.id === id);
+                if (index !== -1) {
+                    items[index] = {
+                        ...items[index],
+                        name,
+                        category: cat,
+                        color: color || 'Neutral',
+                        material: material || 'Cotton',
+                        pattern: pattern || 'Solid',
+                        style: style || 'Classic Tailored',
+                        formality: formality,
+                        image: imgSrc || existingImage || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'
+                    };
+                    saveWardrobeItems(items);
+                    renderWardrobe(currentFilter);
+                    closeEditWardrobeModal();
+                }
+            };
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    commitEdit(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                commitEdit(null);
+            }
+        }
+
+        function deleteWardrobeItemFromModal() {
+            const id = document.getElementById('editItemId').value;
+            if (!id) return;
+            if (confirm("Are you sure you want to delete this piece from your closet?")) {
+                deleteWardrobeItem(id);
+                closeEditWardrobeModal();
+            }
+        }
+
         // Delete item from wardrobe
         function deleteWardrobeItem(id) {
             let items = getWardrobeItems();
@@ -1484,40 +1838,83 @@
             renderWardrobe(currentFilter);
         }
 
+        // Reset to Default Starter Wardrobe
+        function resetDefaultWardrobe() {
+            if (confirm("Reset closet to default sample collection? Any custom added items will be replaced.")) {
+                saveWardrobeItems(defaultWardrobe);
+                document.getElementById('wardrobeSearchInput').value = '';
+                wardrobeSearchQuery = '';
+                renderWardrobe('All');
+            }
+        }
+
+        // Clear All Items
+        function clearAllWardrobeItems() {
+            if (confirm("Are you sure you want to clear all pieces from your digital wardrobe?")) {
+                saveWardrobeItems([]);
+                renderWardrobe(currentFilter);
+            }
+        }
+
+        // Quick Search Filter
+        function filterWardrobeSearch(query) {
+            wardrobeSearchQuery = (query || '').toLowerCase().trim();
+            renderWardrobe(currentFilter);
+        }
+
         // Filter Wardrobe Tabs
         function filterWardrobe(cat, element) {
             currentFilter = cat;
-            document.querySelectorAll('.tab-chip').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-chip').forEach(c => {
+                if (c.parentElement && c.parentElement.id === 'wardrobeTabs') {
+                    c.classList.remove('active');
+                }
+            });
             if (element) element.classList.add('active');
             renderWardrobe(cat);
         }
 
-        // Render Wardrobe Grid (Pinterest Card Style with Rich Details)
+        // Render Wardrobe Grid (Pinterest Card Style with Edit & Delete Controls)
         function renderWardrobe(filter = 'All') {
             const grid = document.getElementById('wardrobeGrid');
             const countEl = document.getElementById('wardrobeCount');
             const items = getWardrobeItems();
 
-            const filtered = filter === 'All'
+            let filtered = filter === 'All'
                 ? items
                 : items.filter(i => i.category === filter);
 
-            countEl.innerText = `${items.length} ${items.length === 1 ? 'piece' : 'pieces'}`;
+            if (wardrobeSearchQuery) {
+                filtered = filtered.filter(i => {
+                    const text = [i.name, i.category, i.color, i.material, i.pattern, i.style].join(' ').toLowerCase();
+                    return text.includes(wardrobeSearchQuery);
+                });
+            }
+
+            countEl.innerText = `${items.length} ${items.length === 1 ? 'piece' : 'pieces'}${wardrobeSearchQuery ? ` (${filtered.length} found)` : ''}`;
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 28px; color: var(--text-muted); font-size: 13.5px;">No pieces in this category yet. Upload one above!</div>`;
+                const emptyMsg = wardrobeSearchQuery
+                    ? `No pieces matching "${wardrobeSearchQuery}". Try clearing search.`
+                    : `No pieces in this category yet. Upload one above!`;
+                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 28px; color: var(--text-muted); font-size: 13.5px;">${emptyMsg}</div>`;
                 return;
             }
 
             grid.innerHTML = filtered.map(item => `
                 <div class="wardrobe-card">
-                    <button class="delete-btn" onclick="deleteWardrobeItem('${item.id}')" title="Delete piece">×</button>
-                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'">
+                    <div class="card-action-bar">
+                        <button class="card-action-btn edit-btn" onclick="openEditWardrobeModal('${item.id}')" title="Edit piece details">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        </button>
+                        <button class="card-action-btn delete-btn" onclick="deleteWardrobeItem('${item.id}')" title="Delete piece">×</button>
+                    </div>
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'" onclick="openEditWardrobeModal('${item.id}')" style="cursor: pointer;">
                     <div style="display: flex; gap: 4px; flex-wrap: wrap;">
                         <span class="wardrobe-badge">${item.category}</span>
                         <span class="wardrobe-badge" style="background: var(--text-primary); color: #ffffff; font-size: 10px;">${item.formality || 5}/10</span>
                     </div>
-                    <span class="wardrobe-card-title" title="${item.name}">${item.name}</span>
+                    <span class="wardrobe-card-title" title="${item.name}" onclick="openEditWardrobeModal('${item.id}')" style="cursor: pointer;">${item.name}</span>
                     <div style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.3;">
                         ${item.color || 'Neutral'} • ${item.material || 'Fabric'}
                     </div>
