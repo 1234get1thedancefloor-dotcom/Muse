@@ -1558,10 +1558,10 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            width: 190px;
-            min-width: 190px;
-            max-width: 190px;
-            min-height: 245px;
+            width: 205px;
+            min-width: 205px;
+            max-width: 205px;
+            min-height: 320px;
             box-sizing: border-box;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
@@ -1748,6 +1748,424 @@
         .weekly-day-empty:hover {
             border-color: var(--text-secondary);
             background: var(--surface-hover);
+        }
+
+        /* Weekly Outfits Music & Soundtrack Layer Styles */
+        .weekly-vibe-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: var(--radius-pill);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #f3e8ff;
+            color: #7e22ce;
+            border: 1px solid rgba(126, 34, 206, 0.2);
+            white-space: nowrap;
+        }
+
+        .weekly-mood-text {
+            font-size: 9.5px;
+            color: var(--text-secondary);
+            line-height: 1.35;
+            margin: 4px 0 6px;
+            font-style: italic;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .weekly-soundtrack-card {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 6px 8px;
+            margin: 4px 0 6px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .weekly-soundtrack-card.playing {
+            background: #fff1f2;
+            border-color: var(--primary-red);
+            box-shadow: 0 2px 8px rgba(230, 0, 35, 0.12);
+        }
+
+        .weekly-soundtrack-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+
+        .weekly-soundtrack-label {
+            font-size: 8.5px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .weekly-soundtrack-license {
+            font-size: 7.5px;
+            font-weight: 700;
+            color: #2e7d32;
+            background: #e8f5e9;
+            padding: 1px 4px;
+            border-radius: 4px;
+        }
+
+        .weekly-soundtrack-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
+        }
+
+        .weekly-soundtrack-artist {
+            font-size: 8.5px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .weekly-soundtrack-play-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+            padding: 3px 8px;
+            background: var(--text-primary);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-pill);
+            font-size: 9.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .weekly-soundtrack-play-btn:hover {
+            background: var(--primary-red);
+        }
+
+        .weekly-soundtrack-play-btn.playing {
+            background: var(--primary-red);
+            box-shadow: 0 2px 6px rgba(230, 0, 35, 0.25);
+        }
+
+        /* Animated Sound Wave Equalizer */
+        .sound-wave-bars {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 1.5px;
+            height: 9px;
+        }
+
+        .sound-wave-bars .bar {
+            width: 2px;
+            background: currentColor;
+            border-radius: 1px;
+            animation: museSoundWave 0.75s ease-in-out infinite alternate;
+        }
+
+        .sound-wave-bars .bar1 { height: 3px; animation-delay: 0.1s; }
+        .sound-wave-bars .bar2 { height: 9px; animation-delay: 0.3s; }
+        .sound-wave-bars .bar3 { height: 6px; animation-delay: 0.2s; }
+        .sound-wave-bars .bar4 { height: 8px; animation-delay: 0.4s; }
+
+        @keyframes museSoundWave {
+            0% { height: 2px; }
+            100% { height: 9px; }
+        }
+
+        /* Vibe Streak & Recap Modal Components */
+        .vibe-stat-box {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 10px 8px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .vibe-stat-box:hover {
+            border-color: var(--border-subtle);
+            background: #ffffff;
+        }
+
+        .vibe-stat-num {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+        }
+
+        .vibe-stat-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-top: 3px;
+        }
+
+        .vibe-recap-section {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .vibe-recap-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .vibe-recap-section-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .vibe-recap-section-sub {
+            font-size: 10.5px;
+            color: var(--text-secondary);
+        }
+
+        .vibe-progression-timeline {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 6px 2px 8px;
+            scrollbar-width: thin;
+        }
+
+        .vibe-timeline-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 90px;
+            max-width: 90px;
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 8px 6px;
+            text-align: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .vibe-timeline-node.has-outfit {
+            background: #ffffff;
+            border-color: var(--border-subtle);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .vibe-timeline-node-day {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .vibe-timeline-node-thumb {
+            width: 42px;
+            height: 42px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid var(--border-light);
+            margin-bottom: 5px;
+        }
+
+        .vibe-timeline-node-vibe {
+            font-size: 8.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .vibe-timeline-arrow {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+
+        .weekly-mixtape-tracklist {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 190px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .mixtape-track-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: var(--surface-muted);
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .mixtape-track-item:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-subtle);
+        }
+
+        .mixtape-track-item.playing {
+            background: #fff1f2;
+            border-color: var(--primary-red);
+        }
+
+        .mixtape-track-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .mixtape-track-num {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            width: 18px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .mixtape-track-details {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .mixtape-track-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mixtape-track-meta {
+            font-size: 9.5px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .vibe-gamification-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .vibe-badge-card {
+            background: var(--surface-muted);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            opacity: 0.65;
+        }
+
+        .vibe-badge-card.unlocked {
+            background: linear-gradient(135deg, #ffffff 0%, #fffbf0 100%);
+            border-color: #f59e0b;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+            opacity: 1;
+        }
+
+        .vibe-badge-icon-box {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--surface-hover);
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-weight: 800;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .vibe-badge-card.unlocked .vibe-badge-icon-box {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3);
+        }
+
+        .vibe-badge-name {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .vibe-badge-desc {
+            font-size: 9px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+
+        .vibe-badge-status {
+            font-size: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
+        .vibe-badge-card.unlocked .vibe-badge-status {
+            color: #b45309;
+        }
+
+        .vibe-badge-card:not(.unlocked) .vibe-badge-status {
+            color: var(--text-secondary);
         }
 
         /* Info Section Cards */
@@ -2236,6 +2654,10 @@
                         </div>
                         <button type="button" class="tab-chip" onclick="jumpWeeklyOutfitsToCurrentWeek()" style="font-size: 10.5px; padding: 4px 10px;">
                             Current Week
+                        </button>
+                        <button type="button" class="tab-chip" onclick="openWeeklyVibeStreakModal()" style="font-size: 11px; padding: 5px 12px; background: linear-gradient(135deg, #e60023 0%, #b8001c 100%); color: #ffffff; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(230, 0, 35, 0.22);">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                            <span>Vibe Streak & Recap</span>
                         </button>
                         <button type="button" class="tab-chip" onclick="openLogWeeklyOutfitModal()" style="font-size: 11px; padding: 5px 12px; background: var(--text-primary); color: #ffffff; border: none; font-weight: 700; cursor: pointer;">
                             + Log Daily Outfit
@@ -3173,6 +3595,102 @@
                 </button>
                 <button type="button" class="action-button" onclick="confirmSaveWeeklyOutfit()" style="padding: 9px 22px; width: auto; margin-top: 0;">
                     Log Outfit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WEEKLY VIBE STREAK & SOUNDTRACK RECAP MODAL -->
+    <div id="weeklyVibeStreakModal" class="modal-backdrop" onclick="handleWeeklyVibeStreakModalBackdropClick(event)">
+        <div class="modal-box" style="max-width: 680px; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-light); padding-bottom: 12px; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #e60023 0%, #ff5252 100%); display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; box-shadow: 0 2px 8px rgba(230, 0, 35, 0.25);">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                    </div>
+                    <div>
+                        <div style="font-size: 10.5px; font-weight: 800; color: var(--primary-red); text-transform: uppercase; letter-spacing: 0.8px;">
+                            Weekly Vibe Streak & Recap
+                        </div>
+                        <span class="modal-title" style="font-size: 17px; margin-top: 1px;">Your Week in Style & Soundtrack</span>
+                        <div id="vibeRecapDateRange" style="font-size: 11px; color: var(--text-secondary); margin-top: 1px;"></div>
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeWeeklyVibeStreakModal()">×</button>
+            </div>
+
+            <!-- 4 Quick Highlight Metrics -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px;">
+                <div class="vibe-stat-box">
+                    <div class="vibe-stat-num" id="vibeRecapOutfitCount">0/7</div>
+                    <div class="vibe-stat-label">Outfits Completed</div>
+                </div>
+                <div class="vibe-stat-box">
+                    <div class="vibe-stat-num" id="vibeRecapDominantVibe">-</div>
+                    <div class="vibe-stat-label">Dominant Vibe</div>
+                </div>
+                <div class="vibe-stat-box">
+                    <div class="vibe-stat-num" id="vibeRecapAestheticsCount">0</div>
+                    <div class="vibe-stat-label">Aesthetics Explored</div>
+                </div>
+                <div class="vibe-stat-box">
+                    <div class="vibe-stat-num" id="vibeRecapStreakScore">0%</div>
+                    <div class="vibe-stat-label">Streak Score</div>
+                </div>
+            </div>
+
+            <!-- Aesthetic / Vibe Progression Across the Week -->
+            <div class="vibe-recap-section">
+                <div class="vibe-recap-section-header">
+                    <div>
+                        <div class="vibe-recap-section-title">Aesthetic Progression Flow</div>
+                        <div class="vibe-recap-section-sub">Your style evolution day by day across the week</div>
+                    </div>
+                </div>
+                <div id="vibeProgressionTimeline" class="vibe-progression-timeline">
+                    <!-- Populated dynamically by renderWeeklyVibeRecapModal() -->
+                </div>
+            </div>
+
+            <!-- Weekly Soundtrack / Mixtape Playlist -->
+            <div class="vibe-recap-section">
+                <div class="vibe-recap-section-header">
+                    <div>
+                        <div class="vibe-recap-section-title">Curated Weekly Soundtrack & Playlist</div>
+                        <div class="vibe-recap-section-sub">Original soundtrack matching your weekly outfits</div>
+                    </div>
+                    <button type="button" id="playWeeklyMixtapeBtn" class="action-button" onclick="toggleWeeklyMixtapePlayback()" style="width: auto; padding: 6px 14px; font-size: 11px; margin: 0; display: inline-flex; align-items: center; gap: 5px;">
+                        <svg id="playWeeklyMixtapeIcon" viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        <span id="playWeeklyMixtapeBtnText">Play Weekly Mixtape</span>
+                    </button>
+                </div>
+
+                <div id="weeklyMixtapeTracklist" class="weekly-mixtape-tracklist">
+                    <!-- Populated dynamically by renderWeeklyVibeRecapModal() -->
+                </div>
+
+                <div style="font-size: 9.5px; color: var(--text-secondary); margin-top: 8px; display: flex; align-items: center; justify-content: space-between; border-top: 1px dashed var(--border-light); padding-top: 6px;">
+                    <span>Explicit License: Creative Commons CC0 / CC-BY 4.0 - Studio Muse Original Soundscapes</span>
+                    <span style="font-weight: 700; color: #2e7d32; background: #e8f5e9; padding: 1px 5px; border-radius: 4px;">Zero Copyrights</span>
+                </div>
+            </div>
+
+            <!-- Gamification Badges Shelf -->
+            <div class="vibe-recap-section" style="margin-bottom: 0;">
+                <div class="vibe-recap-section-header">
+                    <div>
+                        <div class="vibe-recap-section-title">Style & Sound Badges</div>
+                        <div class="vibe-recap-section-sub">Earn badges by logging daily looks, exploring aesthetics, and listening to soundtracks</div>
+                    </div>
+                </div>
+                <div id="vibeGamificationBadges" class="vibe-gamification-grid">
+                    <!-- Populated dynamically: Vibe Explorer, Style Chameleon, Soundtracked Stylist, Flawless Streak -->
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 14px;">
+                <button type="button" class="tab-chip" onclick="closeWeeklyVibeStreakModal()" style="padding: 8px 18px; font-weight: 700;">
+                    Close Recap
                 </button>
             </div>
         </div>
@@ -5873,8 +6391,341 @@
         }
 
         // =====================================================
-        // OUTFITS OF THE WEEK (WEEKLY STYLE LOG & WARDROBE SYNC)
+        // OUTFITS OF THE WEEK (WEEKLY STYLE LOG & MUSIC LAYER)
         // =====================================================
+
+        // Curated Aesthetic Vibe & Royalty-Free Soundtrack Catalog
+        const MUSE_AESTHETIC_SOUNDTRACKS = {
+            clean_girl: {
+                key: 'clean_girl',
+                name: 'Clean Girl',
+                tagBg: '#f0fdf4',
+                tagColor: '#15803d',
+                mood: 'Crisp, dewy, and effortless with calm acoustic Rhodes keys and polished poise.',
+                trackTitle: 'Satin Dewdrop Lounge - Studio Muse',
+                artist: 'Studio Muse (CC0 Original)',
+                license: 'CC0 Public Domain',
+                chords: [261.63, 329.63, 392.00, 493.88] // C maj7
+            },
+            preppy: {
+                key: 'preppy',
+                name: 'Preppy',
+                tagBg: '#eff6ff',
+                tagColor: '#1d4ed8',
+                mood: 'Crisp, collegiate, and tailored with upbeat bright piano rhythm and vibrant clarity.',
+                trackTitle: 'Oxford Quad & Campus Stroll - Studio Muse',
+                artist: 'Studio Muse (CC-BY 4.0)',
+                license: 'CC-BY 4.0',
+                chords: [293.66, 369.99, 440.00, 554.37] // D maj7
+            },
+            dark_academia: {
+                key: 'dark_academia',
+                name: 'Dark Academia',
+                tagBg: '#fdf2f8',
+                tagColor: '#9d174d',
+                mood: 'Introspective, poetic, and vintage with warm cello undertones and rain-washed chords.',
+                trackTitle: 'Baroque Nocturne in D Minor - Studio Muse',
+                artist: 'Studio Muse (CC0 Original)',
+                license: 'CC0 Public Domain',
+                chords: [220.00, 261.63, 329.63, 392.00] // A min7
+            },
+            y2k: {
+                key: 'y2k',
+                name: 'Y2K Cyber',
+                tagBg: '#fdf4ff',
+                tagColor: '#a21caf',
+                mood: 'Futuristic, bold, and metallic with punchy electronic syncopation and hyper-energy.',
+                trackTitle: 'Neo-Chrome Hyper Pulse - Studio Muse',
+                artist: 'Studio Muse (CC-BY 4.0)',
+                license: 'CC-BY 4.0',
+                chords: [174.61, 261.63, 349.23, 415.30] // F min(maj7)
+            },
+            streetwear: {
+                key: 'streetwear',
+                name: 'Streetwear',
+                tagBg: '#f8fafc',
+                tagColor: '#334155',
+                mood: 'Heavy sub-bass groove, raw subway rhythm, and relaxed vinyl lo-fi tempo.',
+                trackTitle: 'Concrete Echoes Lo-Fi Groove - Studio Muse',
+                artist: 'Studio Muse (CC0 Original)',
+                license: 'CC0 Public Domain',
+                chords: [196.00, 233.08, 293.66, 349.23] // G min7
+            },
+            indie_sleaze: {
+                key: 'indie_sleaze',
+                name: 'Indie Sleaze',
+                tagBg: '#fff7ed',
+                tagColor: '#c2410c',
+                mood: 'Gritty, nonchalant, and rebellious with distorted vintage lo-fi crunch and flashbulbs.',
+                trackTitle: 'Overdrive Garage & Flashbulb - Studio Muse',
+                artist: 'Studio Muse (CC-BY 4.0)',
+                license: 'CC-BY 4.0',
+                chords: [164.81, 246.94, 329.63, 392.00] // E min7
+            },
+            romantic_coquette: {
+                key: 'romantic_coquette',
+                name: 'Romantic Coquette',
+                tagBg: '#fdf2f8',
+                tagColor: '#be185d',
+                mood: 'Dreamy, whimsical, and delicate with soft pastel harp reveries and silk ribbons.',
+                trackTitle: 'Ethereal Ribbon Reverie - Studio Muse',
+                artist: 'Studio Muse (CC-BY 4.0)',
+                license: 'CC-BY 4.0',
+                chords: [349.23, 440.00, 523.25, 659.25] // F maj7
+            },
+            quiet_luxury: {
+                key: 'quiet_luxury',
+                name: 'Quiet Luxury',
+                tagBg: '#fefce8',
+                tagColor: '#854d0e',
+                mood: 'Effortless, understated, and timeless with warm cashmere velvet jazz harmonies.',
+                trackTitle: 'Cashmere & Warm Velvet Lounge - Studio Muse',
+                artist: 'Studio Muse (CC0 Original)',
+                license: 'CC0 Public Domain',
+                chords: [261.63, 311.13, 392.00, 466.16] // C min7
+            },
+            boho_chic: {
+                key: 'boho_chic',
+                name: 'Boho Chic',
+                tagBg: '#fef3c7',
+                tagColor: '#b45309',
+                mood: 'Sun-drenched, breezy, and free-spirited with organic acoustic guitar textures.',
+                trackTitle: 'Sunlit Shoreline & Breeze - Studio Muse',
+                artist: 'Studio Muse (CC0 Original)',
+                license: 'CC0 Public Domain',
+                chords: [246.94, 329.63, 392.00, 493.88] // B min7
+            },
+            ninety_minimalist: {
+                key: 'ninety_minimalist',
+                name: '90s Minimalist',
+                tagBg: '#f1f5f9',
+                tagColor: '#475569',
+                mood: 'Architectural, clean, and understated with subtle spatial ambient tones.',
+                trackTitle: 'Spatial Synthesis & Monochrome - Studio Muse',
+                artist: 'Studio Muse (CC0 Original)',
+                license: 'CC0 Public Domain',
+                chords: [220.00, 277.18, 329.63, 440.00] // A maj
+            }
+        };
+
+        // Aesthetic / Vibe Detector Engine
+        function detectOutfitVibe(title = '', occasion = '', notes = '', pieces = [], userAesthetic = '') {
+            const fullText = `${title} ${occasion} ${notes} ${pieces.map(p => (p.name || '') + ' ' + (p.color || '')).join(' ')} ${userAesthetic}`.toLowerCase();
+
+            if (fullText.match(/\b(y2k|cyber|chrome|metallic|crop top|cargo|futuristic|neon|glitch|platform)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.y2k;
+            }
+            if (fullText.match(/\b(clean girl|dewy|slick|linen|monochrome|neutral|minimal|claw clip|beige|crisp)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.clean_girl;
+            }
+            if (fullText.match(/\b(preppy|tennis|pleat|polo|loafer|blazer|cardigan|ivy|oxford|argyle|skirt|collegiate)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.preppy;
+            }
+            if (fullText.match(/\b(dark academia|academia|tweed|charcoal|wool|vintage|trousers|oxblood|houndstooth|library|gothic|turtleneck)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.dark_academia;
+            }
+            if (fullText.match(/\b(streetwear|hoodie|sneaker|dunk|oversized|graphic|bomber|cap|puffer|denim jacket|subway)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.streetwear;
+            }
+            if (fullText.match(/\b(indie sleaze|indie|grunge|leather|combat|distressed|band tee|fishnet|vinyl|after-party|smudged)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.indie_sleaze;
+            }
+            if (fullText.match(/\b(coquette|corset|lace|ribbon|bow|pearl|powder pink|ballet|mary jane|ruffle|silk|cutesy)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.romantic_coquette;
+            }
+            if (fullText.match(/\b(quiet luxury|old money|cashmere|tailored|trench|silk blouse|camel|refined|chic)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.quiet_luxury;
+            }
+            if (fullText.match(/\b(boho|bohemian|cottagecore|floral|crochet|fringe|maxi|sundress|prairie|botanical)\b/)) {
+                return MUSE_AESTHETIC_SOUNDTRACKS.boho_chic;
+            }
+
+            // Fallback according to user's saved aesthetic theme
+            const savedAesthetic = localStorage.getItem('muse_userAesthetic') || 'chic';
+            if (savedAesthetic === 'pink') return MUSE_AESTHETIC_SOUNDTRACKS.romantic_coquette;
+            if (savedAesthetic === 'goth') return MUSE_AESTHETIC_SOUNDTRACKS.dark_academia;
+            if (savedAesthetic === 'indie') return MUSE_AESTHETIC_SOUNDTRACKS.indie_sleaze;
+            if (savedAesthetic === 'minimalist') return MUSE_AESTHETIC_SOUNDTRACKS.ninety_minimalist;
+            return MUSE_AESTHETIC_SOUNDTRACKS.clean_girl;
+        }
+
+        // =====================================================
+        // ROYALTY-FREE WEB AUDIO SYNTHESIZER & SOUND ENGINE
+        // =====================================================
+        class MuseAudioSynthesizer {
+            constructor() {
+                this.ctx = null;
+                this.activeOscillators = [];
+                this.gainNode = null;
+                this.filterNode = null;
+                this.isPlaying = false;
+                this.currentVibeKey = null;
+                this.currentTrackTitle = '';
+                this.isMixtapeActive = false;
+                this.mixtapeQueue = [];
+                this.mixtapeCurrentIndex = 0;
+                this.mixtapeTimer = null;
+                this.hasListened = (localStorage.getItem('muse_has_listened_soundtrack') === 'true');
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) {
+                        this.ctx = new AudioContextClass();
+                    }
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playVibeSoundscape(vibeKey, trackTitle, onFinishCallback = null) {
+                this.init();
+                if (!this.ctx) return;
+
+                this.stopCurrent();
+
+                const vibeData = MUSE_AESTHETIC_SOUNDTRACKS[vibeKey] || MUSE_AESTHETIC_SOUNDTRACKS.clean_girl;
+                this.currentVibeKey = vibeKey;
+                this.currentTrackTitle = trackTitle || vibeData.trackTitle;
+                this.isPlaying = true;
+                this.hasListened = true;
+                localStorage.setItem('muse_has_listened_soundtrack', 'true');
+
+                const now = this.ctx.currentTime;
+
+                // Master Gain
+                this.gainNode = this.ctx.createGain();
+                this.gainNode.gain.setValueAtTime(0.001, now);
+                this.gainNode.gain.exponentialRampToValueAtTime(0.18, now + 0.8);
+
+                // Low-pass Filter for lush warm analog feel
+                this.filterNode = this.ctx.createBiquadFilter();
+                this.filterNode.type = 'lowpass';
+                this.filterNode.frequency.setValueAtTime(1400, now);
+                this.filterNode.Q.setValueAtTime(2.5, now);
+
+                this.filterNode.connect(this.gainNode);
+                this.gainNode.connect(this.ctx.destination);
+
+                // Build polyphonic chord cluster
+                const chordFrequencies = vibeData.chords || [261.63, 329.63, 392.00, 493.88];
+                const oscTypes = ['sine', 'triangle', 'sine', 'triangle'];
+
+                chordFrequencies.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    osc.type = oscTypes[idx % oscTypes.length];
+                    osc.frequency.setValueAtTime(freq, now);
+
+                    // Gentle pitch detune / chorusing
+                    const detuneAmount = (idx % 2 === 0 ? 3.5 : -3.5) * (idx + 1);
+                    osc.detune.setValueAtTime(detuneAmount, now);
+
+                    // Sub-gain for smooth voicing
+                    const voiceGain = this.ctx.createGain();
+                    voiceGain.gain.setValueAtTime(0.25, now);
+
+                    osc.connect(voiceGain);
+                    voiceGain.connect(this.filterNode);
+
+                    osc.start(now);
+                    this.activeOscillators.push(osc);
+                });
+
+                // Subtle LFO modulation on filter for breathing ambient texture
+                const lfo = this.ctx.createOscillator();
+                const lfoGain = this.ctx.createGain();
+                lfo.frequency.setValueAtTime(0.35, now);
+                lfoGain.gain.setValueAtTime(280, now);
+                lfo.connect(lfoGain);
+                lfoGain.connect(this.filterNode.frequency);
+                lfo.start(now);
+                this.activeOscillators.push(lfo);
+
+                this.notifyUI();
+
+                // If callback exists (for mixtape preview transition)
+                if (onFinishCallback) {
+                    clearTimeout(this.mixtapeTimer);
+                    this.mixtapeTimer = setTimeout(() => {
+                        if (this.isPlaying && this.isMixtapeActive) {
+                            onFinishCallback();
+                        }
+                    }, 10000); // 10-second curated preview per outfit in mixtape
+                }
+            }
+
+            stopCurrent() {
+                if (this.gainNode && this.ctx) {
+                    const now = this.ctx.currentTime;
+                    this.gainNode.gain.cancelScheduledValues(now);
+                    this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, now);
+                    this.gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+                }
+
+                setTimeout(() => {
+                    this.activeOscillators.forEach(osc => {
+                        try { osc.stop(); osc.disconnect(); } catch (e) {}
+                    });
+                    this.activeOscillators = [];
+                }, 350);
+
+                this.isPlaying = false;
+                this.currentVibeKey = null;
+                this.currentTrackTitle = '';
+                clearTimeout(this.mixtapeTimer);
+                this.notifyUI();
+            }
+
+            toggleTrack(vibeKey, trackTitle) {
+                if (this.isPlaying && this.currentVibeKey === vibeKey) {
+                    this.isMixtapeActive = false;
+                    this.stopCurrent();
+                } else {
+                    this.isMixtapeActive = false;
+                    this.playVibeSoundscape(vibeKey, trackTitle);
+                }
+            }
+
+            startMixtape(trackQueue) {
+                if (!trackQueue || trackQueue.length === 0) return;
+                this.mixtapeQueue = trackQueue;
+                this.mixtapeCurrentIndex = 0;
+                this.isMixtapeActive = true;
+                this.playNextMixtapeTrack();
+            }
+
+            playNextMixtapeTrack() {
+                if (!this.isMixtapeActive || this.mixtapeQueue.length === 0) {
+                    this.stopCurrent();
+                    this.isMixtapeActive = false;
+                    return;
+                }
+
+                if (this.mixtapeCurrentIndex >= this.mixtapeQueue.length) {
+                    this.mixtapeCurrentIndex = 0; // loop back to first track
+                }
+
+                const currentItem = this.mixtapeQueue[this.mixtapeCurrentIndex];
+                this.playVibeSoundscape(currentItem.vibeKey, currentItem.trackTitle, () => {
+                    this.mixtapeCurrentIndex++;
+                    this.playNextMixtapeTrack();
+                });
+            }
+
+            stopMixtape() {
+                this.isMixtapeActive = false;
+                this.stopCurrent();
+            }
+
+            notifyUI() {
+                renderWeeklyOutfits();
+                updateWeeklyRecapModalAudioState();
+            }
+        }
+
+        const museAudio = new MuseAudioSynthesizer();
 
         let currentWeeklyLogDate = new Date();
         let currentWeeklyLogSource = 'saved';
@@ -5912,6 +6763,13 @@
                     title: 'Linen Tailored Monochrome Chic',
                     occasion: 'Casual Chic',
                     vibe: '90s Minimalist',
+                    vibeKey: 'ninety_minimalist',
+                    mood: 'Architectural, clean, and understated with subtle spatial ambient tones.',
+                    soundtrack: {
+                        title: 'Spatial Synthesis & Monochrome - Studio Muse',
+                        artist: 'Studio Muse (CC0 Original)',
+                        license: 'CC0'
+                    },
                     notes: 'Crisp white linen shirt with charcoal pleated trousers for morning studio planning.',
                     image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&auto=format&fit=crop&q=60',
                     pieces: [
@@ -5927,6 +6785,13 @@
                     title: 'Silk Ribbon Corset & Pleats',
                     occasion: 'Party / Night Out',
                     vibe: 'Romantic Coquette',
+                    vibeKey: 'romantic_coquette',
+                    mood: 'Dreamy, whimsical, and delicate with soft pastel harp reveries and silk ribbons.',
+                    soundtrack: {
+                        title: 'Ethereal Ribbon Reverie - Studio Muse',
+                        artist: 'Studio Muse (CC-BY 4.0)',
+                        license: 'CC-BY 4.0'
+                    },
                     notes: 'Powder pink corset with tennis skirt and pearl necklace for styling dinner.',
                     image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&auto=format&fit=crop&q=60',
                     pieces: [
@@ -5952,7 +6817,7 @@
             const viewport = document.getElementById('weeklyCarouselViewport');
             if (!viewport) return;
 
-            const cardStep = 202; // 190px width + 12px gap
+            const cardStep = 217; // 205px width + 12px gap
             const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
             
             // Circular loop check
@@ -5981,7 +6846,7 @@
             const viewport = document.getElementById('weeklyCarouselViewport');
             if (!viewport) return;
             activeWeeklyCarouselIndex = Math.max(0, Math.min(6, dayIdx));
-            const cardStep = 202;
+            const cardStep = 217;
             viewport.scrollTo({
                 left: activeWeeklyCarouselIndex * cardStep,
                 behavior: 'smooth'
@@ -6009,6 +6874,11 @@
         function jumpWeeklyOutfitsToCurrentWeek() {
             currentWeeklyLogDate = new Date();
             renderWeeklyOutfits(true);
+        }
+
+        function togglePlayDailySoundtrack(vibeKey, trackTitle, e) {
+            if (e) e.stopPropagation();
+            museAudio.toggleTrack(vibeKey, trackTitle);
         }
 
         function renderWeeklyOutfits(autoCenterToday = false) {
@@ -6070,10 +6940,10 @@
                                 </div>
                                 <div class="weekly-day-empty" onclick="openLogWeeklyOutfitModal(${index})">
                                     <div style="font-size: 11px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">+ Log Outfit</div>
-                                    <div style="font-size: 9.5px; color: var(--text-secondary);">Add look worn</div>
+                                    <div style="font-size: 9.5px; color: var(--text-secondary);">Add look & soundtrack</div>
                                 </div>
                             </div>
-                            <button type="button" class="tab-chip" onclick="openLogWeeklyOutfitModal(${index})" style="font-size: 9.5px; padding: 3px 6px; width: 100%; text-align: center;">
+                            <button type="button" class="tab-chip" onclick="openLogWeeklyOutfitModal(${index})" style="font-size: 9.5px; padding: 4px 6px; width: 100%; text-align: center; font-weight: 700;">
                                 + Add Look
                             </button>
                         </div>
@@ -6082,6 +6952,17 @@
 
                 const fallbackImg = 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
                 const mainImg = outfit.image || (outfit.pieces && outfit.pieces[0]?.image) || fallbackImg;
+
+                // Detect or resolve outfit aesthetic & soundtrack details
+                const detectedVibe = detectOutfitVibe(outfit.title, outfit.occasion, outfit.notes, outfit.pieces || []);
+                const vibeKey = outfit.vibeKey || detectedVibe.key;
+                const vibeObj = MUSE_AESTHETIC_SOUNDTRACKS[vibeKey] || detectedVibe;
+                const moodText = outfit.mood || vibeObj.mood;
+                const trackTitle = (outfit.soundtrack && outfit.soundtrack.title) || vibeObj.trackTitle;
+                const trackArtist = (outfit.soundtrack && outfit.soundtrack.artist) || vibeObj.artist;
+                const trackLicense = (outfit.soundtrack && outfit.soundtrack.license) || vibeObj.license;
+
+                const isPlayingThisTrack = museAudio.isPlaying && museAudio.currentVibeKey === vibeKey;
 
                 // Check if outfit is saved in wardrobe
                 const isSavedInWardrobe = outfit.savedInWardrobe || savedWardrobeOutfits.some(o => o.title === outfit.title || o.id === outfit.id);
@@ -6101,29 +6982,58 @@
                                 <img src="${mainImg}" alt="${outfit.title}" onerror="this.src='${fallbackImg}'" class="weekly-outfit-img">
                             </div>
 
-                            <div style="font-weight: 800; font-size: 11px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${outfit.title}">
+                            <div style="font-weight: 800; font-size: 11px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;" title="${outfit.title}">
                                 ${outfit.title}
                             </div>
 
-                            <div style="display: flex; gap: 3px; flex-wrap: wrap; margin-top: 3px;">
-                                <span class="wardrobe-badge" style="font-size: 8.5px; padding: 1px 4px; background: var(--text-primary); color: #ffffff;">${outfit.occasion || 'Casual'}</span>
-                                ${outfit.vibe ? `<span class="wardrobe-badge" style="font-size: 8.5px; padding: 1px 4px;">${outfit.vibe}</span>` : ''}
+                            <div style="display: flex; gap: 3px; flex-wrap: wrap; margin-top: 4px; align-items: center;">
+                                <span class="weekly-vibe-pill" style="background: ${vibeObj.tagBg}; color: ${vibeObj.tagColor};">
+                                    ${vibeObj.name}
+                                </span>
+                                <span class="wardrobe-badge" style="font-size: 8.5px; padding: 1px 4px; background: var(--text-primary); color: #ffffff;">
+                                    ${outfit.occasion || 'Everyday'}
+                                </span>
                             </div>
 
-                            ${outfit.notes ? `
-                                <div style="font-size: 9px; color: var(--text-secondary); margin-top: 3px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${outfit.notes}">
-                                    ${outfit.notes}
+                            <div class="weekly-mood-text" title="${moodText}">
+                                ${moodText}
+                            </div>
+
+                            <!-- Your Soundtrack Card -->
+                            <div class="weekly-soundtrack-card ${isPlayingThisTrack ? 'playing' : ''}">
+                                <div class="weekly-soundtrack-header">
+                                    <span class="weekly-soundtrack-label">
+                                        <svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                                        Your Soundtrack
+                                    </span>
+                                    <span class="weekly-soundtrack-license">${trackLicense}</span>
                                 </div>
-                            ` : ''}
+                                <div class="weekly-soundtrack-title" title="${trackTitle}">${trackTitle}</div>
+                                <div class="weekly-soundtrack-artist">${trackArtist}</div>
+                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThisTrack ? 'playing' : ''}" onclick="togglePlayDailySoundtrack('${vibeKey}', '${trackTitle.replace(/'/g, "\\'")}', event)">
+                                    ${isPlayingThisTrack ? `
+                                        <div class="sound-wave-bars">
+                                            <span class="bar bar1"></span>
+                                            <span class="bar bar2"></span>
+                                            <span class="bar bar3"></span>
+                                            <span class="bar bar4"></span>
+                                        </div>
+                                        <span>Pause</span>
+                                    ` : `
+                                        <svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                        <span>Listen</span>
+                                    `}
+                                </button>
+                            </div>
                         </div>
 
-                        <div style="display: flex; flex-direction: column; gap: 3px; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border-light);">
+                        <div style="display: flex; flex-direction: column; gap: 3px; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border-light);">
                             ${isSavedInWardrobe ? `
-                                <span style="font-size: 9px; font-weight: 700; color: #2e7d32; background: #e8f5e9; padding: 2px 4px; border-radius: var(--radius-pill); text-align: center;">
+                                <span style="font-size: 8.5px; font-weight: 700; color: #2e7d32; background: #e8f5e9; padding: 2px 4px; border-radius: var(--radius-pill); text-align: center;">
                                     In Wardrobe
                                 </span>
                             ` : `
-                                <button type="button" class="tab-chip" onclick="saveWeeklyDayOutfitToWardrobe('${weekKey}', ${index})" style="font-size: 9px; padding: 2px 5px; background: var(--text-primary); color: #ffffff; border: none; font-weight: 700; width: 100%;">
+                                <button type="button" class="tab-chip" onclick="saveWeeklyDayOutfitToWardrobe('${weekKey}', ${index})" style="font-size: 8.5px; padding: 2px 5px; background: var(--text-primary); color: #ffffff; border: none; font-weight: 700; width: 100%;">
                                     + Save to Wardrobe
                                 </button>
                             `}
@@ -6165,7 +7075,7 @@
                 viewport.addEventListener('scroll', () => {
                     clearTimeout(scrollDebounce);
                     scrollDebounce = setTimeout(() => {
-                        const cardStep = 202;
+                        const cardStep = 217;
                         const idx = Math.max(0, Math.min(6, Math.round(viewport.scrollLeft / cardStep)));
                         if (idx !== activeWeeklyCarouselIndex) {
                             activeWeeklyCarouselIndex = idx;
@@ -6386,6 +7296,9 @@
                 return;
             }
 
+            // Intelligent Aesthetic & Soundtrack Detection
+            const detectedVibe = detectOutfitVibe(title, occasion, notes, outfitPieces);
+
             const weekKey = getWeekKey(currentWeeklyLogDate);
             const store = getWeeklyOutfitsStore();
             if (!store[weekKey]) store[weekKey] = {};
@@ -6394,7 +7307,14 @@
                 id: `weekly_${Date.now()}`,
                 title,
                 occasion,
-                vibe: localStorage.getItem('muse_userAesthetic') || 'Custom Vibe',
+                vibe: detectedVibe.name,
+                vibeKey: detectedVibe.key,
+                mood: detectedVibe.mood,
+                soundtrack: {
+                    title: detectedVibe.trackTitle,
+                    artist: detectedVibe.artist,
+                    license: detectedVibe.license
+                },
                 notes,
                 image: outfitImage || (outfitPieces[0] && outfitPieces[0].image),
                 pieces: outfitPieces,
@@ -6472,6 +7392,306 @@
 
             renderWeeklyOutfits();
             alert(`"${outfit.title}" has been saved to your permanent Wardrobe collection!`);
+        }
+
+        // =====================================================
+        // WEEKLY VIBE STREAK & SOUNDTRACK RECAP MODAL ENGINE
+        // =====================================================
+
+        function openWeeklyVibeStreakModal() {
+            const modal = document.getElementById('weeklyVibeStreakModal');
+            if (!modal) return;
+            renderWeeklyVibeRecapModal();
+            modal.classList.add('open');
+            modal.classList.add('active');
+        }
+
+        function closeWeeklyVibeStreakModal() {
+            const modal = document.getElementById('weeklyVibeStreakModal');
+            if (modal) {
+                modal.classList.remove('open');
+                modal.classList.remove('active');
+            }
+        }
+
+        function handleWeeklyVibeStreakModalBackdropClick(e) {
+            if (e.target && e.target.id === 'weeklyVibeStreakModal') {
+                closeWeeklyVibeStreakModal();
+            }
+        }
+
+        function renderWeeklyVibeRecapModal() {
+            const monday = getMondayOfWeek(currentWeeklyLogDate);
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const rangeStr = `${monthNames[monday.getMonth()]} ${monday.getDate()} - ${monthNames[sunday.getMonth()]} ${sunday.getDate()}, ${sunday.getFullYear()}`;
+            
+            const dateRangeEl = document.getElementById('vibeRecapDateRange');
+            if (dateRangeEl) dateRangeEl.innerText = rangeStr;
+
+            const weekKey = getWeekKey(monday);
+            const store = getWeeklyOutfitsStore();
+            const weekData = store[weekKey] || {};
+
+            const daysOfWeek = [
+                { name: 'Monday', short: 'Mon' },
+                { name: 'Tuesday', short: 'Tue' },
+                { name: 'Wednesday', short: 'Wed' },
+                { name: 'Thursday', short: 'Thu' },
+                { name: 'Friday', short: 'Fri' },
+                { name: 'Saturday', short: 'Sat' },
+                { name: 'Sunday', short: 'Sun' }
+            ];
+
+            const completedOutfits = [];
+            const vibeCounts = {};
+            const uniqueVibes = new Set();
+            const chronologicalVibes = [];
+
+            daysOfWeek.forEach((d, idx) => {
+                const outfit = weekData[idx];
+                if (outfit) {
+                    const detectedVibe = detectOutfitVibe(outfit.title, outfit.occasion, outfit.notes, outfit.pieces || []);
+                    const vibeKey = outfit.vibeKey || detectedVibe.key;
+                    const vibeObj = MUSE_AESTHETIC_SOUNDTRACKS[vibeKey] || detectedVibe;
+                    const vibeName = outfit.vibe || vibeObj.name;
+                    
+                    completedOutfits.push({
+                        dayIndex: idx,
+                        dayShort: d.short,
+                        outfit,
+                        vibeKey,
+                        vibeObj,
+                        vibeName
+                    });
+
+                    vibeCounts[vibeName] = (vibeCounts[vibeName] || 0) + 1;
+                    uniqueVibes.add(vibeName);
+                    chronologicalVibes.push(vibeName);
+                }
+            });
+
+            const completedCount = completedOutfits.length;
+
+            // Compute dominant vibe
+            let dominantVibeName = '-';
+            let maxCount = 0;
+            Object.keys(vibeCounts).forEach(v => {
+                if (vibeCounts[v] > maxCount) {
+                    maxCount = vibeCounts[v];
+                    dominantVibeName = v;
+                }
+            });
+
+            const streakScore = Math.round((completedCount / 7) * 100);
+
+            // Update 4 highlight metric cards
+            const countEl = document.getElementById('vibeRecapOutfitCount');
+            const domEl = document.getElementById('vibeRecapDominantVibe');
+            const aesEl = document.getElementById('vibeRecapAestheticsCount');
+            const scoreEl = document.getElementById('vibeRecapStreakScore');
+
+            if (countEl) countEl.innerText = `${completedCount}/7`;
+            if (domEl) domEl.innerText = dominantVibeName;
+            if (aesEl) aesEl.innerText = `${uniqueVibes.size}`;
+            if (scoreEl) scoreEl.innerText = `${streakScore}%`;
+
+            // Render Aesthetic Progression Flow
+            const timelineEl = document.getElementById('vibeProgressionTimeline');
+            if (timelineEl) {
+                if (completedCount === 0) {
+                    timelineEl.innerHTML = `
+                        <div style="font-size: 11px; color: var(--text-secondary); padding: 12px 0; text-align: center; width: 100%;">
+                            No outfits logged yet for this week. Log daily looks to generate your style progression flow!
+                        </div>
+                    `;
+                } else {
+                    const fallbackImg = 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
+                    let timelineHtml = '';
+
+                    completedOutfits.forEach((item, i) => {
+                        const img = item.outfit.image || (item.outfit.pieces && item.outfit.pieces[0]?.image) || fallbackImg;
+                        timelineHtml += `
+                            <div class="vibe-timeline-node has-outfit">
+                                <span class="vibe-timeline-node-day">${item.dayShort}</span>
+                                <img src="${img}" alt="${item.outfit.title}" onerror="this.src='${fallbackImg}'" class="vibe-timeline-node-thumb">
+                                <span class="weekly-vibe-pill" style="font-size: 8px; padding: 1px 5px; background: ${item.vibeObj.tagBg}; color: ${item.vibeObj.tagColor};">
+                                    ${item.vibeObj.name}
+                                </span>
+                            </div>
+                        `;
+                        if (i < completedOutfits.length - 1) {
+                            timelineHtml += `<span class="vibe-timeline-arrow">→</span>`;
+                        }
+                    });
+
+                    timelineEl.innerHTML = timelineHtml;
+                }
+            }
+
+            // Render Curated Weekly Soundtrack Playlist
+            const tracklistEl = document.getElementById('weeklyMixtapeTracklist');
+            if (tracklistEl) {
+                if (completedCount === 0) {
+                    tracklistEl.innerHTML = `
+                        <div style="font-size: 11px; color: var(--text-secondary); padding: 14px 0; text-align: center;">
+                            Log daily looks to curate your personalized weekly soundtrack mixtape.
+                        </div>
+                    `;
+                } else {
+                    tracklistEl.innerHTML = completedOutfits.map((item, idx) => {
+                        const trackTitle = (item.outfit.soundtrack && item.outfit.soundtrack.title) || item.vibeObj.trackTitle;
+                        const trackArtist = (item.outfit.soundtrack && item.outfit.soundtrack.artist) || item.vibeObj.artist;
+                        const isPlayingThis = museAudio.isPlaying && museAudio.currentVibeKey === item.vibeKey;
+
+                        return `
+                            <div class="mixtape-track-item ${isPlayingThis ? 'playing' : ''}">
+                                <div class="mixtape-track-left">
+                                    <span class="mixtape-track-num">0${idx + 1}</span>
+                                    <div class="mixtape-track-details">
+                                        <div class="mixtape-track-title">${trackTitle}</div>
+                                        <div class="mixtape-track-meta">
+                                            <span>${trackArtist}</span>
+                                            <span>•</span>
+                                            <span style="font-weight: 700; color: ${item.vibeObj.tagColor};">${item.dayShort}: ${item.vibeObj.name}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="weekly-soundtrack-play-btn ${isPlayingThis ? 'playing' : ''}" style="width: auto; padding: 4px 10px;" onclick="togglePlayDailySoundtrack('${item.vibeKey}', '${trackTitle.replace(/'/g, "\\'")}', event)">
+                                    ${isPlayingThis ? `
+                                        <div class="sound-wave-bars">
+                                            <span class="bar bar1"></span>
+                                            <span class="bar bar2"></span>
+                                            <span class="bar bar3"></span>
+                                            <span class="bar bar4"></span>
+                                        </div>
+                                        <span>Pause</span>
+                                    ` : `
+                                        <svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                        <span>Play</span>
+                                    `}
+                                </button>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Gamification Badges Evaluation
+            const badgesEl = document.getElementById('vibeGamificationBadges');
+            if (badgesEl) {
+                // Badge 1: Vibe Explorer (explored 3+ distinct aesthetics)
+                const isVibeExplorer = uniqueVibes.size >= 3;
+
+                // Badge 2: Style Chameleon (different vibes across consecutive days)
+                let isStyleChameleon = false;
+                if (chronologicalVibes.length >= 2) {
+                    for (let i = 0; i < chronologicalVibes.length - 1; i++) {
+                        if (chronologicalVibes[i] !== chronologicalVibes[i + 1]) {
+                            isStyleChameleon = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Badge 3: Soundtracked Stylist (played/listened to outfit soundtracks)
+                const isSoundtracked = museAudio.hasListened || museAudio.isPlaying;
+
+                // Badge 4: Flawless Streak (logged 5+ days in the week)
+                const isFlawlessStreak = completedCount >= 5;
+
+                badgesEl.innerHTML = `
+                    <div class="vibe-badge-card ${isVibeExplorer ? 'unlocked' : ''}">
+                        <div class="vibe-badge-icon-box">VE</div>
+                        <div>
+                            <div class="vibe-badge-name">Vibe Explorer</div>
+                            <div class="vibe-badge-desc">Explore 3 or more distinct aesthetic styles in one week (${uniqueVibes.size}/3 explored)</div>
+                            <div class="vibe-badge-status">${isVibeExplorer ? 'Unlocked' : 'Locked'}</div>
+                        </div>
+                    </div>
+
+                    <div class="vibe-badge-card ${isStyleChameleon ? 'unlocked' : ''}">
+                        <div class="vibe-badge-icon-box">SC</div>
+                        <div>
+                            <div class="vibe-badge-name">Style Chameleon</div>
+                            <div class="vibe-badge-desc">Switch up your aesthetic vibe across consecutive days</div>
+                            <div class="vibe-badge-status">${isStyleChameleon ? 'Unlocked' : 'Locked'}</div>
+                        </div>
+                    </div>
+
+                    <div class="vibe-badge-card ${isSoundtracked ? 'unlocked' : ''}">
+                        <div class="vibe-badge-icon-box">SS</div>
+                        <div>
+                            <div class="vibe-badge-name">Soundtracked Stylist</div>
+                            <div class="vibe-badge-desc">Listen to ambient soundscapes and soundtracks matching your looks</div>
+                            <div class="vibe-badge-status">${isSoundtracked ? 'Unlocked' : 'Locked'}</div>
+                        </div>
+                    </div>
+
+                    <div class="vibe-badge-card ${isFlawlessStreak ? 'unlocked' : ''}">
+                        <div class="vibe-badge-icon-box">FS</div>
+                        <div>
+                            <div class="vibe-badge-name">Flawless Streak</div>
+                            <div class="vibe-badge-desc">Complete 5 or more daily styled looks in a single week (${completedCount}/5 days)</div>
+                            <div class="vibe-badge-status">${isFlawlessStreak ? 'Unlocked' : 'Locked'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            updateWeeklyRecapModalAudioState();
+        }
+
+        function updateWeeklyRecapModalAudioState() {
+            const btn = document.getElementById('playWeeklyMixtapeBtn');
+            const btnText = document.getElementById('playWeeklyMixtapeBtnText');
+            if (!btn || !btnText) return;
+
+            if (museAudio.isMixtapeActive && museAudio.isPlaying) {
+                btnText.innerText = "Pause Mixtape";
+                btn.style.background = "#e60023";
+            } else {
+                btnText.innerText = "Play Weekly Mixtape";
+                btn.style.background = "var(--text-primary)";
+            }
+        }
+
+        function toggleWeeklyMixtapePlayback() {
+            if (museAudio.isMixtapeActive && museAudio.isPlaying) {
+                museAudio.stopMixtape();
+                updateWeeklyRecapModalAudioState();
+                return;
+            }
+
+            const monday = getMondayOfWeek(currentWeeklyLogDate);
+            const weekKey = getWeekKey(monday);
+            const store = getWeeklyOutfitsStore();
+            const weekData = store[weekKey] || {};
+
+            const queue = [];
+            for (let idx = 0; idx < 7; idx++) {
+                const outfit = weekData[idx];
+                if (outfit) {
+                    const detectedVibe = detectOutfitVibe(outfit.title, outfit.occasion, outfit.notes, outfit.pieces || []);
+                    const vibeKey = outfit.vibeKey || detectedVibe.key;
+                    const vibeObj = MUSE_AESTHETIC_SOUNDTRACKS[vibeKey] || detectedVibe;
+                    const trackTitle = (outfit.soundtrack && outfit.soundtrack.title) || vibeObj.trackTitle;
+                    queue.push({
+                        vibeKey,
+                        trackTitle
+                    });
+                }
+            }
+
+            if (queue.length === 0) {
+                alert("Please log at least one outfit this week to play your weekly mixtape.");
+                return;
+            }
+
+            museAudio.startMixtape(queue);
+            updateWeeklyRecapModalAudioState();
         }
 
         // =====================================================
