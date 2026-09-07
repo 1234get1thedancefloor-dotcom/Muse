@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./fe.css";
 import heroBg from "./assets/muse-landing.png";
-import About from "./pages/about.jsx"; 
+import About from "./about";
+import KeyFeatures from "./keyfeatures";
 
 export default function App() {
   
@@ -23,7 +24,15 @@ export default function App() {
             {/* The links from Part 1 are here */}
             <a href="#home" onClick={(e) => { e.preventDefault(); setCurrentPage("home"); }}>HOME</a>
             <a href="#about" onClick={(e) => { e.preventDefault(); setCurrentPage("about"); }}>ABOUT</a>
-            <a href="#">KEY FEATURES</a>
+            <a
+  href="#keyfeatures"
+  onClick={(e) => {
+    e.preventDefault();
+    setCurrentPage("keyfeatures");
+  }}
+>
+  KEY FEATURES
+</a>
             <a href="#">FAQ</a>
           </nav>
 
@@ -41,6 +50,9 @@ export default function App() {
       {currentPage === "about" && (
         <About setCurrentPage={setCurrentPage} /> 
       )}
+      {currentPage === "keyfeatures" && (
+  <KeyFeatures setCurrentPage={setCurrentPage} />
+)}
     </>
   );
 }
