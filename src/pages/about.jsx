@@ -1,15 +1,19 @@
 import React from 'react';
-import './About.css'; // Imports the styles for this specific page
+import './about.css';
 
-const About = () => {
+const About = ({ setCurrentPage }) => {
   return (
     <div className="about-page">
       {/* Navigation Bar */}
       <nav className="navbar">
         <div className="logo">MUSE</div>
         <ul className="nav-links">
-          <li><a href="/">HOME</a></li>
-          <li><a href="/about" className="active">ABOUT</a></li>
+          <li>
+            <a href="#home" onClick={(e) => { e.preventDefault(); setCurrentPage("home"); }}>
+              HOME
+            </a>
+          </li>
+          <li><a href="#about" className="active">ABOUT</a></li>
           <li><a href="#features">KEY FEATURES</a></li>
           <li><a href="#faq">FAQ</a></li>
         </ul>
