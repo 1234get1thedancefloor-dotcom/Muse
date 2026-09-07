@@ -1585,21 +1585,94 @@
             }
         });
 
-        // Live preview of wardrobe item photo
+        // =====================================================
+        // STUDIO WHITE BACKGROUND & AUTO-CROP ENGINE
+        // =====================================================
+
+        async function processWardrobeImageToStudioWhite(file) {
+            if (!file) return null;
+            try {
+                const fd = new FormData();
+                fd.append('itemImage', file);
+                const res = await fetch('http://localhost:5000/api/ai/isolate-wardrobe-item', {
+                    method: 'POST',
+                    body: fd
+                });
+                if (res.ok) {
+                    const json = await res.json();
+                    if (json.success && json.processedImage) {
+                        return json.processedImage;
+                    }
+                }
+            } catch (e) {
+                console.warn('Backend studio isolation fallback to client canvas:', e.message);
+            }
+
+            // Client-Side Canvas Whiteout & Center Crop Fallback
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const size = 400;
+                        canvas.width = size;
+                        canvas.height = size;
+                        const ctx = canvas.getContext('2d');
+
+                        // Pure White Studio Background
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, size, size);
+
+                        // Center & Aspect Fit with subtle padding
+                        const hRatio = (size * 0.86) / img.width;
+                        const vRatio = (size * 0.86) / img.height;
+                        const ratio = Math.min(hRatio, vRatio);
+                        const centerShiftX = (size - img.width * ratio) / 2;
+                        const centerShiftY = (size - img.height * ratio) / 2;
+
+                        ctx.drawImage(img, 0, 0, img.width, img.height,
+                                           centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
+                        resolve(canvas.toDataURL('image/jpeg', 0.9));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        let pendingWardrobeProcessedImage = null;
+        let pendingEditProcessedImage = null;
+
+        // Live preview of wardrobe item photo with studio whiteout
         const wardrobeFileInput = document.getElementById('wardrobeItemFile');
         const wardrobePreviewContainer = document.getElementById('wardrobePreviewContainer');
         const wardrobeItemPreview = document.getElementById('wardrobeItemPreview');
 
-        wardrobeFileInput.addEventListener('change', function () {
+        wardrobeFileInput.addEventListener('change', async function () {
             const file = this.files[0];
             if (file) {
+                wardrobePreviewContainer.classList.remove('hidden');
+                wardrobeItemPreview.style.opacity = '0.5';
+                
+                // Show instant local reader preview first
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    wardrobeItemPreview.src = e.target.result;
-                    wardrobePreviewContainer.classList.remove('hidden');
+                    if (wardrobeItemPreview.style.opacity === '0.5') {
+                        wardrobeItemPreview.src = e.target.result;
+                    }
                 };
                 reader.readAsDataURL(file);
+
+                // Auto-crop & isolate onto studio white
+                const whiteBgImage = await processWardrobeImageToStudioWhite(file);
+                if (whiteBgImage) {
+                    pendingWardrobeProcessedImage = whiteBgImage;
+                    wardrobeItemPreview.src = whiteBgImage;
+                }
+                wardrobeItemPreview.style.opacity = '1';
             } else {
+                pendingWardrobeProcessedImage = null;
                 wardrobeItemPreview.src = '';
                 wardrobePreviewContainer.classList.add('hidden');
             }
@@ -1643,8 +1716,8 @@
             }
         }
 
-        // Add Piece to Digital Wardrobe with All 6 Rich Attributes
-        function addWardrobeItem() {
+        // Add Piece to Digital Wardrobe with Studio White Background
+        async function addWardrobeItem() {
             const cat = document.getElementById('wardrobeCategory').value;
             const name = document.getElementById('wardrobeItemName').value.trim();
             const color = document.getElementById('wardrobeItemColor').value.trim();
@@ -1659,62 +1732,67 @@
                 return;
             }
 
+            let finalImageSrc = pendingWardrobeProcessedImage;
+            if (!finalImageSrc && file) {
+                finalImageSrc = await processWardrobeImageToStudioWhite(file);
+            }
+
             const items = getWardrobeItems();
-
-            const processAddition = (imgSrc) => {
-                const newItem = {
-                    id: 'w_' + Date.now(),
-                    name: name,
-                    category: cat,
-                    color: color || 'Neutral',
-                    material: material || 'Cotton',
-                    pattern: pattern || 'Solid',
-                    style: style || 'Casual',
-                    formality: formality,
-                    image: imgSrc || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'
-                };
-
-                items.unshift(newItem);
-                saveWardrobeItems(items);
-
-                // Reset Form
-                document.getElementById('wardrobeItemName').value = '';
-                document.getElementById('wardrobeItemColor').value = '';
-                document.getElementById('wardrobeItemFormality').value = 5;
-                updateFormalityBadge(5);
-                wardrobeFileInput.value = '';
-                wardrobeItemPreview.src = '';
-                wardrobePreviewContainer.classList.add('hidden');
-
-                renderWardrobe(currentFilter);
+            const newItem = {
+                id: 'w_' + Date.now(),
+                name: name,
+                category: cat,
+                color: color || 'Neutral',
+                material: material || 'Cotton',
+                pattern: pattern || 'Solid',
+                style: style || 'Casual',
+                formality: formality,
+                image: finalImageSrc || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'
             };
 
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    processAddition(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                processAddition(null);
-            }
+            items.unshift(newItem);
+            saveWardrobeItems(items);
+
+            // Reset Form & State
+            pendingWardrobeProcessedImage = null;
+            document.getElementById('wardrobeItemName').value = '';
+            document.getElementById('wardrobeItemColor').value = '';
+            document.getElementById('wardrobeItemFormality').value = 5;
+            updateFormalityBadge(5);
+            wardrobeFileInput.value = '';
+            wardrobeItemPreview.src = '';
+            wardrobePreviewContainer.classList.add('hidden');
+
+            renderWardrobe(currentFilter);
         }
 
         let wardrobeSearchQuery = '';
 
-        // Live preview for Edit Item photo
+        // Live preview for Edit Item photo with studio whiteout
         const editFileInput = document.getElementById('editItemFile');
         const editItemPreview = document.getElementById('editItemPreview');
 
         if (editFileInput) {
-            editFileInput.addEventListener('change', function () {
+            editFileInput.addEventListener('change', async function () {
                 const file = this.files[0];
                 if (file) {
+                    editItemPreview.style.opacity = '0.5';
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        editItemPreview.src = e.target.result;
+                        if (editItemPreview.style.opacity === '0.5') {
+                            editItemPreview.src = e.target.result;
+                        }
                     };
                     reader.readAsDataURL(file);
+
+                    const whiteBgImage = await processWardrobeImageToStudioWhite(file);
+                    if (whiteBgImage) {
+                        pendingEditProcessedImage = whiteBgImage;
+                        editItemPreview.src = whiteBgImage;
+                    }
+                    editItemPreview.style.opacity = '1';
+                } else {
+                    pendingEditProcessedImage = null;
                 }
             });
         }
@@ -1740,6 +1818,7 @@
             const item = items.find(i => i.id === id);
             if (!item) return;
 
+            pendingEditProcessedImage = null;
             document.getElementById('editItemId').value = item.id;
             document.getElementById('editItemCategory').value = item.category || 'Top';
             document.getElementById('editItemName').value = item.name || '';
@@ -1754,6 +1833,7 @@
 
             document.getElementById('editItemExistingImage').value = item.image || '';
             editItemPreview.src = item.image || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60';
+            editItemPreview.style.opacity = '1';
             if (editFileInput) editFileInput.value = '';
 
             const modal = document.getElementById('editWardrobeModal');
@@ -1761,6 +1841,7 @@
         }
 
         function closeEditWardrobeModal() {
+            pendingEditProcessedImage = null;
             const modal = document.getElementById('editWardrobeModal');
             if (modal) modal.classList.remove('open');
         }
@@ -1771,8 +1852,8 @@
             }
         }
 
-        // Save Edits to Wardrobe Item
-        function saveEditWardrobeItem() {
+        // Save Edits to Wardrobe Item with Studio Whiteout
+        async function saveEditWardrobeItem() {
             const id = document.getElementById('editItemId').value;
             const cat = document.getElementById('editItemCategory').value;
             const name = document.getElementById('editItemName').value.trim();
@@ -1789,35 +1870,28 @@
                 return;
             }
 
-            const commitEdit = (imgSrc) => {
-                let items = getWardrobeItems();
-                const index = items.findIndex(i => i.id === id);
-                if (index !== -1) {
-                    items[index] = {
-                        ...items[index],
-                        name,
-                        category: cat,
-                        color: color || 'Neutral',
-                        material: material || 'Cotton',
-                        pattern: pattern || 'Solid',
-                        style: style || 'Classic Tailored',
-                        formality: formality,
-                        image: imgSrc || existingImage || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'
-                    };
-                    saveWardrobeItems(items);
-                    renderWardrobe(currentFilter);
-                    closeEditWardrobeModal();
-                }
-            };
+            let finalImageSrc = pendingEditProcessedImage || existingImage;
+            if (file && !pendingEditProcessedImage) {
+                finalImageSrc = await processWardrobeImageToStudioWhite(file);
+            }
 
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    commitEdit(e.target.result);
+            let items = getWardrobeItems();
+            const index = items.findIndex(i => i.id === id);
+            if (index !== -1) {
+                items[index] = {
+                    ...items[index],
+                    name,
+                    category: cat,
+                    color: color || 'Neutral',
+                    material: material || 'Cotton',
+                    pattern: pattern || 'Solid',
+                    style: style || 'Classic Tailored',
+                    formality: formality,
+                    image: finalImageSrc || 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=300&auto=format&fit=crop&q=60'
                 };
-                reader.readAsDataURL(file);
-            } else {
-                commitEdit(null);
+                saveWardrobeItems(items);
+                renderWardrobe(currentFilter);
+                closeEditWardrobeModal();
             }
         }
 

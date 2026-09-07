@@ -6,7 +6,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
-const { isolateClothing } = require('../utils/clothingIsolation');
+const { isolateClothing, isolateAndWhiteoutGarment } = require('../utils/clothingIsolation');
 const { extractColors, findClosestFashionColor, resolveColorHex } = require('../utils/colorExtractor');
 
 // ============================================================
@@ -934,7 +934,37 @@ router.post('/generate-outfit', async (req, res) => {
 });
 
 // ============================================================
-// 3. MAKEUP RECOMMENDATION (ALL 13 TARGET VIBES + OTHER)
+// 3. ISOLATE WARDROBE ITEM (STUDIO WHITE BACKGROUND & AUTO-CROP)
+// ============================================================
+
+router.post('/isolate-wardrobe-item', upload.single('itemImage'), async (req, res) => {
+    let tempPath = null;
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, error: 'No image file uploaded.' });
+        }
+        tempPath = req.file.path;
+        const result = await isolateAndWhiteoutGarment(tempPath);
+        return res.json({
+            success: true,
+            processedImage: result.base64
+        });
+    } catch (err) {
+        console.error('Isolate Wardrobe Item Error:', err);
+        return res.status(500).json({
+            success: false,
+            error: 'Failed to process wardrobe item background.',
+            details: err.message
+        });
+    } finally {
+        if (tempPath && fs.existsSync(tempPath)) {
+            try { fs.unlinkSync(tempPath); } catch (e) {}
+        }
+    }
+});
+
+// ============================================================
+// 4. MAKEUP RECOMMENDATION (ALL 13 TARGET VIBES + OTHER)
 // ============================================================
 
 const makeupGuides = {
