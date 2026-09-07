@@ -3758,16 +3758,16 @@
                 </div>
             </div>
 
-            <!-- Weekly Soundtrack / Mixtape Playlist -->
+            <!-- Weekly Soundtrack / Mashup Playlist -->
             <div class="vibe-recap-section">
                 <div class="vibe-recap-section-header">
                     <div>
-                        <div class="vibe-recap-section-title">Curated Weekly Soundtrack & Playlist</div>
-                        <div class="vibe-recap-section-sub">Original soundtrack matching your weekly outfits</div>
+                        <div class="vibe-recap-section-title">Curated Weekly Aesthetic Mashup</div>
+                        <div class="vibe-recap-section-sub">Multi-stem groove fusing all your aesthetics of the week</div>
                     </div>
                     <button type="button" id="playWeeklyMixtapeBtn" class="action-button" onclick="toggleWeeklyMixtapePlayback()" style="width: auto; padding: 6px 14px; font-size: 11px; margin: 0; display: inline-flex; align-items: center; gap: 5px;">
                         <svg id="playWeeklyMixtapeIcon" viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        <span id="playWeeklyMixtapeBtnText">Play Weekly Mixtape</span>
+                        <span id="playWeeklyMixtapeBtnText">Play Weekly Mashup</span>
                     </button>
                 </div>
 
@@ -6877,6 +6877,8 @@
                 this.stepTimer = null;
                 this.stepIndex = 0;
                 this.isMixtapeActive = false;
+                this.isMashupActive = false;
+                this.mashupElements = [];
                 this.mixtapeQueue = [];
                 this.mixtapeCurrentIndex = 0;
                 this.mixtapeTrackTimer = null;
@@ -7032,6 +7034,70 @@
             playStep() {
                 if (!this.ctx || !this.isPlaying) return;
                 const now = this.ctx.currentTime + 0.02;
+
+                // MULTI-STEM WEEKLY MASHUP FUSION MODE
+                if (this.isMashupActive && this.mashupElements && this.mashupElements.length > 0) {
+                    const activeElemIdx = Math.floor(this.stepIndex / 32) % this.mashupElements.length;
+                    const activeElem = this.mashupElements[activeElemIdx];
+                    const activeVibeKey = activeElem.vibeKey || 'clean_girl';
+                    const activeVibe = MUSE_AESTHETIC_SOUNDTRACKS[activeVibeKey] || MUSE_AESTHETIC_SOUNDTRACKS.clean_girl;
+
+                    if (this.currentDayIndex !== activeElem.dayIndex || this.currentVibeKey !== activeVibeKey) {
+                        this.currentDayIndex = activeElem.dayIndex;
+                        this.currentVibeKey = activeVibeKey;
+                        this.currentTrackTitle = activeElem.trackTitle || activeVibe.trackTitle;
+                        this.notifyUI();
+                    }
+
+                    const stepInBar = this.stepIndex % 16;
+                    const stepInPhrase = this.stepIndex % 32;
+
+                    // 1. Unified Mashup Beat & Kick (steps 0, 8, and 10 in alternating phrases)
+                    if (stepInBar === 0 || stepInBar === 8 || (stepInBar === 10 && stepInPhrase >= 16)) {
+                        this.triggerKick(now);
+                    }
+
+                    // 2. Snare / Claps + DJ Transition Build (steps 28..31 before switching vibe leads)
+                    if (stepInPhrase >= 28) {
+                        this.triggerSnare(now);
+                    } else if (stepInBar === 4 || stepInBar === 12) {
+                        this.triggerSnare(now);
+                    }
+
+                    // 3. Crisp Hi-Hats on every even 16th step
+                    if (stepInBar % 2 === 0) {
+                        this.triggerHiHat(now, stepInBar === 2 || stepInBar === 6 || stepInBar === 10 || stepInBar === 14);
+                    }
+
+                    // 4. Harmonic Bassline (pulls deep sub-bass from current lead vibe)
+                    if (stepInBar === 0 || stepInBar === 3 || stepInBar === 8 || stepInBar === 11) {
+                        const bassNotes = activeVibe.bassNotes || [65.41, 73.42, 82.41, 98.00];
+                        const bassIdx = Math.floor(this.stepIndex / 4) % bassNotes.length;
+                        this.triggerBass(now, bassNotes[bassIdx]);
+                    }
+
+                    // 5. Multi-Aesthetic Chords (Polyphonic blending across week)
+                    if (stepInBar === 0) {
+                        this.triggerChord(now, activeVibe.chords || [261.63, 329.63, 392.00, 493.88], 0.45);
+                    } else if (stepInBar === 6) {
+                        const altElemIdx = (activeElemIdx + 1) % this.mashupElements.length;
+                        const altVibeKey = this.mashupElements[altElemIdx].vibeKey;
+                        const altVibe = MUSE_AESTHETIC_SOUNDTRACKS[altVibeKey] || activeVibe;
+                        this.triggerChord(now, altVibe.altChords || altVibe.chords || activeVibe.altChords, 0.35);
+                    }
+
+                    // 6. Lead Melodic Arpeggios (active outfit's melodic hook)
+                    if (stepInBar % 2 === 1 || stepInBar === 2 || stepInBar === 10) {
+                        const arpNotes = activeVibe.arpNotes || [523.25, 659.25, 783.99];
+                        const arpIdx = (stepInBar + Math.floor(this.stepIndex / 4)) % arpNotes.length;
+                        this.triggerArp(now, arpNotes[arpIdx]);
+                    }
+
+                    this.stepIndex++;
+                    return;
+                }
+
+                // STANDARD SINGLE TRACK GROOVE MODE
                 const vibeData = MUSE_AESTHETIC_SOUNDTRACKS[this.currentVibeKey] || MUSE_AESTHETIC_SOUNDTRACKS.clean_girl;
                 const step = this.stepIndex % 16;
 
@@ -7085,6 +7151,7 @@
                 this.currentTrackTitle = trackTitle || vibeData.trackTitle;
                 this.currentDayIndex = (dayIndex !== undefined ? dayIndex : null);
                 this.isPlaying = true;
+                this.isMashupActive = false;
                 this.stepIndex = 0;
                 this.hasListened = true;
                 localStorage.setItem('muse_has_listened_soundtrack', 'true');
@@ -7100,15 +7167,44 @@
 
                 this.notifyUI();
 
-                // If callback exists (for mixtape progression)
+                // If callback exists
                 if (onFinishCallback) {
                     clearTimeout(this.mixtapeTrackTimer);
                     this.mixtapeTrackTimer = setTimeout(() => {
                         if (this.isPlaying && this.isMixtapeActive) {
                             onFinishCallback();
                         }
-                    }, 12000); // 12-second groove preview per outfit in mixtape
+                    }, 12000);
                 }
+            }
+
+            startWeeklyMashup(elements) {
+                if (!elements || elements.length === 0) return;
+                this.init();
+                if (!this.ctx) return;
+
+                this.stopCurrent();
+
+                this.hasPlayedMixtape = true;
+                localStorage.setItem('muse_has_played_mixtape', 'true');
+                this.isMixtapeActive = true;
+                this.isMashupActive = true;
+                this.mashupElements = elements;
+                this.isPlaying = true;
+                this.stepIndex = 0;
+                this.hasListened = true;
+                localStorage.setItem('muse_has_listened_soundtrack', 'true');
+
+                // Unified danceable fusion tempo (106 BPM)
+                const mashupBpm = 106;
+                const stepMs = Math.round((60000 / mashupBpm) / 4);
+
+                this.playStep();
+                this.stepTimer = setInterval(() => {
+                    this.playStep();
+                }, stepMs);
+
+                this.notifyUI();
             }
 
             stopCurrent() {
@@ -7118,6 +7214,9 @@
                 }
                 clearTimeout(this.mixtapeTrackTimer);
                 this.isPlaying = false;
+                this.isMixtapeActive = false;
+                this.isMashupActive = false;
+                this.mashupElements = [];
                 this.currentVibeKey = null;
                 this.currentTrackTitle = '';
                 this.currentDayIndex = null;
@@ -7125,7 +7224,7 @@
             }
 
             toggleTrack(vibeKey, trackTitle, dayIndex = null) {
-                const isTargetActive = this.isPlaying && (
+                const isTargetActive = this.isPlaying && !this.isMashupActive && (
                     (dayIndex !== null && this.currentDayIndex === dayIndex) ||
                     (dayIndex === null && this.currentVibeKey === vibeKey)
                 );
@@ -7135,40 +7234,16 @@
                     this.stopCurrent();
                 } else {
                     this.isMixtapeActive = false;
+                    this.isMashupActive = false;
                     this.playVibeSoundscape(vibeKey, trackTitle, null, dayIndex);
                 }
             }
 
             startMixtape(trackQueue) {
-                if (!trackQueue || trackQueue.length === 0) return;
-                this.hasPlayedMixtape = true;
-                localStorage.setItem('muse_has_played_mixtape', 'true');
-                this.mixtapeQueue = trackQueue;
-                this.mixtapeCurrentIndex = 0;
-                this.isMixtapeActive = true;
-                this.playNextMixtapeTrack();
-            }
-
-            playNextMixtapeTrack() {
-                if (!this.isMixtapeActive || this.mixtapeQueue.length === 0) {
-                    this.stopCurrent();
-                    this.isMixtapeActive = false;
-                    return;
-                }
-
-                if (this.mixtapeCurrentIndex >= this.mixtapeQueue.length) {
-                    this.mixtapeCurrentIndex = 0; // loop back to first track
-                }
-
-                const currentItem = this.mixtapeQueue[this.mixtapeCurrentIndex];
-                this.playVibeSoundscape(currentItem.vibeKey, currentItem.trackTitle, () => {
-                    this.mixtapeCurrentIndex++;
-                    this.playNextMixtapeTrack();
-                }, currentItem.dayIndex);
+                this.startWeeklyMashup(trackQueue);
             }
 
             stopMixtape() {
-                this.isMixtapeActive = false;
                 this.stopCurrent();
             }
 
@@ -8274,14 +8349,14 @@
             const btnIcon = document.getElementById('playWeeklyMixtapeIcon');
             if (!btn) return;
 
-            if (museAudio.isMixtapeActive && museAudio.isPlaying) {
-                if (btnText) btnText.innerText = "Pause Mixtape";
+            if ((museAudio.isMixtapeActive || museAudio.isMashupActive) && museAudio.isPlaying) {
+                if (btnText) btnText.innerText = "Pause Mashup";
                 btn.style.background = "#e60023";
                 if (btnIcon) {
                     btnIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
                 }
             } else {
-                if (btnText) btnText.innerText = "Play Weekly Mixtape";
+                if (btnText) btnText.innerText = "Play Weekly Mashup";
                 btn.style.background = "var(--text-primary)";
                 if (btnIcon) {
                     btnIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
@@ -8290,7 +8365,7 @@
         }
 
         function toggleWeeklyMixtapePlayback() {
-            if (museAudio.isMixtapeActive && museAudio.isPlaying) {
+            if ((museAudio.isMixtapeActive || museAudio.isMashupActive) && museAudio.isPlaying) {
                 museAudio.stopMixtape();
                 updateWeeklyRecapModalAudioState();
                 return;
@@ -8318,11 +8393,11 @@
             }
 
             if (queue.length === 0) {
-                alert("Please log at least one outfit this week to play your weekly mixtape.");
+                alert("Please log at least one outfit this week to generate your weekly aesthetic mashup.");
                 return;
             }
 
-            museAudio.startMixtape(queue);
+            museAudio.startWeeklyMashup(queue);
             updateWeeklyRecapModalAudioState();
             renderProfileBadges();
         }
